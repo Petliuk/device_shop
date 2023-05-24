@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserService implements UserServiseInterface {
+
     private final UserRepository userRepository;
-    //super(message);
 
  @Transactional
     public User createUser(User user) {
@@ -53,20 +53,6 @@ public class UserService implements UserServiseInterface {
             throw new EntityNotFoundException("User with id " + userId + " not found");
         }
     }
-
-/*
-   @Transactional
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
-
-
- @Transactional
-    public void deleteUser(Long userId) {
-      userRepository.deleteById(userId);
-    }
-*/
-
 
 }
 

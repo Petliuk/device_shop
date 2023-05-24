@@ -1,9 +1,6 @@
 package com.example.myprojectwithspring2.ClientUser.entity_class;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
@@ -15,19 +12,18 @@ public class User {
     private String name;
     private String surname;
     private String phone;
+    @Column(unique = true)
     private String email;
-    private String login;
     private String password;
 
     public User() {
     }
 
-    public User(String name, String surname, String phone, String email, String login, String password) {
+    public User(String name, String surname, String phone, String email,  String password) {
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.email = email;
-        this.login = login;
         this.password = password;
     }
 
@@ -69,14 +65,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {
