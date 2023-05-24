@@ -3,16 +3,12 @@ package com.example.myprojectwithspring2.ClientUser.exception;
 
 import com.example.myprojectwithspring2.ClientUser.entity_class.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
-
 import javax.persistence.EntityNotFoundException;
-
 
 @Slf4j
 @ControllerAdvice
