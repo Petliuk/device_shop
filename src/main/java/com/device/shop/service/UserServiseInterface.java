@@ -1,6 +1,6 @@
-package com.example.myprojectwithspring2.ClientUser.service;
-import com.example.myprojectwithspring2.ClientUser.entity_class.BadRequestException;
-import com.example.myprojectwithspring2.ClientUser.entity_class.User;
+package com.device.shop.service;
+import com.device.shop.entity.User;
+import com.device.shop.exception.BadRequestException;
 
 import java.util.List;
 

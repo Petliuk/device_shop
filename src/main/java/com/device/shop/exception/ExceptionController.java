@@ -1,7 +1,6 @@
-package com.example.myprojectwithspring2.ClientUser.exception;
+package com.device.shop.exception;
 
 
-import com.example.myprojectwithspring2.ClientUser.entity_class.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

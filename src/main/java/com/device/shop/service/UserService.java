@@ -1,8 +1,8 @@
-package com.example.myprojectwithspring2.ClientUser.service;
+package com.device.shop.service;
 
-import com.example.myprojectwithspring2.ClientUser.entity_class.BadRequestException;
-import com.example.myprojectwithspring2.ClientUser.entity_class.User;
-import com.example.myprojectwithspring2.ClientUser.repository.UserRepository;
+import com.device.shop.entity.User;
+import com.device.shop.repository.UserRepository;
+import com.device.shop.exception.BadRequestException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

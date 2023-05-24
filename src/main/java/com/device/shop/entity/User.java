@@ -1,4 +1,4 @@
-package com.example.myprojectwithspring2.ClientUser.entity_class;
+package com.device.shop.entity;
 
 import javax.persistence.*;
 
