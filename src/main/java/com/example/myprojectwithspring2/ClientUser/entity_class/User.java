@@ -1,5 +1,7 @@
 package com.example.myprojectwithspring2.ClientUser.entity_class;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import javax.persistence.*;
 
 
@@ -14,6 +16,7 @@ public class User {
     private String phone;
     @Column(unique = true)
     private String email;
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
     public User() {
