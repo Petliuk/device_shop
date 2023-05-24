@@ -48,6 +48,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
@@ -65,16 +72,6 @@
             <version>7.14.0</version>
         </dependency>
 
-       <!-- <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.2.14</version>
-        </dependency>-->
-
-       <!-- <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-        </dependency>-->
     </dependencies>
 
 
@@ -94,22 +91,10 @@
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>7.14.0</version>
-<!--                <configuration>-->
-<!--                    <url>jdbc:mysql://localhost:3306/device_shop</url>-->
-<!--                    <user>root</user>-->
-<!--                    <password>root</password>-->
-<!--                    <driver>com.mysql.cj.jdbc.Driver</driver>-->
-<!--                    <locations>-->
-<!--                        <location>classpath:db/migration</location>-->
-<!--                    </locations>-->
-<!--                    <table>schema_version</table>-->
-<!--                </configuration>-->
+
             </plugin>
 
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+
         </plugins>
     </build>
 </project>
