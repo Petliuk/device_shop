@@ -1,4 +1,4 @@
-package com.example.myprojectwithspring2.ClientUser.entity_class;
+package com.device.shop.exception;
 
 public class BadRequestException extends Exception {
     public BadRequestException(String message) {

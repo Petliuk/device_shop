@@ -1,4 +1,4 @@
-package com.example.myprojectwithspring2;
+package com.device.shop;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

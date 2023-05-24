@@ -1,4 +1,4 @@
-package com.example.myprojectwithspring2.ClientUser.entity_class;
+package com.device.shop.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;

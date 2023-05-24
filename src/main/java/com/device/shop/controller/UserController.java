@@ -1,8 +1,8 @@
-package com.example.myprojectwithspring2.ClientUser.controller;
+package com.device.shop.controller;
 
-import com.example.myprojectwithspring2.ClientUser.entity_class.BadRequestException;
-import com.example.myprojectwithspring2.ClientUser.entity_class.User;
-import com.example.myprojectwithspring2.ClientUser.service.UserService;
+import com.device.shop.exception.BadRequestException;
+import com.device.shop.entity.User;
+import com.device.shop.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
