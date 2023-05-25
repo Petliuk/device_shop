@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 @Service
 @AllArgsConstructor
-public class UserService implements UserServiseInterface {
+public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
 
