@@ -4,9 +4,9 @@ import com.device.shop.exception.BadRequestException;
 
 import java.util.List;
 
-public interface UserServiseInterface {
+public interface UserServiceInterface {
 
-    User createUser(User user);
+    User createUser(User user) throws BadRequestException;
     User getUserById(Long userId );
     List<User> getAllUser();
     User updateUser(User user, Long userId) throws BadRequestException;

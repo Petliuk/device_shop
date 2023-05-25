@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@RequestBody User user) throws BadRequestException {
         User savedUser = userService.createUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
@@ -29,13 +29,11 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
     @GetMapping("/allUsers")
     public ResponseEntity<List<User>> getAllUser() {
         List<User> users = userService.getAllUser();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
 
     @PostMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
@@ -43,8 +41,6 @@ public class UserController {
         User updatedUser = userService.updateUser(user, userId);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
-
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {

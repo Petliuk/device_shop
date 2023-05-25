@@ -12,7 +12,7 @@ import javax.persistence.EntityNotFoundException;
 @Slf4j
 @ControllerAdvice
 public class ExceptionController {
-
+    
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error("handleDataIntegrityViolationException");
