@@ -48,21 +48,7 @@ public class UserService implements UserServiseInterface {
         }
     }
 
-   @Transactional
-    public List<User> getAllUser() {
-     return userRepository.findAll();
-    }
 
-   @Transactional
-   public User updateUser(User user, Long userId) throws BadRequestException, EntityNotFoundException {
-       if (userId == null || !userRepository.existsById(userId)) {
-           throw new EntityNotFoundException("User with id " + userId + " not found");
-       } else if (!userId.equals(user.getId())) {
-           throw new BadRequestException("Cannot change the id to " + user.getId());
-       } else {
-           return userRepository.save(user);
-       }
-   }
 
     @Transactional
     public void deleteUser(Long userId) {
