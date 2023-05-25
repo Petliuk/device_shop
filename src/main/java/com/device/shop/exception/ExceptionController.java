@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 @ControllerAdvice
 public class ExceptionController {
 
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         log.error("handleDataIntegrityViolationException");

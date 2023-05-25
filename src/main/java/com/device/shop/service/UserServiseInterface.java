@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserServiseInterface {
 
-    User createUser(User user);
+    User createUser(User user) throws BadRequestException;
     User getUserById(Long userId );
     List<User> getAllUser();
     User updateUser(User user, Long userId) throws BadRequestException;
