@@ -49,7 +49,6 @@ public class UserService implements UserServiceInterface {
     }
 
 
-
     @Transactional
     public void deleteUser(Long userId) {
         if (userRepository.existsById(userId)) {
