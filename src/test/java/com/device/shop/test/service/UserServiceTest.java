@@ -109,6 +109,7 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).findAll();
     }
+
     @Test
     void updateUser_ValidUser_ReturnsUpdatedUser() throws BadRequestException, EntityNotFoundException {
         Long userId = 1L;

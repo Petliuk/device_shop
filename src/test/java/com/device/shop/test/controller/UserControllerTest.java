@@ -103,16 +103,14 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testGetUserById_EntityNotFoundException() throws Exception{
+    public void testGetUserById_EntityNotFoundException() throws Exception {
         User user = new User("Alesia", "Pav", "+380-66-789-12-34", "john.doe09@gmail.com", "password");
 
         doThrow(new EntityNotFoundException()).when(userService).getUserById(anyLong());
 
-        mockMvc.perform(get("/{id}", 1L)
-                       .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
-
 
     @Test
     public void testGetAllUser() throws Exception {
@@ -200,8 +198,7 @@ public class UserControllerTest {
     public void testDeleteUser_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException("")).when(userService).deleteUser(anyLong());
 
-        mockMvc.perform(delete("/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 }
