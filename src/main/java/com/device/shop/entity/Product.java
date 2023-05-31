@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Product {
     @Id
     Long id;
     String name;
     String description;
-    String SKU;
+    String sku;
     Double price;
     LocalDateTime created_at;
     LocalDateTime modified_at;
