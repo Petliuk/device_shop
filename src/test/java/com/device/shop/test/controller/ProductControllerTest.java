@@ -54,7 +54,7 @@ public class ProductControllerTest {
        List<Product> productList = Arrays.asList(product1, product2);
 
        when(productService.getAllProducts()).thenReturn(productList);
-        mockMvc.perform(get("/allProducts"))
+       mockMvc.perform(get("/allProducts"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].name").value("phone"))
