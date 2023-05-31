@@ -67,7 +67,14 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUser_DataIntegrityViolationException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("john.doe09@gmail.com")
+                .password("password")
+                .build();
+
         when(userService.createUser(any(User.class))).thenThrow(new DataIntegrityViolationException(""));
 
         mockMvc.perform(post("/users")
@@ -78,7 +85,13 @@ public class UserControllerTest {
 
     @Test
     public void testCreateUser_BadRequestException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("")
+                .password("password")
+                .build();
         when(userService.createUser(any(User.class))).thenThrow(new BadRequestException(""));
 
         mockMvc.perform(post("/users")
@@ -104,7 +117,13 @@ public class UserControllerTest {
 
     @Test
     public void testGetUserById_EntityNotFoundException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "john.doe09@gmail.com", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("john.doe09@gmail.com")
+                .password("password")
+                .build();
 
         doThrow(new EntityNotFoundException()).when(userService).getUserById(anyLong());
 
@@ -157,7 +176,13 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUser_EntityNotFoundException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "john.doe09@gmail.com", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("john.doe09@gmail.com")
+                .password("password")
+                .build();
 
         doThrow(new EntityNotFoundException()).when(userService).updateUser(any(User.class), anyLong());
 
@@ -168,7 +193,13 @@ public class UserControllerTest {
     }
     @Test
     public void testUpdateUser_BadRequestException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "john.doe09@gmail.com", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("john.doe09@gmail.com")
+                .password("password")
+                .build();
         doThrow(new BadRequestException("")).when(userService).updateUser(any(User.class), anyLong());
 
         mockMvc.perform(post("/{id}", 1L)
@@ -178,7 +209,13 @@ public class UserControllerTest {
     }
     @Test
     public void testUpdateUser_DataIntegrityViolationException() throws Exception {
-        User user = new User("Alesia", "Pav", "+380-66-789-12-34", "john.doe09@gmail.com", "password");
+        User user = User.builder()
+                .name("Alesia")
+                .surname("Pav")
+                .phone("0977364523")
+                .email("john.doe09@gmail.com")
+                .password("password")
+                .build();
         doThrow(new DataIntegrityViolationException("")).when(userService).updateUser(any(User.class), anyLong());
 
         mockMvc.perform(post("/{id}", 1L)
