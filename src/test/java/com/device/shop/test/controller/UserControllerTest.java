@@ -31,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
-
     @Mock
     private UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -117,14 +116,6 @@ public class UserControllerTest {
 
     @Test
     public void testGetUserById_EntityNotFoundException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("john.doe09@gmail.com")
-                .password("password")
-                .build();
-
         doThrow(new EntityNotFoundException()).when(userService).getUserById(anyLong());
 
         mockMvc.perform(get("/{id}", 1L))
@@ -153,7 +144,6 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("Jane"));
     }
-
 
     @Test
     public void testUpdateUser() throws Exception {
@@ -191,6 +181,7 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(user))).
                 andExpect(status().isNotFound());
     }
+
     @Test
     public void testUpdateUser_BadRequestException() throws Exception {
         User user = User.builder()
@@ -207,6 +198,7 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(user)))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     public void testUpdateUser_DataIntegrityViolationException() throws Exception {
         User user = User.builder()
@@ -238,5 +230,6 @@ public class UserControllerTest {
         mockMvc.perform(delete("/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
+
 }
 

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Product {
     @Id
+    @GeneratedValue
     Long id;
     String name;
     String description;

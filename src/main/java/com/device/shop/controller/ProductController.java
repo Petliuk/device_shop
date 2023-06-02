@@ -1,13 +1,14 @@
 package com.device.shop.controller;
 
+import com.device.shop.csv.ResponseMessage;
 import com.device.shop.entity.Product;
 import com.device.shop.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,10 +18,21 @@ public class ProductController {
 
     ProductService productService;
 
-    @GetMapping("/allProducts")
-    @ResponseBody
-    public ResponseEntity<List<Product>> getAllProducts() {
+    @GetMapping("/getAllProducts")
+    public ResponseEntity<List<Product>> getAllProduct() {
         List<Product> products = productService.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+        productService.save(file);
+        String message = "Uploaded the file successfully: " + file.getOriginalFilename();
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+    }
+
 }
+
+
+
+
