@@ -1,6 +1,5 @@
 package com.device.shop.controller;
 
-import com.device.shop.csv.ResponseMessage;
 import com.device.shop.entity.Product;
 import com.device.shop.service.ProductService;
 import lombok.AllArgsConstructor;
@@ -25,10 +24,9 @@ public class ProductController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         productService.save(file);
-        String message = "Uploaded the file successfully: " + file.getOriginalFilename();
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        return ResponseEntity.status(HttpStatus.OK).body("Uploaded the file successfully: " + file.getOriginalFilename());
     }
 
 }

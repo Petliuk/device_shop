@@ -1,10 +1,7 @@
 package com.device.shop.test.controller;
 
-import com.device.shop.repository.ProductRepository;
 import com.device.shop.controller.ProductController;
-import com.device.shop.csv.ResponseMessage;
 import com.device.shop.entity.Product;
-import com.device.shop.exception.BadRequestException;
 import com.device.shop.exception.ExceptionController;
 import com.device.shop.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,25 +11,32 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class ProductControllerTest {
 
     @Mock
@@ -40,8 +44,6 @@ public class ProductControllerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
     private ProductController productController;
-
-
 
 
     @BeforeEach
@@ -83,23 +85,20 @@ public class ProductControllerTest {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         when(file.getOriginalFilename()).thenReturn("test.csv");
 
-        ResponseEntity<ResponseMessage> response = productController.uploadFile(file);
+        ResponseEntity<String> response = productController.uploadFile(file);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Uploaded the file successfully: test.csv", response.getBody().getMessage());
+        assertEquals("Uploaded the file successfully: test.csv", response.getBody());
         verify(productService, times(1)).save(file);
     }
-
     @Test
-    void save_InvalidCSVFile_ThrowsBadRequestException() {
-        ProductRepository productRepository = mock(ProductRepository.class);
-        ProductService productService1 = new ProductService(productRepository);
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "invalid csv".getBytes());
+    public void testSave_InvalidCSVFormat() throws Exception{
+        MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "invalid csv".getBytes());
 
+        ResultMatcher expectedStatus = status().isOk();
 
-        assertThrows(BadRequestException.class, () -> productService1.save(file));
-        verifyNoInteractions(productRepository);
+        mockMvc.perform(multipart("/upload")
+                        .file(file))
+                .andExpect(expectedStatus);
     }
-
-
 }

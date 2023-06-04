@@ -24,7 +24,7 @@ public class CSVHelper {
     public static List<Product> csvToProducts(InputStream is) throws IOException {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader,
-                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withDelimiter(';').withIgnoreHeaderCase().withTrim());) {
+                     CSVFormat.DEFAULT.withFirstRecordAsHeader().withDelimiter(';').withIgnoreHeaderCase().withTrim())) {
 
             List<Product> products = new ArrayList<>();
 
@@ -35,7 +35,6 @@ public class CSVHelper {
                 String description = csvRecord.get("description");
                 String sku = csvRecord.get("sku");
                 double price = Double.parseDouble(csvRecord.get("price"));
-
                 Product product = Product.builder()
                         .name(name)
                         .description(description)

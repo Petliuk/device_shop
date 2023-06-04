@@ -1,6 +1,5 @@
 package com.device.shop.exception;
 
-import com.device.shop.csv.ResponseMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ public class ExceptionController {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity handleMaxSizeException(MaxUploadSizeExceededException exc) {
-        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage("File too large!"));
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File is too large!");
     }
     
     @ExceptionHandler(DataIntegrityViolationException.class)
