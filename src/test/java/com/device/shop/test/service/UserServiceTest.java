@@ -141,6 +141,7 @@ public class UserServiceTest {
         verify(userRepository, never()).existsById(userId);
         verify(userRepository, never()).save(user);
     }
+
     @Test
     void updateUser_NonExistingUserId_ThrowsEntityNotFoundException() throws BadRequestException {
         Long userId = 1L;

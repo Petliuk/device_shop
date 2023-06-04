@@ -1,24 +1,38 @@
 package com.device.shop.test.service;
 
 import com.device.shop.entity.Product;
+import com.device.shop.exception.BadRequestException;
 import com.device.shop.repository.ProductRepository;
 import com.device.shop.service.ProductService;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class ProductServiceTest {
+    @Autowired
+    private MockMvc mockMvc;
     @Mock
     private ProductRepository productRepository;
-
     private ProductService productService;
 
     @BeforeEach
@@ -44,8 +58,19 @@ public class ProductServiceTest {
         when(productRepository.findAll()).thenReturn(productList);
 
         List<Product> retrievedList = productService.getAllProducts();
-        Assertions.assertEquals(productList, retrievedList);
+        assertEquals(productList, retrievedList);
 
         verify(productRepository, times(1)).findAll();
     }
+
+    @Test
+    void save_InvalidCSVFile_ThrowsBadRequestException() {
+        ProductRepository productRepository = mock(ProductRepository.class);
+        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "invalid csv".getBytes());
+
+        assertThrows(BadRequestException.class, () -> productService.save(file));
+        verifyNoInteractions(productRepository);
+    }
+
 }
+
