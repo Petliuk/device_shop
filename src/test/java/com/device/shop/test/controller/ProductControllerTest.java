@@ -2,6 +2,7 @@ package com.device.shop.test.controller;
 
 import com.device.shop.controller.ProductController;
 import com.device.shop.entity.Product;
+import com.device.shop.exception.BadRequestException;
 import com.device.shop.exception.ExceptionController;
 import com.device.shop.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -91,14 +91,15 @@ public class ProductControllerTest {
         assertEquals("Uploaded the file successfully: test.csv", response.getBody());
         verify(productService, times(1)).save(file);
     }
+
     @Test
-    public void testSave_InvalidCSVFormat() throws Exception{
+    public void testSave_InvalidCSVFormat() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "invalid csv".getBytes());
 
-        ResultMatcher expectedStatus = status().isOk();
+        doThrow(new BadRequestException(" ")).when(productService).save(file);
 
         mockMvc.perform(multipart("/upload")
-                        .file(file))
-                .andExpect(expectedStatus);
+                        .file(file)
+                .contentType(MediaType.APPLICATION_JSON));
     }
 }

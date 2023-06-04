@@ -22,12 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -81,10 +82,9 @@ public class ProductServiceTest {
     @Test
     void save_InvalidCSVFile_ThrowsBadRequestException() {
         ProductRepository productRepository = mock(ProductRepository.class);
-        ProductService productService1 = new ProductService(productRepository);
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "invalid csv".getBytes());
 
-        assertThrows(BadRequestException.class, () -> productService1.save(file));
+        assertThrows(BadRequestException.class, () -> productService.save(file));
         verifyNoInteractions(productRepository);
     }
 
