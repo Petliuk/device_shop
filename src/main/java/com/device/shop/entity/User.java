@@ -32,6 +32,9 @@ public class User {
     @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
 
+    @OneToOne(mappedBy = "user")
+    OrderDetails orderDetails;
 
-
+    @OneToOne(mappedBy = "user")
+    ShoppingSession shoppingSession;
 }

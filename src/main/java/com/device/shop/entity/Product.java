@@ -26,10 +26,16 @@ public class Product {
 
 
     @OneToOne
-    @JoinColumn(name = "product_inventory_id")
+    @JoinColumn(name = "inventory_id")
     ProductInventory productInventory;
+
     @ManyToOne
     ProductCategory productCategory;
 
+    @OneToOne(mappedBy = "product")
+    CartItem cartItem;
+
+    @ManyToOne
+    Discount discount;
 
 }

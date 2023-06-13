@@ -107,7 +107,7 @@ public class UserControllerTest {
 
         when(userService.getUserById(10L)).thenReturn(user);
 
-        mockMvc.perform(get("/{id}", 10L))
+        mockMvc.perform(get("/users/{id}", 10L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(10))
@@ -118,7 +118,7 @@ public class UserControllerTest {
     public void testGetUserById_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException()).when(userService).getUserById(anyLong());
 
-        mockMvc.perform(get("/{id}", 1L))
+        mockMvc.perform(get("/users/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 

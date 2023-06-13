@@ -10,22 +10,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "product_category")
+@Table(name = "discount")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductCategory {
+public class Discount {
+
     @Id
     Long id;
     String name;
     String description;
+    String discount_percent;
     LocalDateTime created_at;
     LocalDateTime modified_at;
-    LocalDateTime deleted_at;
 
-    @OneToMany(mappedBy = "productCategory")
+    @OneToMany(mappedBy = "discount")
     List<Product> products;
 
 }
