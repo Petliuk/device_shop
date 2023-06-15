@@ -63,7 +63,7 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/upload/file")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         productService.save(file);
         return ResponseEntity.status(HttpStatus.OK).body("Uploaded the file successfully: " + file.getOriginalFilename());

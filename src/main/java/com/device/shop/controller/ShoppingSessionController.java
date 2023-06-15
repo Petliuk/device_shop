@@ -17,7 +17,7 @@ public class ShoppingSessionController {
 
     ShoppingSessionService shoppingSessionService;
 
-    @PostMapping("/")
+    @PostMapping("/createSession")
     public ResponseEntity<ShoppingSession> createShoppingSession(@RequestBody ShoppingSession shoppingSession) {
         ShoppingSession createdSession = shoppingSessionService.createShoppingSession(shoppingSession);
         return ResponseEntity.ok(createdSession);

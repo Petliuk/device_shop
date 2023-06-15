@@ -23,7 +23,7 @@ public class DiscountController {
         return new ResponseEntity<>(addDiscount, HttpStatus.CREATED);
     }
 
-    @GetMapping("get/discount")
+    @GetMapping("/list/discount")
     public ResponseEntity<List<Discount>> getAllDiscounts() {
         List<Discount> discounts = discountService.getAllDiscount();
         return new ResponseEntity<>(discounts, HttpStatus.OK);

@@ -32,14 +32,14 @@ public class CartItemController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/card/{id}/items")
+    @DeleteMapping("/card/items/{id}")
     public ResponseEntity<Product> deleteTheProductsById (@PathVariable("id") Long productId){
         cartItemService.deleteTheProduct(productId);
         return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
-    @DeleteMapping("/delete/all/products/{cartId}")
+    @DeleteMapping("/all/products/{cartId}")
     public ResponseEntity<String> deleteAllProducts (@PathVariable("cartId") Long cartId){
         cartItemService.removeAllProductsFromCart(cartId);
         return ResponseEntity.status(HttpStatus.OK).body("All products removed from the cart");

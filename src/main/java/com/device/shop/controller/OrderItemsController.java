@@ -23,13 +23,13 @@ public class OrderItemsController {
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-    @PostMapping("/post/{id}/order/items")
+    @PostMapping("/order/items/{id}")
     public ResponseEntity<OrderItems> addOrderItemsById(@PathVariable("id") Long productId) {
         OrderItems orderItems = orderItemsService.addOrderItems(productId);
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-    @PostMapping("/update/order/{id}/items")
+    @PostMapping("/{id}/order/items")
     public ResponseEntity<OrderItems> updateOrderItems(@PathVariable("id") Long orderItemsId,
                                            @RequestBody OrderItems orderItems) throws BadRequestException {
         OrderItems updatedOrder = orderItemsService.updateOrderItemsById(orderItems, orderItemsId);
