@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ProductInventory {
+
     @Id
     Long id;
     Long quantify;

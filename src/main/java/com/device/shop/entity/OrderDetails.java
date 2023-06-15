@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class OrderDetails {
+
     @Id
     Long id;
     Double total;

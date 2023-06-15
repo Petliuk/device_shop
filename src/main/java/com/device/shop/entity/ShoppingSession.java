@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ShoppingSession {
+
     @Id
     Long id;
     Double total;
@@ -26,4 +27,5 @@ public class ShoppingSession {
 
     @OneToMany(mappedBy = "shoppingSession")
     List<CartItem> cartItems;
+
 }

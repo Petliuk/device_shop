@@ -3,7 +3,9 @@ package com.device.shop.controller;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.entity.User;
 import com.device.shop.service.UserService;
+
 import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -47,4 +49,5 @@ public class UserController {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
     }
+
 }

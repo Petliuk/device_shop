@@ -57,7 +57,6 @@ public class ProductServiceTest {
                 .modified_at(LocalDateTime.now())
                 .deleted_at(null)
                 .build();
-
     }
 
     @Test
@@ -149,6 +148,7 @@ public class ProductServiceTest {
         assertEquals(expectedProduct, actualProduct);
         verify(productRepository).findByName(productName);
     }
+
     @Test
     public void testGetProductsByCategory() {
         Long categoryId = 1L;
@@ -187,8 +187,6 @@ public class ProductServiceTest {
                 .build();
     }
 
-
-
     @Test
     void save_InvalidCSVFile_ThrowsBadRequestException() {
         ProductRepository productRepository = mock(ProductRepository.class);
@@ -199,4 +197,3 @@ public class ProductServiceTest {
     }
 
 }
-

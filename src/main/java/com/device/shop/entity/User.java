@@ -16,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 public class User {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -37,4 +38,5 @@ public class User {
 
     @OneToOne(mappedBy = "user")
     ShoppingSession shoppingSession;
+
 }

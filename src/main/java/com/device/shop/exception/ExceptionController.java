@@ -1,6 +1,7 @@
 package com.device.shop.exception;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,4 +45,3 @@ public class ExceptionController {
     }
 
 }
-

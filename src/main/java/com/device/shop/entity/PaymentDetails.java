@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PaymentDetails {
+
     @Id
     Long id;
     Long order_id;
@@ -24,5 +25,9 @@ public class PaymentDetails {
 
     @OneToOne(mappedBy = "paymentDetails")
      OrderDetails orderDetails;
+
+    public PaymentDetails(Long id) {
+        this.id = id;
+    }
 
 }
