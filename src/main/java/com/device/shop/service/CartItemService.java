@@ -22,8 +22,7 @@ public class CartItemService implements CartItemServiceInterface {
 
     @Transactional
     public CartItem addToCart(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
 
         CartItem cartItem = new CartItem();
         cartItem.setProduct(product);
@@ -34,8 +33,7 @@ public class CartItemService implements CartItemServiceInterface {
 
     @Transactional
     public List<Product> getProductsInCart(Long productId) {
-        CartItem cartItem = cartItemRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Cart not found with id: " + productId));
+        CartItem cartItem = cartItemRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Cart not found with id: " + productId));
 
         List<Product> products = new ArrayList<>();
         products.add(cartItem.getProduct());
@@ -44,10 +42,10 @@ public class CartItemService implements CartItemServiceInterface {
     }
 
     @Transactional
-    public void deleteTheProduct (Long cartId){
-        if(cartItemRepository.existsById(cartId)){
+    public void deleteTheProduct(Long cartId) {
+        if (cartItemRepository.existsById(cartId)) {
             cartItemRepository.deleteById(cartId);
-        }else {
+        } else {
             throw new EntityNotFoundException("Cart with id " + cartId + " not found");
         }
     }

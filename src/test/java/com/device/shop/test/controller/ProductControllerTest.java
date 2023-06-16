@@ -54,21 +54,21 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void testGetAllProducts() throws Exception{
-       Product product1 = Product.builder()
-               .name("phone")
-               .description("*")
-               .sku("one")
-               .build();
-       Product product2 = Product.builder()
-               .name("laptop")
-               .description("*")
-               .sku("one")
-               .build();
-       List<Product> productList = Arrays.asList(product1, product2);
+    public void testGetAllProducts() throws Exception {
+        Product product1 = Product.builder()
+                .name("phone")
+                .description("*")
+                .sku("one")
+                .build();
+        Product product2 = Product.builder()
+                .name("laptop")
+                .description("*")
+                .sku("one")
+                .build();
+        List<Product> productList = Arrays.asList(product1, product2);
 
-       when(productService.getAllProducts()).thenReturn(productList);
-       mockMvc.perform(get("/getAllProducts"))
+        when(productService.getAllProducts()).thenReturn(productList);
+        mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].name").value("phone"))
@@ -81,17 +81,17 @@ public class ProductControllerTest {
 
     @Test
     public void testGetProductById() throws Exception {
-      Product product = Product.builder()
-              .id(1L)
-              .name("Назва товару")
-              .description("Опис товару")
-              .sku("ABC123")
-              .price(10.99)
-              .build();
+        Product product = Product.builder()
+                .id(1L)
+                .name("Назва товару")
+                .description("Опис товару")
+                .sku("ABC123")
+                .price(10.99)
+                .build();
 
         when(productService.getProductById(1L)).thenReturn(product);
 
-        mockMvc.perform(get("/products/{id}", 1L))
+        mockMvc.perform(get("/product/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1))
@@ -106,13 +106,13 @@ public class ProductControllerTest {
     public void testGetProductById_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException()).when(productService).getProductById(anyLong());
 
-        mockMvc.perform(get("/products/{id}", 1L))
+        mockMvc.perform(get("/product/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void testDeleteProductsById () throws Exception{
-        mockMvc.perform(delete("/delete/products/{id}", 1L))
+    public void testDeleteProductsById() throws Exception {
+        mockMvc.perform(delete("/product/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Product successfully deleted!"));
     }
@@ -121,7 +121,7 @@ public class ProductControllerTest {
     public void testDeleteProduct_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException("")).when(productService).deleteProduct(anyLong());
 
-        mockMvc.perform(delete("/delete/products/{id}", 1L))
+        mockMvc.perform(delete("/product/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
@@ -137,7 +137,7 @@ public class ProductControllerTest {
 
         when(productService.updateProduct(any(Product.class), anyLong())).thenReturn(product);
 
-        mockMvc.perform(post("/update/product/{id}", 1L)
+        mockMvc.perform(post("/product/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
@@ -163,7 +163,7 @@ public class ProductControllerTest {
         when(productService.updateProduct(any(Product.class), anyLong()))
                 .thenThrow(new EntityNotFoundException("Product with id 1 not found"));
 
-        mockMvc.perform(post("/update/product/{id}", 1L)
+        mockMvc.perform(post("/product/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isNotFound());
@@ -227,7 +227,7 @@ public class ProductControllerTest {
 
         when(productService.addProducts(any(Product.class))).thenReturn(ResponseEntity.ok(product));
 
-        mockMvc.perform(post("/addProduct")
+        mockMvc.perform(post("/product")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(product)))
                 .andExpect(status().isOk())
@@ -238,9 +238,9 @@ public class ProductControllerTest {
 
     @Test
     public void testUploadFile() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "test.csv", MediaType.TEXT_PLAIN_VALUE, "test data".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "test.csv", MediaType.TEXT_PLAIN_VALUE, "test data" .getBytes());
 
-        mockMvc.perform(multipart("/upload")
+        mockMvc.perform(multipart("/upload/file")
                         .file(file))
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("Uploaded the file successfully: test.csv")));
@@ -248,13 +248,13 @@ public class ProductControllerTest {
 
     @Test
     public void testSave_InvalidCSVFormat() throws Exception {
-        MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "invalid csv".getBytes());
+        MockMultipartFile file = new MockMultipartFile("file", "test.csv", "text/csv", "invalid csv" .getBytes());
 
         doThrow(new BadRequestException(" ")).when(productService).save(file);
 
-        mockMvc.perform(multipart("/upload")
+        mockMvc.perform(multipart("/upload/file")
                         .file(file)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andReturn();
     }

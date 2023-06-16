@@ -18,32 +18,32 @@ public class DiscountController {
     DiscountService discountService;
 
     @PostMapping("/discount")
-    public ResponseEntity<Discount> addDiscount(@RequestBody Discount discount)  {
+    public ResponseEntity<Discount> addDiscount(@RequestBody Discount discount) {
         Discount addDiscount = discountService.addNewDiscount(discount);
         return new ResponseEntity<>(addDiscount, HttpStatus.CREATED);
     }
 
-    @GetMapping("/list/discount")
+    @GetMapping("/discount")
     public ResponseEntity<List<Discount>> getAllDiscounts() {
         List<Discount> discounts = discountService.getAllDiscount();
         return new ResponseEntity<>(discounts, HttpStatus.OK);
     }
 
     @GetMapping("/discount/{id}")
-    public ResponseEntity <Discount> getDetailsAboutTheDiscountById (@PathVariable("id") Long discountId){
-       Discount discount = discountService.getDiscountById(discountId);
+    public ResponseEntity<Discount> getDetailsAboutTheDiscountById(@PathVariable("id") Long discountId) {
+        Discount discount = discountService.getDiscountById(discountId);
         return new ResponseEntity<>(discount, HttpStatus.OK);
     }
 
     @PostMapping("/discount/{id}")
-    public ResponseEntity <Discount> updateDiscountInformation(@PathVariable("id") Long discountId,
-                                                               @RequestBody Discount discount) throws BadRequestException {
-        Discount updateDiscount = discountService.updateDiscountById(discount,discountId);
-        return new  ResponseEntity<>(updateDiscount, HttpStatus.OK);
+    public ResponseEntity<Discount> updateDiscountInformation(@PathVariable("id") Long discountId,
+                                                              @RequestBody Discount discount) throws BadRequestException {
+        Discount updateDiscount = discountService.updateDiscountById(discount, discountId);
+        return new ResponseEntity<>(updateDiscount, HttpStatus.OK);
     }
 
     @DeleteMapping("/discount/{id}")
-    public ResponseEntity<String> deleteDiscount (@PathVariable("id") Long discountId){
+    public ResponseEntity<String> deleteDiscount(@PathVariable("id") Long discountId) {
         discountService.deleteDiscount(discountId);
         return new ResponseEntity<>("Discount successfully deleted!", HttpStatus.OK);
     }

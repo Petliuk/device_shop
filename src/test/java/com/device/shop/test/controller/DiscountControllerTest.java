@@ -48,14 +48,7 @@ public class DiscountControllerTest {
 
         when(discountService.addNewDiscount(any(Discount.class))).thenReturn(discount);
 
-        mockMvc.perform(post("/discount")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"name\":\"Test Discount\",\"description\":\"Test Description\",\"discount_percent\":\"10\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Test Discount"))
-                .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.discount_percent").value("10"));
+        mockMvc.perform(post("/discount").contentType(MediaType.APPLICATION_JSON).content("{\"id\":1,\"name\":\"Test Discount\",\"description\":\"Test Description\",\"discount_percent\":\"10\"}")).andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.name").value("Test Discount")).andExpect(jsonPath("$.description").value("Test Description")).andExpect(jsonPath("$.discount_percent").value("10"));
 
         verify(discountService).addNewDiscount(any(Discount.class));
     }
@@ -78,16 +71,7 @@ public class DiscountControllerTest {
 
         when(discountService.getAllDiscount()).thenReturn(discounts);
 
-        mockMvc.perform(get("/get/discount"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Discount 1"))
-                .andExpect(jsonPath("$[0].description").value("Description 1"))
-                .andExpect(jsonPath("$[0].discount_percent").value("10"))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("Discount 2"))
-                .andExpect(jsonPath("$[1].description").value("Description 2"))
-                .andExpect(jsonPath("$[1].discount_percent").value("20"));
+        mockMvc.perform(get("/discount")).andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(1)).andExpect(jsonPath("$[0].name").value("Discount 1")).andExpect(jsonPath("$[0].description").value("Description 1")).andExpect(jsonPath("$[0].discount_percent").value("10")).andExpect(jsonPath("$[1].id").value(2)).andExpect(jsonPath("$[1].name").value("Discount 2")).andExpect(jsonPath("$[1].description").value("Description 2")).andExpect(jsonPath("$[1].discount_percent").value("20"));
 
         verify(discountService).getAllDiscount();
     }
@@ -102,12 +86,7 @@ public class DiscountControllerTest {
 
         when(discountService.getDiscountById(1L)).thenReturn(discount);
 
-        mockMvc.perform(get("/discount/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Test Discount"))
-                .andExpect(jsonPath("$.description").value("Test Description"))
-                .andExpect(jsonPath("$.discount_percent").value("10"));
+        mockMvc.perform(get("/discount/1")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.name").value("Test Discount")).andExpect(jsonPath("$.description").value("Test Description")).andExpect(jsonPath("$.discount_percent").value("10"));
 
         verify(discountService).getDiscountById(1L);
     }
@@ -122,23 +101,14 @@ public class DiscountControllerTest {
 
         when(discountService.updateDiscountById(any(Discount.class), eq(1L))).thenReturn(discount);
 
-        mockMvc.perform(post("/discount/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"name\":\"Updated Discount\",\"description\":\"Updated Description\",\"discount_percent\":\"15\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.name").value("Updated Discount"))
-                .andExpect(jsonPath("$.description").value("Updated Description"))
-                .andExpect(jsonPath("$.discount_percent").value("15"));
+        mockMvc.perform(post("/discount/1").contentType(MediaType.APPLICATION_JSON).content("{\"id\":1,\"name\":\"Updated Discount\",\"description\":\"Updated Description\",\"discount_percent\":\"15\"}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.name").value("Updated Discount")).andExpect(jsonPath("$.description").value("Updated Description")).andExpect(jsonPath("$.discount_percent").value("15"));
 
         verify(discountService).updateDiscountById(any(Discount.class), eq(1L));
     }
 
     @Test
     public void testDeleteDiscount() throws Exception {
-        mockMvc.perform(delete("/discount/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Discount successfully deleted!"));
+        mockMvc.perform(delete("/discount/1")).andExpect(status().isOk()).andExpect(content().string("Discount successfully deleted!"));
 
         verify(discountService).deleteDiscount(1L);
     }

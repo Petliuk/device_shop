@@ -20,8 +20,7 @@ public class OrderDetailsService implements OrderDetailsServiceInterface {
 
     @Transactional
     public OrderDetails getOrderDetailsById(Long orderId) {
-        return orderDetailsRepository.findById(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("Order Details  with id " + orderId + " not found"));
+        return orderDetailsRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order Details  with id " + orderId + " not found"));
     }
 
     @Transactional
@@ -32,7 +31,7 @@ public class OrderDetailsService implements OrderDetailsServiceInterface {
     @Transactional
     public OrderDetails updateOrderDetailsById(OrderDetails orderDetails, Long orderDetailsId) throws BadRequestException, EntityNotFoundException {
         if (orderDetailsId == null || !orderDetailsRepository.existsById(orderDetailsId)) {
-            throw new EntityNotFoundException("User with id " + orderDetailsId + " not found");
+            throw new EntityNotFoundException("Order Details with id " + orderDetailsId + " not found");
         } else if (!orderDetailsId.equals(orderDetails.getId())) {
             throw new BadRequestException("Cannot change the id to " + orderDetails.getId());
         } else {
@@ -47,7 +46,6 @@ public class OrderDetailsService implements OrderDetailsServiceInterface {
         } else {
             throw new EntityNotFoundException("Order Details with id " + orderDetailsId + " not found");
         }
-
     }
 
 }

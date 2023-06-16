@@ -24,7 +24,7 @@ public class PaymentDetails {
     LocalDateTime modified_at;
 
     @OneToOne(mappedBy = "paymentDetails")
-     OrderDetails orderDetails;
+    OrderDetails orderDetails;
 
     public PaymentDetails(Long id) {
         this.id = id;

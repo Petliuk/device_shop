@@ -31,15 +31,14 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/allUsers")
+    @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUser() {
         List<User> users = userService.getAllUser();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
-                                           @RequestBody User user) throws BadRequestException {
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody User user) throws BadRequestException {
         User updatedUser = userService.updateUser(user, userId);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }

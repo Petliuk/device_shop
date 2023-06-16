@@ -44,12 +44,7 @@ public class ShoppingSessionControllerTest {
 
         when(shoppingSessionService.createShoppingSession(any(ShoppingSession.class))).thenReturn(shoppingSession);
 
-        mockMvc.perform(post("/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"total\": 100.0}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.total").value(100.0));
+        mockMvc.perform(post("/session").contentType(MediaType.APPLICATION_JSON).content("{\"total\": 100.0}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
 
         verify(shoppingSessionService, times(1)).createShoppingSession(any(ShoppingSession.class));
     }
@@ -62,10 +57,7 @@ public class ShoppingSessionControllerTest {
 
         when(shoppingSessionService.getShoppingSessionById(1L)).thenReturn(shoppingSession);
 
-        mockMvc.perform(get("/{sessionId}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.total").value(100.0));
+        mockMvc.perform(get("/{sessionId}", 1L)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
 
         verify(shoppingSessionService, times(1)).getShoppingSessionById(1L);
     }
@@ -84,12 +76,7 @@ public class ShoppingSessionControllerTest {
 
         when(shoppingSessionService.getAllShoppingSessions()).thenReturn(shoppingSessions);
 
-        mockMvc.perform(get("/allSession"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].total").value(100.0))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].total").value(200.0));
+        mockMvc.perform(get("/session")).andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(1)).andExpect(jsonPath("$[0].total").value(100.0)).andExpect(jsonPath("$[1].id").value(2)).andExpect(jsonPath("$[1].total").value(200.0));
 
         verify(shoppingSessionService, times(1)).getAllShoppingSessions();
     }
@@ -102,20 +89,14 @@ public class ShoppingSessionControllerTest {
 
         when(shoppingSessionService.updateShoppingSession(any(ShoppingSession.class))).thenReturn(shoppingSession);
 
-        mockMvc.perform(put("/{sessionId}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"total\": 100.0}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.total").value(100.0));
+        mockMvc.perform(put("/{sessionId}", 1L).contentType(MediaType.APPLICATION_JSON).content("{\"total\": 100.0}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
 
         verify(shoppingSessionService, times(1)).updateShoppingSession(any(ShoppingSession.class));
     }
 
     @Test
     public void testDeleteShoppingSessionById() throws Exception {
-        mockMvc.perform(delete("/{sessionId}", 1L))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/{sessionId}", 1L)).andExpect(status().isNoContent());
 
         verify(shoppingSessionService, times(1)).deleteShoppingSessionById(1L);
     }

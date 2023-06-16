@@ -11,19 +11,18 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ShoppingSessionService implements ShoppingSessionServiceInterface{
+public class ShoppingSessionService implements ShoppingSessionServiceInterface {
 
     ShoppingSessionRepository shoppingSessionRepository;
 
-     @Transactional
+    @Transactional
     public ShoppingSession createShoppingSession(ShoppingSession shoppingSession) {
         return shoppingSessionRepository.save(shoppingSession);
     }
 
     @Transactional
     public ShoppingSession getShoppingSessionById(Long sessionId) {
-        return shoppingSessionRepository.findById(sessionId)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping session not found"));
+        return shoppingSessionRepository.findById(sessionId).orElseThrow(() -> new EntityNotFoundException("Shopping session not found"));
     }
 
     @Transactional

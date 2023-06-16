@@ -46,9 +46,7 @@ public class CartItemControllerTest {
     @BeforeEach
     public void setup() {
         cartItemController = new CartItemController(cartItemService);
-        mockMvc = MockMvcBuilders.standaloneSetup(cartItemController)
-                .setControllerAdvice(new ExceptionController())
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(cartItemController).setControllerAdvice(new ExceptionController()).build();
     }
 
     @Test
@@ -59,16 +57,10 @@ public class CartItemControllerTest {
 
         when(cartItemService.addToCart(productId)).thenReturn(cartItem);
 
-        mockMvc.perform(
-                        post("/cart/{id}/items", productId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.id").value(cartItem.getId()))
-                .andExpect(jsonPath("$.quantity").value(cartItem.getQuantity()));
+        mockMvc.perform(post("/cart/{id}/items", productId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$.id").value(cartItem.getId())).andExpect(jsonPath("$.quantity").value(cartItem.getQuantity()));
 
 
-        ResponseEntity<CartItem> actualResponse = cartItemController.addingProductToTheCartById(productId);
+        ResponseEntity<CartItem> actualResponse = cartItemController.addProductToTheCartById(productId);
 
         assertEquals(expectedResponse.getStatusCode(), actualResponse.getStatusCode());
         assertEquals(expectedResponse.getBody(), actualResponse.getBody());
@@ -83,10 +75,7 @@ public class CartItemControllerTest {
 
         when(cartItemService.getProductsInCart(cartId)).thenReturn(products);
 
-        mockMvc.perform(get("/cart/{id}/products", cartId))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray());
+        mockMvc.perform(get("/cart/{id}/items", cartId)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$").isArray());
 
         verify(cartItemService, times(1)).getProductsInCart(cartId);
     }
@@ -95,8 +84,7 @@ public class CartItemControllerTest {
     public void testDeleteTheProductsById() throws Exception {
         Long productId = 1L;
 
-        mockMvc.perform(delete("/delete/card/{id}/items", productId))
-                .andExpect(status().isOk());
+        mockMvc.perform(delete("/cart/items/{id}", productId)).andExpect(status().isOk());
 
         verify(cartItemService, times(1)).deleteTheProduct(productId);
     }
@@ -105,10 +93,7 @@ public class CartItemControllerTest {
     public void deleteAllProducts_ShouldReturnOk() throws Exception {
         Long cartId = 1L;
 
-        mockMvc.perform(delete("/delete/all/products/{cartId}", cartId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string("All products removed from the cart"));
+        mockMvc.perform(delete("/cart/{cartId}/items", cartId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string("All products removed from the cart"));
 
         verify(cartItemService).removeAllProductsFromCart(cartId);
     }

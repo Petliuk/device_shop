@@ -1,11 +1,14 @@
 package com.device.shop.controller;
 
 
+import com.device.shop.entity.Discount;
 import com.device.shop.entity.PaymentDetails;
+import com.device.shop.exception.BadRequestException;
 import com.device.shop.service.PaymentDetailsService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,22 +26,21 @@ public class PaymentDetailsController {
     }
 
     @GetMapping("/{paymentId}")
-    public ResponseEntity<PaymentDetails> getPaymentDetaById(@PathVariable("paymentId") Long paymentId) {
+    public ResponseEntity<PaymentDetails> getPaymentDataById(@PathVariable("paymentId") Long paymentId) {
         PaymentDetails payment = paymentDetailsService.getPaymentById(paymentId);
         return ResponseEntity.ok(payment);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PaymentDetails> updateOrderDetails(@PathVariable("id") Long id, @RequestBody PaymentDetails paymentDetails) {
-        paymentDetails.setId(id);
-        PaymentDetails updatedOrderDetails = paymentDetailsService.updatePaymentDetails(paymentDetails);
+    @PutMapping("/payment/{id}")
+    public ResponseEntity<PaymentDetails> updatePaymentDetails(@PathVariable("id") Long id, @RequestBody PaymentDetails paymentDetails) throws BadRequestException {
+        PaymentDetails updatedOrderDetails = paymentDetailsService.updatePaymentDetails(paymentDetails, id);
         return ResponseEntity.ok(updatedOrderDetails);
     }
 
-    @DeleteMapping("/payment{id}/details")
-    public ResponseEntity<Void> deletePaymentDetailsById(@PathVariable("id") Long paymentId) {
-        paymentDetailsService.deletePaymentDetailsById(paymentId);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/payment/{id}/details")
+    public ResponseEntity<String> deletePaymentDetailsById(@PathVariable("id") Long id) {
+        paymentDetailsService.deletePaymentDetailsById(id);
+        return new ResponseEntity<>("Payment Details successfully deleted!", HttpStatus.OK);
     }
 
 }

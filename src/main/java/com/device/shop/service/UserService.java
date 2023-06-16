@@ -26,8 +26,7 @@ public class UserService implements UserServiceInterface {
 
     @Transactional
     public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
     }
 
     @Transactional

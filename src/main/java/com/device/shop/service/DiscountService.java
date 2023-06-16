@@ -19,7 +19,7 @@ public class DiscountService implements DiscountServiceInterface {
     DiscountRepository discountRepository;
 
     @Transactional
-    public Discount addNewDiscount(Discount discount)  {
+    public Discount addNewDiscount(Discount discount) {
         return discountRepository.save(discount);
     }
 
@@ -30,8 +30,7 @@ public class DiscountService implements DiscountServiceInterface {
 
     @Transactional
     public Discount getDiscountById(Long discountId) {
-        return discountRepository.findById(discountId)
-                .orElseThrow(() -> new EntityNotFoundException("Discount with id " + discountId + " not found"));
+        return discountRepository.findById(discountId).orElseThrow(() -> new EntityNotFoundException("Discount with id " + discountId + " not found"));
     }
 
     @Transactional
@@ -46,7 +45,7 @@ public class DiscountService implements DiscountServiceInterface {
     }
 
     @Transactional
-    public void deleteDiscount (Long discountId){
+    public void deleteDiscount(Long discountId) {
         if (discountRepository.existsById(discountId)) {
             discountRepository.deleteById(discountId);
         } else {

@@ -21,18 +21,17 @@ public class ProductService implements ProductServiceInterface {
     ProductRepository productRepository;
 
     @Transactional
-    public List<Product> getAllProducts(){
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
     @Transactional
-    public Product getProductById (Long productId){
-       return productRepository.findById(productId)
-               .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
     }
 
     @Transactional
-    public void deleteProduct (Long productId){
+    public void deleteProduct(Long productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
         } else {
@@ -56,18 +55,18 @@ public class ProductService implements ProductServiceInterface {
     }
 
     @Transactional
-    public Product updateProduct (Product product, Long productId ) throws BadRequestException, EntityNotFoundException {
-        if (productId != null || productRepository.existsById(productId)){
-              throw new EntityNotFoundException("Product with id " + productId + " not found");
+    public Product updateProduct(Product product, Long productId) throws BadRequestException, EntityNotFoundException {
+        if (productId != null || productRepository.existsById(productId)) {
+            throw new EntityNotFoundException("Product with id " + productId + " not found");
         } else if (!productId.equals(product.getId())) {
-              throw new BadRequestException("Cannot change the id to " + product.getId());
+            throw new BadRequestException("Cannot change the id to " + product.getId());
         } else {
-               return productRepository.save(product);
-         }
+            return productRepository.save(product);
+        }
     }
 
     @Transactional
-    public void save(MultipartFile file) throws IOException , BadRequestException {
+    public void save(MultipartFile file) throws IOException, BadRequestException {
         if (!CSVHelper.hasCSVFormat(file)) {
             throw new BadRequestException("Please upload a csv file");
         }

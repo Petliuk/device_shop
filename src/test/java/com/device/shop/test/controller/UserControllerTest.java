@@ -40,9 +40,7 @@ public class UserControllerTest {
     @BeforeEach
     public void setup() {
         userController = new UserController(userService);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController)
-                .setControllerAdvice(new ExceptionController())
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userController).setControllerAdvice(new ExceptionController()).build();
     }
 
     @Test
@@ -53,50 +51,24 @@ public class UserControllerTest {
 
         when(userService.createUser(any(User.class))).thenReturn(user);
 
-        mockMvc.perform(
-                post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user))
-                )
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(10))
-                .andExpect(jsonPath("$.name").value("Alesia"));
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isCreated()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(10)).andExpect(jsonPath("$.name").value("Alesia"));
     }
 
     @Test
     public void testCreateUser_DataIntegrityViolationException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("john.doe09@gmail.com")
-                .password("password")
-                .build();
+        User user = User.builder().name("Alesia").surname("Pav").phone("0977364523").email("john.doe09@gmail.com").password("password").build();
 
         when(userService.createUser(any(User.class))).thenThrow(new DataIntegrityViolationException(""));
 
-        mockMvc.perform(post("/users")
-                      .contentType(MediaType.APPLICATION_JSON)
-                      .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isBadRequest());
     }
 
     @Test
     public void testCreateUser_BadRequestException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("")
-                .password("password")
-                .build();
+        User user = User.builder().name("Alesia").surname("Pav").phone("0977364523").email("").password("password").build();
         when(userService.createUser(any(User.class))).thenThrow(new BadRequestException(""));
 
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -107,19 +79,14 @@ public class UserControllerTest {
 
         when(userService.getUserById(10L)).thenReturn(user);
 
-        mockMvc.perform(get("/users/{id}", 10L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(10))
-                .andExpect(jsonPath("$.name").value("Alesia"));
+        mockMvc.perform(get("/users/{id}", 10L)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(10)).andExpect(jsonPath("$.name").value("Alesia"));
     }
 
     @Test
     public void testGetUserById_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException()).when(userService).getUserById(anyLong());
 
-        mockMvc.perform(get("/users/{id}", 1L))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/users/{id}", 1L)).andExpect(status().isNotFound());
     }
 
     @Test
@@ -136,13 +103,7 @@ public class UserControllerTest {
 
         when(userService.getAllUser()).thenReturn(users);
 
-        mockMvc.perform(get("/allUsers"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("John"))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[1].name").value("Jane"));
+        mockMvc.perform(get("/users")).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$[0].id").value(1)).andExpect(jsonPath("$[0].name").value("John")).andExpect(jsonPath("$[1].id").value(2)).andExpect(jsonPath("$[1].name").value("Jane"));
     }
 
     @Test
@@ -153,82 +114,44 @@ public class UserControllerTest {
 
         when(userService.updateUser(any(User.class), any(Long.class))).thenReturn(user);
 
-        mockMvc.perform(
-                post("/{id}", 10L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user))
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(10))
-                .andExpect(jsonPath("$.name").value("Alesia"));
+        mockMvc.perform(post("/{id}", 10L).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(10)).andExpect(jsonPath("$.name").value("Alesia"));
     }
 
     @Test
     public void testUpdateUser_EntityNotFoundException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("john.doe09@gmail.com")
-                .password("password")
-                .build();
+        User user = User.builder().name("Alesia").surname("Pav").phone("0977364523").email("john.doe09@gmail.com").password("password").build();
 
         doThrow(new EntityNotFoundException()).when(userService).updateUser(any(User.class), anyLong());
 
-        mockMvc.perform(post("/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user))).
-                andExpect(status().isNotFound());
+        mockMvc.perform(post("/{id}", 1L).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isNotFound());
     }
 
     @Test
     public void testUpdateUser_BadRequestException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("john.doe09@gmail.com")
-                .password("password")
-                .build();
+        User user = User.builder().name("Alesia").surname("Pav").phone("0977364523").email("john.doe09@gmail.com").password("password").build();
         doThrow(new BadRequestException("")).when(userService).updateUser(any(User.class), anyLong());
 
-        mockMvc.perform(post("/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/{id}", 1L).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isBadRequest());
     }
 
     @Test
     public void testUpdateUser_DataIntegrityViolationException() throws Exception {
-        User user = User.builder()
-                .name("Alesia")
-                .surname("Pav")
-                .phone("0977364523")
-                .email("john.doe09@gmail.com")
-                .password("password")
-                .build();
+        User user = User.builder().name("Alesia").surname("Pav").phone("0977364523").email("john.doe09@gmail.com").password("password").build();
         doThrow(new DataIntegrityViolationException("")).when(userService).updateUser(any(User.class), anyLong());
 
-        mockMvc.perform(post("/{id}", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(post("/{id}", 1L).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(user))).andExpect(status().isBadRequest());
     }
 
     @Test
     public void testDeleteUser() throws Exception {
-        mockMvc.perform(delete("/{id}", 10L))
-                .andExpect(status().isOk())
-                .andExpect(content().string("User successfully deleted!"));
+        mockMvc.perform(delete("/{id}", 10L)).andExpect(status().isOk()).andExpect(content().string("User successfully deleted!"));
     }
 
     @Test
     public void testDeleteUser_EntityNotFoundException() throws Exception {
         doThrow(new EntityNotFoundException("")).when(userService).deleteUser(anyLong());
 
-        mockMvc.perform(delete("/{id}", 1L))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(delete("/{id}", 1L)).andExpect(status().isNotFound());
     }
 
 }

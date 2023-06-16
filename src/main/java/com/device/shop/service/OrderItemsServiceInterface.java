@@ -8,8 +8,11 @@ import javax.persistence.EntityNotFoundException;
 public interface OrderItemsServiceInterface {
 
     OrderItems getOrderItemsById(Long orderItemsId);
+
     OrderItems addOrderItems(Long productId);
-    OrderItems updateOrderItemsById (OrderItems orderItems, Long orderItemsId) throws BadRequestException, EntityNotFoundException;
+
+    OrderItems updateOrderItemsById(OrderItems orderItems, Long orderItemsId) throws BadRequestException, EntityNotFoundException;
+
     void deleteOrderItemsById(Long orderItemsId);
 
 }

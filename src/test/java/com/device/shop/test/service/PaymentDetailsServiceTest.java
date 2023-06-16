@@ -1,6 +1,7 @@
 package com.device.shop.test.service;
 
 import com.device.shop.entity.PaymentDetails;
+import com.device.shop.exception.BadRequestException;
 import com.device.shop.repository.PaymentDetailsRepository;
 import com.device.shop.service.PaymentDetailsService;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +30,7 @@ public class PaymentDetailsServiceTest {
     @Test
     public void testCreatePaymentById() {
         Long id = 1L;
-        PaymentDetails payment = PaymentDetails.builder()
-                .id(id)
-                .build();
+        PaymentDetails payment = PaymentDetails.builder().id(id).build();
         when(paymentDetailsRepository.save(any(PaymentDetails.class))).thenReturn(payment);
 
         PaymentDetails result = paymentDetailsService.createPaymentById(id);
@@ -44,9 +43,7 @@ public class PaymentDetailsServiceTest {
     @Test
     public void testGetPaymentById() {
         Long paymentId = 1L;
-        PaymentDetails payment = PaymentDetails.builder()
-                .id(paymentId)
-                .build();
+        PaymentDetails payment = PaymentDetails.builder().id(paymentId).build();
         when(paymentDetailsRepository.findById(paymentId)).thenReturn(java.util.Optional.of(payment));
 
         PaymentDetails result = paymentDetailsService.getPaymentById(paymentId);
@@ -57,27 +54,29 @@ public class PaymentDetailsServiceTest {
     }
 
     @Test
-    public void testUpdatePaymentDetails() {
-        Long id = 1L;
-        PaymentDetails payment = PaymentDetails.builder()
-                .id(id)
-                .build();
-        when(paymentDetailsRepository.save(any(PaymentDetails.class))).thenReturn(payment);
+    public void testUpdatePaymentDetails() throws BadRequestException {
+        Long paymentDetailsId = 1L;
+        PaymentDetails paymentDetails = new PaymentDetails();
+        paymentDetails.setId(paymentDetailsId);
+        when(paymentDetailsRepository.existsById(paymentDetailsId)).thenReturn(true);
+        when(paymentDetailsRepository.save(paymentDetails)).thenReturn(paymentDetails);
 
-        PaymentDetails result = paymentDetailsService.updatePaymentDetails(payment);
+        PaymentDetails result = paymentDetailsService.updatePaymentDetails(paymentDetails, paymentDetailsId);
 
-        assertNotNull(result);
-        assertEquals(id, result.getId());
-        verify(paymentDetailsRepository, times(1)).save(any(PaymentDetails.class));
+        assertEquals(paymentDetails, result);
+        verify(paymentDetailsRepository, times(1)).save(paymentDetails);
     }
 
     @Test
     public void testDeletePaymentDetailsById() {
         Long paymentId = 1L;
 
+        when(paymentDetailsRepository.existsById(paymentId)).thenReturn(true);
+
         paymentDetailsService.deletePaymentDetailsById(paymentId);
 
-        verify(paymentDetailsRepository, times(1)).deleteById(paymentId);
+        verify(paymentDetailsRepository).existsById(paymentId);
+        verify(paymentDetailsRepository).deleteById(paymentId);
     }
 
 }

@@ -10,14 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,10 +32,10 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class ProductServiceTest {
-    @Autowired
-    private MockMvc mockMvc;
+
     @Mock
     private ProductRepository productRepository;
+
     private ProductService productService;
 
     @BeforeEach
@@ -47,30 +45,13 @@ public class ProductServiceTest {
     }
 
     private Product buildProduct() {
-        return Product.builder()
-                .id(1L)
-                .name("Test Product")
-                .description("Test Description")
-                .sku("TEST_SKU")
-                .price(9.99)
-                .created_at(LocalDateTime.now())
-                .modified_at(LocalDateTime.now())
-                .deleted_at(null)
-                .build();
+        return Product.builder().id(1L).name("Test Product").description("Test Description").sku("TEST_SKU").price(9.99).created_at(LocalDateTime.now()).modified_at(LocalDateTime.now()).deleted_at(null).build();
     }
 
     @Test
     public void testGetAllProducts_ReturnsListOfUsers() {
-        Product product1 = Product.builder()
-                .name("phone")
-                .description("*")
-                .sku("one")
-                .build();
-        Product product2 = Product.builder()
-                .name("laptop")
-                .description("*")
-                .sku("one")
-                .build();
+        Product product1 = Product.builder().name("phone").description("*").sku("one").build();
+        Product product2 = Product.builder().name("laptop").description("*").sku("one").build();
         List<Product> productList = Arrays.asList(product1, product2);
 
         when(productRepository.findAll()).thenReturn(productList);
@@ -82,7 +63,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProductById(){
+    public void getProductById() {
         Long productId = 1L;
         Product product = buildProduct();
 
@@ -117,15 +98,15 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProductById(){
-            Long productId = 1L;
-            Product expectedProduct = buildProduct();
-            when(productRepository.findById(productId)).thenReturn(Optional.of(expectedProduct));
+    public void updateProductById() {
+        Long productId = 1L;
+        Product expectedProduct = buildProduct();
+        when(productRepository.findById(productId)).thenReturn(Optional.of(expectedProduct));
 
-            Product actualProduct = productService.getProductById(productId);
+        Product actualProduct = productService.getProductById(productId);
 
-            assertEquals(expectedProduct, actualProduct);
-            verify(productRepository).findById(productId);
+        assertEquals(expectedProduct, actualProduct);
+        verify(productRepository).findById(productId);
     }
 
     @Test
@@ -175,22 +156,13 @@ public class ProductServiceTest {
     }
 
     private Product buildProducts() {
-        return Product.builder()
-                .id(1L)
-                .name("Test Product")
-                .description("Test Description")
-                .sku("TEST_SKU")
-                .price(9.99)
-                .created_at(LocalDateTime.now())
-                .modified_at(LocalDateTime.now())
-                .deleted_at(null)
-                .build();
+        return Product.builder().id(1L).name("Test Product").description("Test Description").sku("TEST_SKU").price(9.99).created_at(LocalDateTime.now()).modified_at(LocalDateTime.now()).deleted_at(null).build();
     }
 
     @Test
     void save_InvalidCSVFile_ThrowsBadRequestException() {
         ProductRepository productRepository = mock(ProductRepository.class);
-        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "invalid csv".getBytes());
+        MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "invalid csv" .getBytes());
 
         assertThrows(BadRequestException.class, () -> productService.save(file));
         verifyNoInteractions(productRepository);

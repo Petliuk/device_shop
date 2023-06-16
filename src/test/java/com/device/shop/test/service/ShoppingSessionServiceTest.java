@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class ShoppingSessionServiceTest  {
+public class ShoppingSessionServiceTest {
 
     @Mock
     private ShoppingSessionRepository shoppingSessionRepository;
@@ -33,10 +33,7 @@ public class ShoppingSessionServiceTest  {
 
     @Test
     public void testCreateShoppingSession() {
-        ShoppingSession shoppingSession = ShoppingSession.builder()
-                .id(1L)
-                .total(100.0)
-                .build();
+        ShoppingSession shoppingSession = ShoppingSession.builder().id(1L).total(100.0).build();
 
         when(shoppingSessionRepository.save(shoppingSession)).thenReturn(shoppingSession);
 
@@ -48,10 +45,7 @@ public class ShoppingSessionServiceTest  {
 
     @Test
     public void testGetShoppingSessionById() {
-        ShoppingSession shoppingSession = ShoppingSession.builder()
-                .id(1L)
-                .total(100.0)
-                .build();
+        ShoppingSession shoppingSession = ShoppingSession.builder().id(1L).total(100.0).build();
 
         when(shoppingSessionRepository.findById(1L)).thenReturn(Optional.of(shoppingSession));
 
@@ -72,14 +66,8 @@ public class ShoppingSessionServiceTest  {
 
     @Test
     public void testGetAllShoppingSessions() {
-        ShoppingSession session1 = ShoppingSession.builder()
-                .id(1L)
-                .total(100.0)
-                .build();
-        ShoppingSession session2 = ShoppingSession.builder()
-                .id(2L)
-                .total(200.0)
-                .build();
+        ShoppingSession session1 = ShoppingSession.builder().id(1L).total(100.0).build();
+        ShoppingSession session2 = ShoppingSession.builder().id(2L).total(200.0).build();
         List<ShoppingSession> sessions = Arrays.asList(session1, session2);
 
         when(shoppingSessionRepository.findAll()).thenReturn(sessions);

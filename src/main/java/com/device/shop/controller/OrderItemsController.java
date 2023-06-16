@@ -18,26 +18,26 @@ public class OrderItemsController {
     OrderItemsService orderItemsService;
 
     @GetMapping("/order/{id}/items")
-    public ResponseEntity<OrderItems> getOrderItemsId(@PathVariable("id") Long orderItemsId) {
+    public ResponseEntity<OrderItems> getOrderItemsById(@PathVariable("id") Long orderItemsId) {
         OrderItems orderItems = orderItemsService.getOrderItemsById(orderItemsId);
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-    @PostMapping("/order/items/{id}")
+    @PostMapping("/order/{id}/items")
     public ResponseEntity<OrderItems> addOrderItemsById(@PathVariable("id") Long productId) {
         OrderItems orderItems = orderItemsService.addOrderItems(productId);
         return new ResponseEntity<>(orderItems, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/order/items")
-    public ResponseEntity<OrderItems> updateOrderItems(@PathVariable("id") Long orderItemsId,
-                                           @RequestBody OrderItems orderItems) throws BadRequestException {
+    @PostMapping("/order/items/{id}")
+    public ResponseEntity<OrderItems> updateOrderItemsById(@PathVariable("id") Long orderItemsId,
+                                                           @RequestBody OrderItems orderItems) throws BadRequestException {
         OrderItems updatedOrder = orderItemsService.updateOrderItemsById(orderItems, orderItemsId);
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 
     @DeleteMapping("/order/{id}/items")
-    public ResponseEntity<String> deleteOrderItems(@PathVariable("id") Long orderItemsId) {
+    public ResponseEntity<String> deleteOrderItemsById(@PathVariable("id") Long orderItemsId) {
         orderItemsService.deleteOrderItemsById(orderItemsId);
         return new ResponseEntity<>("Order Items successfully deleted!", HttpStatus.OK);
     }

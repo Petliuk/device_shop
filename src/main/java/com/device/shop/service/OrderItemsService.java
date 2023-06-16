@@ -20,14 +20,12 @@ public class OrderItemsService implements OrderItemsServiceInterface {
 
     @Transactional
     public OrderItems getOrderItemsById(Long orderItemsId) {
-        return orderItemsRepository.findById(orderItemsId)
-                .orElseThrow(() -> new EntityNotFoundException("Order Items with id " + orderItemsId + " not found"));
+        return orderItemsRepository.findById(orderItemsId).orElseThrow(() -> new EntityNotFoundException("Order Items with id " + orderItemsId + " not found"));
     }
 
     @Transactional
     public OrderItems addOrderItems(Long productId) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
 
         OrderItems orderItems = new OrderItems();
         orderItems.setProduct(product);
@@ -37,7 +35,7 @@ public class OrderItemsService implements OrderItemsServiceInterface {
     }
 
     @Transactional
-    public OrderItems updateOrderItemsById (OrderItems orderItems, Long orderItemsId) throws BadRequestException, EntityNotFoundException {
+    public OrderItems updateOrderItemsById(OrderItems orderItems, Long orderItemsId) throws BadRequestException, EntityNotFoundException {
         if (orderItemsId == null || !orderItemsRepository.existsById(orderItemsId)) {
             throw new EntityNotFoundException("User with id " + orderItemsId + " not found");
         } else if (!orderItemsId.equals(orderItems.getId())) {
@@ -54,7 +52,6 @@ public class OrderItemsService implements OrderItemsServiceInterface {
         } else {
             throw new EntityNotFoundException("Order Items with id " + orderItemsId + " not found");
         }
-
     }
 
 }

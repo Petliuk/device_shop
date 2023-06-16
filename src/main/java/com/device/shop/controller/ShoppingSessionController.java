@@ -17,7 +17,7 @@ public class ShoppingSessionController {
 
     ShoppingSessionService shoppingSessionService;
 
-    @PostMapping("/createSession")
+    @PostMapping("/session")
     public ResponseEntity<ShoppingSession> createShoppingSession(@RequestBody ShoppingSession shoppingSession) {
         ShoppingSession createdSession = shoppingSessionService.createShoppingSession(shoppingSession);
         return ResponseEntity.ok(createdSession);
@@ -29,7 +29,7 @@ public class ShoppingSessionController {
         return ResponseEntity.ok(shoppingSession);
     }
 
-    @GetMapping("/allSession")
+    @GetMapping("/session")
     public ResponseEntity<List<ShoppingSession>> getAllShoppingSessions() {
         List<ShoppingSession> shoppingSessions = shoppingSessionService.getAllShoppingSessions();
         return ResponseEntity.ok(shoppingSessions);

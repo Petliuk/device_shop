@@ -65,25 +65,25 @@ public class PaymentDetailsControllerTest {
         PaymentDetails paymentDetails = new PaymentDetails();
         paymentDetails.setId(paymentDetailsId);
 
-        when(paymentDetailsService.updatePaymentDetails(any(PaymentDetails.class))).thenReturn(paymentDetails);
+        when(paymentDetailsService.updatePaymentDetails(any(PaymentDetails.class), any(Long.class))).thenReturn(paymentDetails);
 
-        mockMvc.perform(put("/{id}", paymentDetailsId)
+        mockMvc.perform(put("/payment/{id}", paymentDetailsId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":1}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(paymentDetailsId));
 
-        verify(paymentDetailsService).updatePaymentDetails(any(PaymentDetails.class));
+        verify(paymentDetailsService).updatePaymentDetails(any(PaymentDetails.class), any(Long.class));
     }
 
     @Test
     public void testDeletePaymentDetailsById() throws Exception {
         Long paymentId = 1L;
+        mockMvc.perform(delete("/payment/{id}/details", paymentId ))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Payment Details successfully deleted!"));
 
-        mockMvc.perform(delete("/payment{id}/details", paymentId))
-                .andExpect(status().isNoContent());
-
-        verify(paymentDetailsService, times(1)).deletePaymentDetailsById(paymentId);
+        verify(paymentDetailsService).deletePaymentDetailsById(paymentId);
     }
 
 }

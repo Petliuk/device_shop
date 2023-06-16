@@ -20,33 +20,32 @@ public class ProductController {
 
     ProductService productService;
 
-    @PostMapping("/update/product/{id}")
-    public ResponseEntity<Product> updateProductsById(@PathVariable ("id")Long priductid,
-                                                     @RequestBody Product product ) throws BadRequestException{
-        Product updateProduct = productService.updateProduct(product, priductid);
+    @PostMapping("/product/{id}")
+    public ResponseEntity<Product> updateProductsById(@PathVariable("id") Long productId, @RequestBody Product product) throws BadRequestException {
+        Product updateProduct = productService.updateProduct(product, productId);
         return new ResponseEntity<>(updateProduct, HttpStatus.OK);
     }
 
-    @GetMapping("/getAllProducts")
+    @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProduct() {
         List<Product> products = productService.getAllProducts();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/products/{id}")
-     public ResponseEntity<String> deleteProductsById (@PathVariable("id") Long  productId){
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProductsById(@PathVariable("id") Long productId) {
         productService.deleteProduct(productId);
         return new ResponseEntity<>("Product successfully deleted!", HttpStatus.OK);
 
     }
 
-    @GetMapping ("/products/{id}")
-    public ResponseEntity <Product> getProductById (@PathVariable("id") Long productId) {
-       Product product = productService.getProductById(productId);
-       return new ResponseEntity<>(product,HttpStatus.OK);
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId) {
+        Product product = productService.getProductById(productId);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
-    @PostMapping("/addProduct")
+    @PostMapping("/product")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         return productService.addProducts(product);
     }
@@ -70,5 +69,3 @@ public class ProductController {
     }
 
 }
-
-

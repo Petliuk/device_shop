@@ -20,9 +20,9 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    @ApiModelProperty(value = "User firstname",example = "firstname")
+    @ApiModelProperty(value = "User firstname", example = "firstname")
     private String name;
-    @ApiModelProperty(value = "User lastname",example = "lastname")
+    @ApiModelProperty(value = "User lastname", example = "lastname")
     private String surname;
     @ApiModelProperty(value = "The user's phone number in the format +380 XX XXX XX XX , +380-XX-XXX-XX-XX", required = true, example = "+380 XX XXX XX XX , +380-XX-XXX-XX-XX")
     private String phone;

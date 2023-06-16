@@ -42,9 +42,7 @@ public class OrderDetailsControllerTest {
 
         when(orderDetailsService.getOrderDetailsById(orderId)).thenReturn(orderDetails);
 
-        mockMvc.perform(get("/order/{id}/details", orderId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(orderId));
+        mockMvc.perform(get("/order/{id}/details", orderId)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(orderId));
 
         verify(orderDetailsService).getOrderDetailsById(orderId);
     }
@@ -56,11 +54,7 @@ public class OrderDetailsControllerTest {
 
         when(orderDetailsService.createOrder(any(OrderDetails.class))).thenReturn(orderDetails);
 
-        mockMvc.perform(post("/order/{id}/details", 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1));
+        mockMvc.perform(post("/order/{id}/details", 1L).contentType(MediaType.APPLICATION_JSON).content("{\"id\":1}")).andExpect(status().isCreated()).andExpect(jsonPath("$.id").value(1));
 
         verify(orderDetailsService).createOrder(any(OrderDetails.class));
     }
@@ -73,11 +67,7 @@ public class OrderDetailsControllerTest {
 
         when(orderDetailsService.updateOrderDetailsById(any(OrderDetails.class), any(Long.class))).thenReturn(orderDetails);
 
-        mockMvc.perform(put("/order/{id}/details", orderDetailsId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(orderDetailsId));
+        mockMvc.perform(put("/order/{id}/details", orderDetailsId).contentType(MediaType.APPLICATION_JSON).content("{\"id\":1}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(orderDetailsId));
 
         verify(orderDetailsService).updateOrderDetailsById(any(OrderDetails.class), any(Long.class));
     }
@@ -86,9 +76,7 @@ public class OrderDetailsControllerTest {
     public void testDeleteOrderDetailsById() throws Exception {
         Long orderDetailsId = 1L;
 
-        mockMvc.perform(delete("/order/{id}/details", orderDetailsId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Order Details successfully deleted!"));
+        mockMvc.perform(delete("/order/{id}/details", orderDetailsId)).andExpect(status().isOk()).andExpect(content().string("Order Details successfully deleted!"));
 
         verify(orderDetailsService).deleteOrderDetailsById(orderDetailsId);
     }

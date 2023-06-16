@@ -16,22 +16,22 @@ public class OrderDetailsController {
     OrderDetailsService orderDetailsService;
 
     @GetMapping("/order/{id}/details")
-    public ResponseEntity<OrderDetails> getDetailsAboutTheOderDerailsById (@PathVariable("id") Long orderId){
+    public ResponseEntity<OrderDetails> getDetailsAboutTheOderDerailsById(@PathVariable("id") Long orderId) {
         OrderDetails orderDetails = orderDetailsService.getOrderDetailsById(orderId);
         return new ResponseEntity<>(orderDetails, HttpStatus.OK);
     }
 
     @PostMapping("/order/{id}/details")
-    public ResponseEntity<OrderDetails> createOrderDetails(@RequestBody OrderDetails orderDetails)  {
+    public ResponseEntity<OrderDetails> createOrderDetails(@RequestBody OrderDetails orderDetails) {
         OrderDetails savedOrderDetails = orderDetailsService.createOrder(orderDetails);
         return new ResponseEntity<>(savedOrderDetails, HttpStatus.CREATED);
     }
 
-    @PutMapping ("/order/{id}/details")
-    public ResponseEntity <OrderDetails> updateOrderDetailsById(@PathVariable("id") Long orderDetailsId,
+    @PutMapping("/order/{id}/details")
+    public ResponseEntity<OrderDetails> updateOrderDetailsById(@PathVariable("id") Long orderDetailsId,
                                                                @RequestBody OrderDetails orderDetails) throws BadRequestException {
-        OrderDetails updateOrderDetails = orderDetailsService.updateOrderDetailsById(orderDetails,orderDetailsId);
-        return new  ResponseEntity<>(updateOrderDetails, HttpStatus.OK);
+        OrderDetails updateOrderDetails = orderDetailsService.updateOrderDetailsById(orderDetails, orderDetailsId);
+        return new ResponseEntity<>(updateOrderDetails, HttpStatus.OK);
     }
 
     @DeleteMapping("/order/{id}/details")
