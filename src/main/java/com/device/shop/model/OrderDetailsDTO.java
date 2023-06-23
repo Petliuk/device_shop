@@ -1,6 +1,5 @@
 package com.device.shop.model;
 
-import com.device.shop.entity.PaymentDetails;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +17,7 @@ public class OrderDetailsDTO {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<OrderItemsDTO> orderItems;
-    private PaymentDetails paymentDetails;
+    private Long paymentDetailsId;
     private Long userId;
 
 }

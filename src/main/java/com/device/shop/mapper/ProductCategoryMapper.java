@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ProductCategoryMapper {
 
 
-    public static ProductCategory toEntity(ProductCategoryDTO dto) {
+    public ProductCategory toEntity(ProductCategoryDTO dto) {
         return ProductCategory.builder()
                 .id(dto.getId())
                 .name(dto.getName())
@@ -19,7 +19,7 @@ public class ProductCategoryMapper {
                 .build();
     }
 
-    public static ProductCategoryDTO toDTO(ProductCategory entity) {
+    public ProductCategoryDTO toDTO(ProductCategory entity) {
         return ProductCategoryDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())

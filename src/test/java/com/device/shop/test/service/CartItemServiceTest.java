@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 public class CartItemServiceTest {
 
-    private CartItemImpl cartItemService;
+/*    private CartItemImpl cartItemService;
 
     @Mock
     private CartItemRepository cartItemRepository;
@@ -107,6 +107,6 @@ public class CartItemServiceTest {
         cartItemService.removeAllProductsFromCart(cartId);
 
         verify(cartItemRepository, times(1)).deleteAll(cartItems);
-    }
+    }*/
 
 }

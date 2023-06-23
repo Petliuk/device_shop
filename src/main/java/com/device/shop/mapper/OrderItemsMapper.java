@@ -7,25 +7,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderItemsMapper {
 
-    public static OrderItems toEntity(OrderItemsDTO dto) {
+    public OrderItems toEntity(OrderItemsDTO dto) {
         return OrderItems.builder()
                 .id(dto.getId())
                 .orderId(dto.getOrderId())
                 .createdAt(dto.getCreatedAt())
                 .modifiedAt(dto.getModifiedAt())
-                .product(dto.getProduct())
-                .orderDetails(dto.getOrderDetails())
                 .build();
     }
 
-    public static OrderItemsDTO toDTO(OrderItems entity) {
+    public OrderItemsDTO toDTO(OrderItems entity) {
         return OrderItemsDTO.builder()
                 .id(entity.getId())
                 .orderId(entity.getOrderId())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
-                .product(entity.getProduct())
-                .orderDetails(entity.getOrderDetails())
+                .productId(entity.getProduct().getId())
+                .orderDetailsId(entity.getOrderDetails().getId())
                 .build();
     }
 }

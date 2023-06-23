@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PaymentDetailsMapper {
 
-    public static PaymentDetails toEntity(PaymentDetailsDTO dto) {
+    public PaymentDetails toEntity(PaymentDetailsDTO dto) {
         return PaymentDetails.builder()
                 .id(dto.getId())
                 .orderId(dto.getOrderId())
@@ -19,7 +19,7 @@ public class PaymentDetailsMapper {
                 .build();
     }
 
-    public static PaymentDetailsDTO toDTO(PaymentDetails entity) {
+    public PaymentDetailsDTO toDTO(PaymentDetails entity) {
         return PaymentDetailsDTO.builder()
                 .id(entity.getId())
                 .orderId(entity.getOrderId())

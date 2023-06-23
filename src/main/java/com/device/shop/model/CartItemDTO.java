@@ -17,14 +17,4 @@ public class CartItemDTO {
     private Long shoppingSessionId;
     private Long productId;
 
-    private ProductDTO product;
-
-    public ProductDTO getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductDTO product) {
-        this.product = product;
-    }
-
 }

@@ -2,9 +2,12 @@ package com.device.shop.service.impl;
 
 import com.device.shop.entity.CartItem;
 
+import com.device.shop.entity.Product;
 import com.device.shop.entity.ShoppingSession;
+import com.device.shop.entity.User;
 import com.device.shop.mapper.CartItemMapper;
 import com.device.shop.mapper.ProductMapper;
+import com.device.shop.mapper.ShoppingSessionMapper;
 import com.device.shop.model.CartItemDTO;
 import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.CartItemRepository;
@@ -25,26 +28,24 @@ public class CartItemImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
     private final ProductImpl productService;
-    private final ShoppingSessionRepository shoppingSessionRepository;
+    private final CartItemMapper cartItemMapper;
+    private final ProductMapper productMapper;
+    private final ShoppingSessionImpl shoppingSessionService;
+    private  final ShoppingSessionMapper shoppingSessionMapper;
 
     @Transactional
-    public CartItemDTO addToCart(Long id, CartItemDTO cartItemDTO) {
-        ProductDTO product = productService.getProductById(cartItemDTO.getProduct().getId());
+    public CartItemDTO addToCart(Long shoppingId, CartItemDTO cartItemDTO) {
+        CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
 
-        ShoppingSession shoppingSession = shoppingSessionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Shopping session not found"));
+        Product product = productMapper.toEntity(productService.getProductById(cartItemDTO.getProductId()));
+        cartItem.setProduct(product);
 
-        CartItem cartItem = CartItem.builder()
-                .product(ProductMapper.toEntity(product))
-                .shoppingSession(shoppingSession)
-                .quantity(cartItemDTO.getQuantity())
-                .createdAt(LocalDateTime.now())
-                .modifiedAt(LocalDateTime.now())
-                .build();
+        ShoppingSession shoppingSession = shoppingSessionMapper.toEntity(shoppingSessionService.getShoppingSessionById(shoppingId));
+        cartItem.setShoppingSession(shoppingSession);
 
         CartItem newCartItem = cartItemRepository.save(cartItem);
 
-        return CartItemMapper.toDTO(newCartItem);
+        return cartItemMapper.toDTO(newCartItem);
     }
 
     @Transactional
@@ -53,7 +54,7 @@ public class CartItemImpl implements CartItemService {
         List<ProductDTO> products = new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
-            products.add(ProductMapper.toDTO(cartItem.getProduct()));
+            products.add(productMapper.toDTO(cartItem.getProduct()));
         }
 
         return products;

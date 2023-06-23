@@ -12,8 +12,6 @@ public class OrderDetailsMapper {
                 .total(dto.getTotal())
                 .createdAt(dto.getCreatedAt())
                 .modifiedAt(dto.getModifiedAt())
-                .paymentDetails(dto.getPaymentDetails())
-                //.user(dto.getUser())
                 .build();
     }
 
@@ -23,7 +21,7 @@ public class OrderDetailsMapper {
                 .total(entity.getTotal())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
-                .paymentDetails(entity.getPaymentDetails())
+                .paymentDetailsId(entity.getPaymentDetails().getId())
                 .userId(entity.getUser().getId())
                 .build();
     }

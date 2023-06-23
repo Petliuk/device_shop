@@ -16,8 +16,8 @@ public class OrderItemsDTO {
     private Long orderId;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private Product product;
-    private OrderDetails orderDetails;
+    private Long productId;
+    private Long orderDetailsId;
 
 
 }

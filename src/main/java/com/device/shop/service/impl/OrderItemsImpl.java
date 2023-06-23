@@ -1,9 +1,11 @@
 package com.device.shop.service.impl;
 
-import com.device.shop.entity.OrderItems;
-import com.device.shop.entity.Product;
+import com.device.shop.entity.*;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.mapper.OrderDetailsMapper;
 import com.device.shop.mapper.OrderItemsMapper;
+import com.device.shop.mapper.ProductMapper;
+import com.device.shop.model.CartItemDTO;
 import com.device.shop.model.OrderItemsDTO;
 import com.device.shop.repository.OrderItemsRepository;
 import com.device.shop.repository.ProductRepository;
@@ -19,25 +21,32 @@ import javax.persistence.EntityNotFoundException;
 public class OrderItemsImpl implements OrderItemsService {
 
     private final OrderItemsRepository orderItemsRepository;
-    private final ProductRepository productRepository;
+    private final OrderItemsMapper orderItemsMapper;
+    private final ProductMapper productMapper;
+    private final OrderDetailsMapper orderDetailsMapper;
+    private final ProductImpl productImps;
+    private final OrderDetailsImpl orderDetailsImpl;
 
     @Transactional
     public OrderItemsDTO getOrderItemsById(Long orderItemsId) {
         OrderItems orderItems = orderItemsRepository.findById(orderItemsId)
                 .orElseThrow(() -> new EntityNotFoundException("Order Items with id " + orderItemsId + " not found"));
-        return OrderItemsMapper.toDTO(orderItems);
+        return orderItemsMapper.toDTO(orderItems);
     }
 
     @Transactional
     public OrderItemsDTO addOrderItems(Long productId, OrderItemsDTO orderItemsDTO) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
+       OrderItems orderItems = orderItemsMapper.toEntity(orderItemsDTO);
 
-        OrderItems orderItems = new OrderItems();
+        Product product = productMapper.toEntity(productImps.getProductById(productId));
         orderItems.setProduct(product);
-        orderItemsRepository.save(orderItems);
 
-        return OrderItemsMapper.toDTO(orderItems);
+        OrderDetails orderDetails = orderDetailsMapper.toEntity(orderDetailsImpl.getOrderDetailsById(orderItemsDTO.getOrderDetailsId()));
+        orderItems.setOrderDetails(orderDetails);
+
+        OrderItems newOrderItems = orderItemsRepository.save(orderItems);
+
+        return orderItemsMapper.toDTO(newOrderItems);
     }
 
     @Transactional
@@ -54,7 +63,7 @@ public class OrderItemsImpl implements OrderItemsService {
         orderItems.setModifiedAt(orderItemsDTO.getModifiedAt());
 
         orderItemsRepository.save(orderItems);
-        return OrderItemsMapper.toDTO(orderItems);
+        return orderItemsMapper.toDTO(orderItems);
     }
 
     @Transactional

@@ -22,28 +22,28 @@ public class PaymentDetailsImpl  implements PaymentDetailsService {
 
     @Transactional
     public PaymentDetailsDTO createPaymentById(Long id, PaymentDetailsDTO paymentDTO) {
-        PaymentDetails payment = PaymentDetailsMapper.toEntity(paymentDTO);
+        PaymentDetails payment = paymentDetailsMapper.toEntity(paymentDTO);
         payment.setId(id);
         PaymentDetails savedPayment = paymentDetailsRepository.save(payment);
-        return PaymentDetailsMapper.toDTO(savedPayment);
+        return paymentDetailsMapper.toDTO(savedPayment);
     }
 
     @Transactional
     public PaymentDetailsDTO getPaymentById(Long paymentId) {
         PaymentDetails payment = paymentDetailsRepository.findById(paymentId).orElseThrow(() -> new EntityNotFoundException("Payment not found"));
-        return PaymentDetailsMapper.toDTO(payment);
+        return paymentDetailsMapper.toDTO(payment);
     }
 
     @Transactional
     public PaymentDetailsDTO updatePaymentDetails(PaymentDetailsDTO paymentDetailsDTO, Long id) throws BadRequestException, EntityNotFoundException {
-        PaymentDetails paymentDetails = PaymentDetailsMapper.toEntity(paymentDetailsDTO);
+        PaymentDetails paymentDetails = paymentDetailsMapper.toEntity(paymentDetailsDTO);
         if (id == null || !paymentDetailsRepository.existsById(id)) {
             throw new EntityNotFoundException("Payment Details with id " + id + " not found");
         } else if (!id.equals(paymentDetails.getId())) {
             throw new BadRequestException("Cannot change the id to " + paymentDetails.getId());
         } else {
             PaymentDetails updatedPaymentDetails = paymentDetailsRepository.save(paymentDetails);
-            return PaymentDetailsMapper.toDTO(updatedPaymentDetails);
+            return paymentDetailsMapper.toDTO(updatedPaymentDetails);
         }
     }
 
