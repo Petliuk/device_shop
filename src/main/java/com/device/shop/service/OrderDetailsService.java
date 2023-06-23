@@ -1,51 +1,17 @@
 package com.device.shop.service;
 
-import com.device.shop.entity.OrderDetails;
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.repository.OrderDetailsRepository;
+import com.device.shop.model.OrderDetailsDTO;
 
-import lombok.AllArgsConstructor;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+public interface OrderDetailsService {
 
-import javax.persistence.EntityNotFoundException;
+    OrderDetailsDTO getOrderDetailsById(Long orderId);
 
-@Service
-@AllArgsConstructor
+    OrderDetailsDTO createOrder(OrderDetailsDTO orderDetailsDTO);
 
-public class OrderDetailsService implements OrderDetailsServiceInterface {
+    OrderDetailsDTO updateOrderDetailsById(OrderDetailsDTO orderDetailsDTO, Long orderDetailsId) throws BadRequestException;
 
-    OrderDetailsRepository orderDetailsRepository;
-
-    @Transactional
-    public OrderDetails getOrderDetailsById(Long orderId) {
-        return orderDetailsRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order Details  with id " + orderId + " not found"));
-    }
-
-    @Transactional
-    public OrderDetails createOrder(OrderDetails orderDetails) {
-        return orderDetailsRepository.save(orderDetails);
-    }
-
-    @Transactional
-    public OrderDetails updateOrderDetailsById(OrderDetails orderDetails, Long orderDetailsId) throws BadRequestException, EntityNotFoundException {
-        if (orderDetailsId == null || !orderDetailsRepository.existsById(orderDetailsId)) {
-            throw new EntityNotFoundException("Order Details with id " + orderDetailsId + " not found");
-        } else if (!orderDetailsId.equals(orderDetails.getId())) {
-            throw new BadRequestException("Cannot change the id to " + orderDetails.getId());
-        } else {
-            return orderDetailsRepository.save(orderDetails);
-        }
-    }
-
-    @Transactional
-    public void deleteOrderDetailsById(Long orderDetailsId) {
-        if (orderDetailsRepository.existsById(orderDetailsId)) {
-            orderDetailsRepository.deleteById(orderDetailsId);
-        } else {
-            throw new EntityNotFoundException("Order Details with id " + orderDetailsId + " not found");
-        }
-    }
+    void deleteOrderDetailsById(Long orderDetailsId);
 
 }

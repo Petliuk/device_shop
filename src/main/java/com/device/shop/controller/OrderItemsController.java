@@ -1,7 +1,7 @@
 package com.device.shop.controller;
 
-import com.device.shop.entity.OrderItems;
-import com.device.shop.exception.BadRequestException;
+import com.device.shop.exception.BadRequestException;;
+import com.device.shop.model.OrderItemsDTO;
 import com.device.shop.service.OrderItemsService;
 
 import lombok.AllArgsConstructor;
@@ -15,25 +15,24 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class OrderItemsController {
 
-    OrderItemsService orderItemsService;
+    private final OrderItemsService orderItemsService;
 
     @GetMapping("/order/{id}/items")
-    public ResponseEntity<OrderItems> getOrderItemsById(@PathVariable("id") Long orderItemsId) {
-        OrderItems orderItems = orderItemsService.getOrderItemsById(orderItemsId);
-        return new ResponseEntity<>(orderItems, HttpStatus.OK);
+    public ResponseEntity<OrderItemsDTO> getOrderItemsById(@PathVariable("id") Long orderItemsId) {
+        OrderItemsDTO orderItemsDTO = orderItemsService.getOrderItemsById(orderItemsId);
+        return new ResponseEntity<>(orderItemsDTO, HttpStatus.OK);
     }
 
     @PostMapping("/order/{id}/items")
-    public ResponseEntity<OrderItems> addOrderItemsById(@PathVariable("id") Long productId) {
-        OrderItems orderItems = orderItemsService.addOrderItems(productId);
-        return new ResponseEntity<>(orderItems, HttpStatus.OK);
+    public ResponseEntity<OrderItemsDTO> addOrderItemsById(@PathVariable("id") Long productId, @RequestBody OrderItemsDTO orderItemsDTO) {
+        OrderItemsDTO createdOrderItems = orderItemsService.addOrderItems(productId, orderItemsDTO);
+        return new ResponseEntity<>(createdOrderItems, HttpStatus.OK);
     }
 
     @PostMapping("/order/items/{id}")
-    public ResponseEntity<OrderItems> updateOrderItemsById(@PathVariable("id") Long orderItemsId,
-                                                           @RequestBody OrderItems orderItems) throws BadRequestException {
-        OrderItems updatedOrder = orderItemsService.updateOrderItemsById(orderItems, orderItemsId);
-        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+    public ResponseEntity<OrderItemsDTO> updateOrderItemsById(@PathVariable("id") Long orderItemsId, @RequestBody OrderItemsDTO orderItemsDTO) throws BadRequestException {
+        OrderItemsDTO updatedOrderItemsDTO = orderItemsService.updateOrderItemsById(orderItemsDTO, orderItemsId);
+        return new ResponseEntity<>(updatedOrderItemsDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/order/{id}/items")

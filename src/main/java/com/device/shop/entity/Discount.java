@@ -2,10 +2,7 @@ package com.device.shop.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,9 +19,12 @@ public class Discount {
     Long id;
     String name;
     String description;
-    String discount_percent;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
+    @Column(name = "discount_percent")
+    String discountPercent;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "discount")
     List<Product> products;

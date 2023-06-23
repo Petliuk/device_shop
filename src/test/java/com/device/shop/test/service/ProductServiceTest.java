@@ -2,14 +2,15 @@ package com.device.shop.test.service;
 
 import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.ProductRepository;
-import com.device.shop.service.ProductService;
+import com.device.shop.service.impl.ProductImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
-import org.mockito.MockitoAnnotations;
+import org.mockito.AdditionalAnswers;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -19,145 +20,206 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class ProductServiceTest {
-
-    @Mock
     private ProductRepository productRepository;
-
-    private ProductService productService;
+    private ModelMapper modelMapper;
+    private ProductImpl productService;
 
     @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        productService = new ProductService(productRepository);
-    }
-
-    private Product buildProduct() {
-        return Product.builder().id(1L).name("Test Product").description("Test Description").sku("TEST_SKU").price(9.99).created_at(LocalDateTime.now()).modified_at(LocalDateTime.now()).deleted_at(null).build();
+    public void setUp() {
+        productRepository = mock(ProductRepository.class);
+        modelMapper = new ModelMapper();
+        productService = new ProductImpl(productRepository, modelMapper);
     }
 
     @Test
-    public void testGetAllProducts_ReturnsListOfUsers() {
-        Product product1 = Product.builder().name("phone").description("*").sku("one").build();
-        Product product2 = Product.builder().name("laptop").description("*").sku("one").build();
+    public void testGetAllProducts_ReturnsListOfProducts() {
+        Product product1 = new Product();
+        product1.setId(1L);
+        product1.setName("phone");
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setName("laptop");
         List<Product> productList = Arrays.asList(product1, product2);
-
         when(productRepository.findAll()).thenReturn(productList);
 
-        List<Product> retrievedList = productService.getAllProducts();
-        assertEquals(productList, retrievedList);
+        List<ProductDTO> retrievedList = productService.getAllProducts();
 
+        assertEquals(2, retrievedList.size());
+        assertEquals("phone", retrievedList.get(0).getName());
+        assertEquals("laptop", retrievedList.get(1).getName());
         verify(productRepository, times(1)).findAll();
     }
-
     @Test
-    public void getProductById() {
-        Long productId = 1L;
-        Product product = buildProduct();
+    public void testGetProductById_WithValidId_ReturnsProductDTO() {
+        Product product = new Product();
+        product.setId(1L);
+        product.setName("phone");
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
-        when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+        ProductDTO retrievedProduct = productService.getProductById(1L);
 
-        Product result = productService.getProductById(productId);
-
-        assertEquals(product, result);
-
-        verify(productRepository).findById(productId);
+        assertNotNull(retrievedProduct);
+        assertEquals("phone", retrievedProduct.getName());
+        verify(productRepository, times(1)).findById(1L);
     }
 
     @Test
-    public void testDeleteProduct() {
-        Long productId = 1L;
-        when(productRepository.existsById(productId)).thenReturn(true);
+    public void testGetProductById_WithInvalidId_ThrowsEntityNotFoundException() {
 
-        productService.deleteProduct(productId);
+        when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
-        verify(productRepository).existsById(productId);
-        verify(productRepository).deleteById(productId);
+        assertThrows(EntityNotFoundException.class, () -> productService.getProductById(1L));
+        verify(productRepository, times(1)).findById(1L);
     }
 
     @Test
-    public void testDeleteProduct_EntityNotFoundException() {
-        Long productId = 1L;
-        when(productRepository.existsById(productId)).thenReturn(false);
+    public void testDeleteProduct_WithExistingId_DeletesProduct() {
 
-        assertThrows(EntityNotFoundException.class, () -> productService.deleteProduct(productId));
-        verify(productRepository).existsById(productId);
-        verify(productRepository, never()).deleteById(productId);
+        when(productRepository.existsById(1L)).thenReturn(true);
+
+        assertDoesNotThrow(() -> productService.deleteProduct(1L));
+
+        verify(productRepository, times(1)).existsById(1L);
+        verify(productRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    public void updateProductById() {
+    public void testDeleteProduct_WithNonExistingId_ThrowsEntityNotFoundException() {
+
+        when(productRepository.existsById(1L)).thenReturn(false);
+
+        assertThrows(EntityNotFoundException.class, () -> productService.deleteProduct(1L));
+        verify(productRepository, times(1)).existsById(1L);
+        verify(productRepository, never()).deleteById(anyLong());
+    }
+
+
+
+    @Test
+    public void testUpdateProduct_WithValidData_ReturnsUpdatedProductDTO() throws BadRequestException, EntityNotFoundException {
+
         Long productId = 1L;
-        Product expectedProduct = buildProduct();
-        when(productRepository.findById(productId)).thenReturn(Optional.of(expectedProduct));
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(productId);
+        productDTO.setName("Updated Product");
 
-        Product actualProduct = productService.getProductById(productId);
+        Product existingProduct = new Product();
+        existingProduct.setId(productId);
+        existingProduct.setName("Existing Product");
 
-        assertEquals(expectedProduct, actualProduct);
-        verify(productRepository).findById(productId);
+        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+
+        when(productRepository.save(any(Product.class))).then(AdditionalAnswers.returnsFirstArg());
+
+        ProductDTO updatedProduct = productService.updateProduct(productDTO, productId);
+
+        assertNotNull(updatedProduct);
+        assertEquals(productId, updatedProduct.getId());
+        assertEquals("Updated Product", updatedProduct.getName());
+        verify(productRepository, times(1)).findById(productId);
+        verify(productRepository, times(1)).save(any(Product.class));
     }
 
     @Test
-    public void testGetProductById_EntityNotFoundException() {
+    public void testUpdateProduct_WithInvalidId_ThrowsBadRequestException() {
+
         Long productId = 1L;
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(2L);
+        productDTO.setName("Updated Product");
+        Product existingProduct = new Product();
+        existingProduct.setId(productId);
+        existingProduct.setName("Existing Product");
+        when(productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
+
+        assertThrows(BadRequestException.class, () -> productService.updateProduct(productDTO, productId));
+        verify(productRepository, times(1)).findById(productId);
+        verify(productRepository, never()).save(any(Product.class));
+    }
+
+    @Test
+    public void testUpdateProduct_WithNonExistingId_ThrowsEntityNotFoundException() {
+
+        Long productId = 1L;
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(productId);
+        productDTO.setName("Updated Product");
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> productService.getProductById(productId));
-        verify(productRepository).findById(productId);
+        assertThrows(EntityNotFoundException.class, () -> productService.updateProduct(productDTO, productId));
+        verify(productRepository, times(1)).findById(productId);
+        verify(productRepository, never()).save(any(Product.class));
     }
 
     @Test
-    public void testGetProductByName() {
+    public void testGetProductByName_ReturnsProductDTO() {
+
         String productName = "Test Product";
-        Product expectedProduct = buildProduct();
-        when(productRepository.findByName(productName)).thenReturn(expectedProduct);
+        Product product = new Product();
+        product.setId(1L);
+        product.setName(productName);
+        when(productRepository.findByName(productName)).thenReturn(product);
 
-        Product actualProduct = productService.getProductByName(productName);
+        ProductDTO retrievedProduct = productService.getProductByName(productName);
 
-        assertEquals(expectedProduct, actualProduct);
-        verify(productRepository).findByName(productName);
+        assertNotNull(retrievedProduct);
+        assertEquals(productName, retrievedProduct.getName());
+        verify(productRepository, times(1)).findByName(productName);
     }
 
     @Test
-    public void testGetProductsByCategory() {
+    public void testGetProductsByCategory_ReturnsListOfProductDTOs() {
         Long categoryId = 1L;
-        List<Product> expectedProducts = Arrays.asList(buildProduct(), buildProduct());
-        when(productRepository.findByProductCategory_Id(categoryId)).thenReturn(expectedProducts);
+        Product product1 = new Product();
+        product1.setId(1L);
+        product1.setName("Product 1");
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setName("Product 2");
+        List<Product> products = Arrays.asList(product1, product2);
+        when(productRepository.findByProductCategory_Id(categoryId)).thenReturn(products);
 
-        List<Product> actualProducts = productService.getProductsByCategory(categoryId);
+        List<ProductDTO> retrievedProducts = productService.getProductsByCategory(categoryId);
 
-        assertEquals(expectedProducts.size(), actualProducts.size());
+        assertNotNull(retrievedProducts);
+        assertEquals(2, retrievedProducts.size());
+        assertEquals("Product 1", retrievedProducts.get(0).getName());
+        assertEquals("Product 2", retrievedProducts.get(1).getName());
+        verify(productRepository, times(1)).findByProductCategory_Id(categoryId);
     }
 
-    @Test
-    public void testAddProduct() {
-        MockitoAnnotations.initMocks(this);
-        ProductService productService = new ProductService(productRepository);
-        Product product = buildProducts();
-        when(productRepository.save(product)).thenReturn(product);
 
-        ResponseEntity<Product> response = productService.addProducts(product);
+    @Test
+    public void testAddProducts_ReturnsProductDTO() {
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1L);
+        productDTO.setName("Test Product");
+
+        Product savedProduct = new Product();
+        savedProduct.setId(productDTO.getId());
+        savedProduct.setName(productDTO.getName());
+
+        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+
+        ResponseEntity<ProductDTO> response = productService.addProducts(productDTO);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(product, response.getBody());
-        verify(productRepository, times(1)).save(product);
+        assertEquals(productDTO, response.getBody());
+        verify(productRepository, times(1)).save(any(Product.class));
     }
 
-    private Product buildProducts() {
-        return Product.builder().id(1L).name("Test Product").description("Test Description").sku("TEST_SKU").price(9.99).created_at(LocalDateTime.now()).modified_at(LocalDateTime.now()).deleted_at(null).build();
-    }
 
     @Test
     void save_InvalidCSVFile_ThrowsBadRequestException() {

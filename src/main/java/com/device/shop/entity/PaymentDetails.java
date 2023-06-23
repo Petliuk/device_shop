@@ -16,12 +16,14 @@ public class PaymentDetails {
 
     @Id
     Long id;
-    Long order_id;
+    Long orderId;
     Long amount;
     String provider;
     String status;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
 
     @OneToOne(mappedBy = "paymentDetails")
     OrderDetails orderDetails;

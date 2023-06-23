@@ -1,7 +1,7 @@
 package com.device.shop.controller;
 
-import com.device.shop.entity.Discount;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.model.DiscountDTO;
 import com.device.shop.service.DiscountService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,37 +9,38 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller
 @AllArgsConstructor
 public class DiscountController {
 
-    DiscountService discountService;
+    private final DiscountService discountService;
 
     @PostMapping("/discount")
-    public ResponseEntity<Discount> addDiscount(@RequestBody Discount discount) {
-        Discount addDiscount = discountService.addNewDiscount(discount);
-        return new ResponseEntity<>(addDiscount, HttpStatus.CREATED);
+    public ResponseEntity<DiscountDTO> addDiscount(@RequestBody DiscountDTO discountDTO) {
+        DiscountDTO addedDiscountDTO = discountService.addNewDiscount(discountDTO);
+        return new ResponseEntity<>(addedDiscountDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/discount")
-    public ResponseEntity<List<Discount>> getAllDiscounts() {
-        List<Discount> discounts = discountService.getAllDiscount();
-        return new ResponseEntity<>(discounts, HttpStatus.OK);
+    public ResponseEntity<List<DiscountDTO>> getAllDiscounts() {
+        List<DiscountDTO> discountDTOs = discountService.getAllDiscounts();
+        return new ResponseEntity<>(discountDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/discount/{id}")
-    public ResponseEntity<Discount> getDetailsAboutTheDiscountById(@PathVariable("id") Long discountId) {
-        Discount discount = discountService.getDiscountById(discountId);
-        return new ResponseEntity<>(discount, HttpStatus.OK);
+    public ResponseEntity<DiscountDTO> getDetailsAboutTheDiscountById(@PathVariable("id") Long discountId) {
+        DiscountDTO discountDTO = discountService.getDiscountById(discountId);
+        return new ResponseEntity<>(discountDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/discount/{id}")
-    public ResponseEntity<Discount> updateDiscountInformation(@PathVariable("id") Long discountId,
-                                                              @RequestBody Discount discount) throws BadRequestException {
-        Discount updateDiscount = discountService.updateDiscountById(discount, discountId);
-        return new ResponseEntity<>(updateDiscount, HttpStatus.OK);
+    @PutMapping("/discount/{id}")
+    public ResponseEntity<DiscountDTO> updateDiscountById(@PathVariable("id") Long discountId,
+                                                          @RequestBody DiscountDTO discountDTO) throws BadRequestException, EntityNotFoundException {
+        DiscountDTO updatedDiscountDTO = discountService.updateDiscountById(discountId, discountDTO);
+        return new ResponseEntity<>(updatedDiscountDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/discount/{id}")

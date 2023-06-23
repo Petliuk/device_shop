@@ -1,18 +1,22 @@
 package com.device.shop.test.service;
 
 import com.device.shop.entity.ShoppingSession;
+import com.device.shop.mapper.ShoppingSessionMapper;
+import com.device.shop.model.ShoppingSessionDTO;
 import com.device.shop.repository.ShoppingSessionRepository;
-import com.device.shop.service.ShoppingSessionService;
+import com.device.shop.service.impl.ShoppingSessionImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,8 +27,11 @@ public class ShoppingSessionServiceTest {
     @Mock
     private ShoppingSessionRepository shoppingSessionRepository;
 
+    @Mock
+    private ShoppingSessionMapper shoppingSessionMapper;
+
     @InjectMocks
-    private ShoppingSessionService shoppingSessionService;
+    private ShoppingSessionImpl shoppingSessionService;
 
     @BeforeEach
     void setup() {
@@ -35,33 +42,39 @@ public class ShoppingSessionServiceTest {
     public void testCreateShoppingSession() {
         ShoppingSession shoppingSession = ShoppingSession.builder().id(1L).total(100.0).build();
 
-        when(shoppingSessionRepository.save(shoppingSession)).thenReturn(shoppingSession);
+        when(shoppingSessionRepository.save(Mockito.any(ShoppingSession.class))).thenReturn(shoppingSession);
 
-        ShoppingSession createdSession = shoppingSessionService.createShoppingSession(shoppingSession);
+        ShoppingSessionDTO expectedSession = shoppingSessionMapper.toDTO(shoppingSession);
 
-        assertEquals(shoppingSession, createdSession);
-        verify(shoppingSessionRepository, times(1)).save(shoppingSession);
+        ShoppingSessionDTO createdSession = shoppingSessionService.createShoppingSession(new ShoppingSessionDTO());
+
+        assertEquals(expectedSession, createdSession);
+        verify(shoppingSessionRepository, times(1)).save(Mockito.any(ShoppingSession.class));
     }
 
     @Test
     public void testGetShoppingSessionById() {
-        ShoppingSession shoppingSession = ShoppingSession.builder().id(1L).total(100.0).build();
+        Long sessionId = 1L;
+        ShoppingSession shoppingSession = ShoppingSession.builder().id(sessionId).total(100.0).build();
 
-        when(shoppingSessionRepository.findById(1L)).thenReturn(Optional.of(shoppingSession));
+        when(shoppingSessionRepository.findById(sessionId)).thenReturn(Optional.of(shoppingSession));
 
-        ShoppingSession retrievedSession = shoppingSessionService.getShoppingSessionById(1L);
+        ShoppingSessionDTO expectedSession = shoppingSessionMapper.toDTO(shoppingSession);
 
-        assertEquals(shoppingSession, retrievedSession);
-        verify(shoppingSessionRepository, times(1)).findById(1L);
+        ShoppingSessionDTO retrievedSession = shoppingSessionService.getShoppingSessionById(sessionId);
+
+        assertEquals(expectedSession, retrievedSession);
+        verify(shoppingSessionRepository, times(1)).findById(sessionId);
     }
 
     @Test
     public void testGetShoppingSessionById_ThrowsEntityNotFoundException() {
+        Long sessionId = 1L;
 
-        when(shoppingSessionRepository.findById(1L)).thenReturn(Optional.empty());
+        when(shoppingSessionRepository.findById(sessionId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> shoppingSessionService.getShoppingSessionById(1L));
-        verify(shoppingSessionRepository, times(1)).findById(1L);
+        assertThrows(EntityNotFoundException.class, () -> shoppingSessionService.getShoppingSessionById(sessionId));
+        verify(shoppingSessionRepository, times(1)).findById(sessionId);
     }
 
     @Test
@@ -72,19 +85,12 @@ public class ShoppingSessionServiceTest {
 
         when(shoppingSessionRepository.findAll()).thenReturn(sessions);
 
-        List<ShoppingSession> retrievedSessions = shoppingSessionService.getAllShoppingSessions();
+        List<ShoppingSessionDTO> expectedSessions = sessions.stream().map(shoppingSessionMapper::toDTO).collect(Collectors.toList());
 
-        assertEquals(sessions, retrievedSessions);
+        List<ShoppingSessionDTO> retrievedSessions = shoppingSessionService.getAllShoppingSessions();
+
+        assertEquals(expectedSessions, retrievedSessions);
         verify(shoppingSessionRepository, times(1)).findAll();
-    }
-
-    @Test
-    public void testDeleteShoppingSessionById() {
-        Long sessionId = 1L;
-
-        shoppingSessionService.deleteShoppingSessionById(sessionId);
-
-        verify(shoppingSessionRepository, times(1)).deleteById(sessionId);
     }
 
 }

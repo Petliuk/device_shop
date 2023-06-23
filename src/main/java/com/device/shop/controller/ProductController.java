@@ -1,8 +1,8 @@
 package com.device.shop.controller;
 
-import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.service.ProductService;
+import com.device.shop.model.ProductDTO;
+import com.device.shop.service.impl.ProductImpl;
 
 import lombok.AllArgsConstructor;
 
@@ -18,18 +18,18 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductController {
 
-    ProductService productService;
+    ProductImpl productService;
 
     @PostMapping("/product/{id}")
-    public ResponseEntity<Product> updateProductsById(@PathVariable("id") Long productId, @RequestBody Product product) throws BadRequestException {
-        Product updateProduct = productService.updateProduct(product, productId);
-        return new ResponseEntity<>(updateProduct, HttpStatus.OK);
+    public ResponseEntity<ProductDTO> updateProductsById(@PathVariable("id") Long productId, @RequestBody ProductDTO productDTO) throws BadRequestException {
+        ProductDTO updateProductDAO = productService.updateProduct(productDTO, productId);
+        return new ResponseEntity<>(updateProductDAO, HttpStatus.OK);
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getAllProduct() {
-        List<Product> products = productService.getAllProducts();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<List<ProductDTO>> getAllProduct() {
+        List<ProductDTO> productDTO = productService.getAllProducts();
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/product/{id}")
@@ -40,26 +40,27 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long productId) {
-        Product product = productService.getProductById(productId);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable("id") Long productId) {
+        ProductDTO productDTO = productService.getProductById(productId);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        return productService.addProducts(product);
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
+        ProductDTO addedProductDTO = productService.addProducts(productDTO).getBody();
+        return ResponseEntity.ok(addedProductDTO);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Product> getProductByName(@PathVariable String name) {
-        Product product = productService.getProductByName(name);
-        return new ResponseEntity<>(product, HttpStatus.OK);
+    @GetMapping("/name/{name}")
+    public ResponseEntity<ProductDTO> getProductByName(@PathVariable String name) {
+        ProductDTO productDTO = productService.getProductByName(name);
+        return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
-        List<Product> products = productService.getProductsByCategory(categoryId);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
+        List<ProductDTO> productsDTO = productService.getProductsByCategory(categoryId);
+        return new ResponseEntity<>(productsDTO, HttpStatus.OK);
     }
 
     @PostMapping("/upload/file")

@@ -16,9 +16,11 @@ public class OrderItems {
 
     @Id
     Long id;
-    Long order_id;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
+    Long orderId;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
 
     @OneToOne
     @JoinColumn(name = "product_id")

@@ -21,9 +21,12 @@ public class Product {
     String description;
     String sku;
     Double price;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
-    LocalDateTime deleted_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
 
     @OneToOne

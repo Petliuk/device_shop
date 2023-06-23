@@ -1,5 +1,6 @@
 package com.device.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import io.swagger.annotations.ApiModelProperty;
@@ -37,6 +38,7 @@ public class User {
     OrderDetails orderDetails;
 
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     ShoppingSession shoppingSession;
 
 }

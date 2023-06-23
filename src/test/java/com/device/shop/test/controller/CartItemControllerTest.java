@@ -1,32 +1,33 @@
 package com.device.shop.test.controller;
 
 import com.device.shop.controller.CartItemController;
-import com.device.shop.entity.CartItem;
-import com.device.shop.entity.Product;
-import com.device.shop.exception.ExceptionController;
-import com.device.shop.service.CartItemService;
+import com.device.shop.model.CartItemDTO;
+import com.device.shop.model.ProductDTO;
+import com.device.shop.service.impl.CartItemImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,66 +37,89 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 public class CartItemControllerTest {
-
-    @Mock
-    CartItemService cartItemService;
-    @InjectMocks
-    CartItemController cartItemController;
     private MockMvc mockMvc;
 
+    @Mock
+    private CartItemImpl cartItemService;
+
+    private CartItemController cartItemController;
+
     @BeforeEach
-    public void setup() {
+    void setup() {
+        MockitoAnnotations.openMocks(this);
         cartItemController = new CartItemController(cartItemService);
-        mockMvc = MockMvcBuilders.standaloneSetup(cartItemController).setControllerAdvice(new ExceptionController()).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(cartItemController).build();
     }
 
     @Test
-    void testAddingProductToTheCartById() throws Exception {
-        Long productId = 1L;
-        CartItem cartItem = new CartItem();
-        ResponseEntity<CartItem> expectedResponse = new ResponseEntity<>(cartItem, HttpStatus.OK);
+    void testAddProductToCart() throws Exception {
+        Long sessionId = 1L;
+        Long productId = 2L;
+        Long cartItemId = 3L;
+        Long quantity = 1L;
 
-        when(cartItemService.addToCart(productId)).thenReturn(cartItem);
+        CartItemDTO cartItemDTO = CartItemDTO.builder()
+                .id(cartItemId)
+                .quantity(quantity)
+                .build();
 
-        mockMvc.perform(post("/cart/{id}/items", productId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE)).andExpect(jsonPath("$.id").value(cartItem.getId())).andExpect(jsonPath("$.quantity").value(cartItem.getQuantity()));
+        CartItemDTO expectedResponse = CartItemDTO.builder()
+                .id(cartItemId)
+                .quantity(quantity)
+                .build();
 
+        when(cartItemService.addToCart(eq(sessionId), any(CartItemDTO.class))).thenReturn(expectedResponse);
 
-        ResponseEntity<CartItem> actualResponse = cartItemController.addProductToTheCartById(productId);
+        mockMvc.perform(post("/cart/{id}/items", sessionId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\": " + productId + ", \"quantity\": " + quantity + "}"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.id").value(cartItemId))
+                .andExpect(jsonPath("$.quantity").value(quantity));
 
-        assertEquals(expectedResponse.getStatusCode(), actualResponse.getStatusCode());
-        assertEquals(expectedResponse.getBody(), actualResponse.getBody());
-
-        verify(cartItemService, times(2)).addToCart(productId);
+        verify(cartItemService, times(1)).addToCart(eq(sessionId), any(CartItemDTO.class));
     }
 
     @Test
-    public void testGetProductsInCart() throws Exception {
+    void testGetProductsInCart() throws Exception {
         Long cartId = 1L;
-        List<Product> products = new ArrayList<>();
 
-        when(cartItemService.getProductsInCart(cartId)).thenReturn(products);
+        List<ProductDTO> products = new ArrayList<>();
+        products.add(ProductDTO.builder().id(1L).name("Product 1").build());
+        products.add(ProductDTO.builder().id(2L).name("Product 2").build());
 
-        mockMvc.perform(get("/cart/{id}/items", cartId)).andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$").isArray());
+        when(cartItemService.getProductsInCart(eq(cartId))).thenReturn(products);
 
-        verify(cartItemService, times(1)).getProductsInCart(cartId);
+        mockMvc.perform(get("/cart/{id}/items", cartId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].name").value("Product 1"))
+                .andExpect(jsonPath("$[1].id").value(2L))
+                .andExpect(jsonPath("$[1].name").value("Product 2"));
+
+        verify(cartItemService, times(1)).getProductsInCart(eq(cartId));
     }
 
     @Test
-    public void testDeleteTheProductsById() throws Exception {
+    void testDeleteProductById() throws Exception {
         Long productId = 1L;
 
-        mockMvc.perform(delete("/cart/items/{id}", productId)).andExpect(status().isOk());
+        mockMvc.perform(delete("/cart/items/{id}", productId))
+                .andExpect(status().isOk());
 
         verify(cartItemService, times(1)).deleteTheProduct(productId);
     }
 
     @Test
-    public void deleteAllProducts_ShouldReturnOk() throws Exception {
+    void testDeleteAllProducts() throws Exception {
         Long cartId = 1L;
 
-        mockMvc.perform(delete("/cart/{cartId}/items", cartId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string("All products removed from the cart"));
+        mockMvc.perform(delete("/cart/{cartId}/items", cartId))
+                .andExpect(status().isOk());
 
-        verify(cartItemService).removeAllProductsFromCart(cartId);
+        verify(cartItemService, times(1)).removeAllProductsFromCart(cartId);
     }
 
 }

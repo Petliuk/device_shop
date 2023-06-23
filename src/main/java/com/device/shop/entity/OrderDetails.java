@@ -18,8 +18,10 @@ public class OrderDetails {
     @Id
     Long id;
     Double total;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "orderDetails")
     List<OrderItems> orderItems;

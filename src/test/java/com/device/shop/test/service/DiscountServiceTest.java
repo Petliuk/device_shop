@@ -2,9 +2,10 @@ package com.device.shop.test.service;
 
 import com.device.shop.entity.Discount;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.mapper.DiscountMapper;
+import com.device.shop.model.DiscountDTO;
 import com.device.shop.repository.DiscountRepository;
-import com.device.shop.service.DiscountService;
-import org.junit.jupiter.api.Assertions;
+import com.device.shop.service.impl.DiscountImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,20 +13,25 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class DiscountServiceTest {
 
+
     @Mock
     private DiscountRepository discountRepository;
 
+    @Mock
+    private DiscountMapper discountMapper;
+
     @InjectMocks
-    private DiscountService discountService;
+    private DiscountImpl discountService;
 
     @BeforeEach
     public void setup() {
@@ -34,110 +40,210 @@ public class DiscountServiceTest {
 
     @Test
     public void testAddNewDiscount() {
-        Discount discount = new Discount();
-        discount.setId(1L);
-        discount.setName("Test Discount");
-        discount.setDescription("Test Description");
-        discount.setDiscount_percent("10");
+        DiscountDTO discountDTO = DiscountDTO.builder()
+                .id(1L)
+                .name("Test Discount")
+                .build();
 
-        when(discountRepository.save(any(Discount.class))).thenReturn(discount);
+        Discount discount = Discount.builder()
+                .id(discountDTO.getId())
+                .name(discountDTO.getName())
+                .build();
 
-        Discount result = discountService.addNewDiscount(discount);
+        when(discountMapper.toEntity(discountDTO)).thenReturn(discount);
+        when(discountMapper.toDTO(discount)).thenReturn(discountDTO);
+        when(discountRepository.save(discount)).thenReturn(discount);
 
-        Assertions.assertEquals(discount.getId(), result.getId());
-        Assertions.assertEquals(discount.getName(), result.getName());
-        Assertions.assertEquals(discount.getDescription(), result.getDescription());
-        Assertions.assertEquals(discount.getDiscount_percent(), result.getDiscount_percent());
+        DiscountDTO resultDTO = discountService.addNewDiscount(discountDTO);
 
-        verify(discountRepository).save(any(Discount.class));
+        assertEquals(discountDTO.getId(), resultDTO.getId());
+        assertEquals(discountDTO.getName(), resultDTO.getName());
+
+        verify(discountRepository).save(discount);
+        verify(discountMapper).toEntity(discountDTO);
+        verify(discountMapper).toDTO(discount);
     }
 
     @Test
-    public void testGetAllDiscount() {
-        List<Discount> discounts = new ArrayList<>();
-        Discount discount1 = new Discount();
-        discount1.setId(1L);
-        discount1.setName("Discount 1");
-        discount1.setDescription("Description 1");
-        discount1.setDiscount_percent("10");
-        discounts.add(discount1);
+    void getAllDiscounts_ShouldReturnAllDiscounts() {
 
-        Discount discount2 = new Discount();
-        discount2.setId(2L);
-        discount2.setName("Discount 2");
-        discount2.setDescription("Description 2");
-        discount2.setDiscount_percent("15");
-        discounts.add(discount2);
-
+        List<Discount> discounts = Arrays.asList(
+                Discount.builder()
+                        .id(1L)
+                        .name("Discount 1")
+                        .description("Description 1")
+                        .discountPercent("10%")
+                        .createdAt(LocalDateTime.now())
+                        .modifiedAt(LocalDateTime.now())
+                        .build(),
+                Discount.builder()
+                        .id(2L)
+                        .name("Discount 2")
+                        .description("Description 2")
+                        .discountPercent("20%")
+                        .createdAt(LocalDateTime.now())
+                        .modifiedAt(LocalDateTime.now())
+                        .build()
+        );
         when(discountRepository.findAll()).thenReturn(discounts);
 
-        List<Discount> result = discountService.getAllDiscount();
+        List<DiscountDTO> expectedDiscountDTOs = Arrays.asList(
+                DiscountDTO.builder()
+                        .id(1L)
+                        .name("Discount 1")
+                        .description("Description 1")
+                        .discountPercent("10%")
+                        .createdAt(LocalDateTime.now())
+                        .modifiedAt(LocalDateTime.now())
+                        .build(),
+                DiscountDTO.builder()
+                        .id(2L)
+                        .name("Discount 2")
+                        .description("Description 2")
+                        .discountPercent("20%")
+                        .createdAt(LocalDateTime.now())
+                        .modifiedAt(LocalDateTime.now())
+                        .build()
+        );
+        when(discountMapper.toDTO(discounts.get(0))).thenReturn(expectedDiscountDTOs.get(0));
+        when(discountMapper.toDTO(discounts.get(1))).thenReturn(expectedDiscountDTOs.get(1));
 
-        Assertions.assertEquals(discounts.size(), result.size());
-        Assertions.assertEquals(discounts.get(0).getId(), result.get(0).getId());
-        Assertions.assertEquals(discounts.get(1).getId(), result.get(1).getId());
+        List<DiscountDTO> result = discountService.getAllDiscounts();
 
-        verify(discountRepository).findAll();
+        assertEquals(expectedDiscountDTOs, result);
+        verify(discountRepository, times(1)).findAll();
+        verify(discountMapper, times(1)).toDTO(discounts.get(0));
+        verify(discountMapper, times(1)).toDTO(discounts.get(1));
     }
 
     @Test
-    public void testGetDiscountById() {
-        Discount discount = new Discount();
-        discount.setId(1L);
-        discount.setName("Test Discount");
-        discount.setDescription("Test Description");
-        discount.setDiscount_percent("10");
+    void getDiscountById_ExistingId_ShouldReturnDiscountDTO() {
 
-        when(discountRepository.findById(1L)).thenReturn(Optional.of(discount));
-
-        Discount result = discountService.getDiscountById(1L);
-
-        Assertions.assertEquals(discount.getId(), result.getId());
-        Assertions.assertEquals(discount.getName(), result.getName());
-        Assertions.assertEquals(discount.getDescription(), result.getDescription());
-        Assertions.assertEquals(discount.getDiscount_percent(), result.getDiscount_percent());
-
-        verify(discountRepository).findById(1L);
-    }
-
-    @Test
-    public void testUpdateDiscountById() throws BadRequestException, EntityNotFoundException {
-        Discount existingDiscount = new Discount();
-        existingDiscount.setId(1L);
-        existingDiscount.setName("Existing Discount");
-        existingDiscount.setDescription("Existing Description");
-        existingDiscount.setDiscount_percent("10");
-
-        Discount updatedDiscount = new Discount();
-        updatedDiscount.setId(1L);
-        updatedDiscount.setName("Updated Discount");
-        updatedDiscount.setDescription("Updated Description");
-        updatedDiscount.setDiscount_percent("15");
-
-        when(discountRepository.existsById(1L)).thenReturn(true);
-        when(discountRepository.save(any(Discount.class))).thenReturn(updatedDiscount);
-
-        Discount result = discountService.updateDiscountById(updatedDiscount, 1L);
-
-        Assertions.assertEquals(updatedDiscount.getId(), result.getId());
-        Assertions.assertEquals(updatedDiscount.getName(), result.getName());
-        Assertions.assertEquals(updatedDiscount.getDescription(), result.getDescription());
-        Assertions.assertEquals(updatedDiscount.getDiscount_percent(), result.getDiscount_percent());
-
-        verify(discountRepository).existsById(1L);
-        verify(discountRepository).save(any(Discount.class));
-    }
-
-    @Test
-    public void testDeleteDiscount() {
         Long discountId = 1L;
+        Discount discount = Discount.builder()
+                .id(discountId)
+                .name("Discount 1")
+                .description("Description 1")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+        when(discountRepository.findById(discountId)).thenReturn(Optional.of(discount));
 
+        DiscountDTO expectedDiscountDTO = DiscountDTO.builder()
+                .id(discountId)
+                .name("Discount 1")
+                .description("Description 1")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+        when(discountMapper.toDTO(discount)).thenReturn(expectedDiscountDTO);
+
+        DiscountDTO result = discountService.getDiscountById(discountId);
+
+        assertEquals(expectedDiscountDTO, result);
+        verify(discountRepository, times(1)).findById(discountId);
+        verify(discountMapper, times(1)).toDTO(discount);
+    }
+
+    @Test
+    void getDiscountById_NonExistingDiscountId_ThrowsEntityNotFoundException() {
+
+        Long discountId = 1L;
+        when(discountRepository.findById(discountId)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> discountService.getDiscountById(discountId));
+        verify(discountRepository, times(1)).findById(discountId);
+        verifyNoMoreInteractions(discountRepository);
+    }
+
+
+    @Test
+    void updateDiscountById_WhenValidInput_ReturnUpdatedDiscountDTO() throws BadRequestException {
+
+        Long discountId = 1L;
+        DiscountDTO discountDTO = DiscountDTO.builder()
+                .id(discountId)
+                .name("New Discount")
+                .description("Updated Description")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+
+        Discount updatedDiscount = Discount.builder()
+                .id(discountId)
+                .name("New Discount")
+                .description("Updated Description")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+
+        Discount savedDiscount = Discount.builder()
+                .id(discountId)
+                .name("New Discount")
+                .description("Updated Description")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+
+        when(discountRepository.save(updatedDiscount)).thenReturn(savedDiscount);
+        when(discountMapper.toEntity(discountDTO)).thenReturn(updatedDiscount);
+        when(discountMapper.toDTO(savedDiscount)).thenReturn(discountDTO);
+
+        DiscountDTO updatedDiscountDTO = null;
+        try {
+            updatedDiscountDTO = discountService.updateDiscountById(discountId, discountDTO);
+        } catch (BadRequestException e) {
+            fail("Should not throw a BadRequestException");
+        }
+
+        assertNotNull(updatedDiscountDTO);
+        assertEquals(discountId, updatedDiscountDTO.getId());
+        assertEquals("New Discount", updatedDiscountDTO.getName());
+        assertEquals("Updated Description", updatedDiscountDTO.getDescription());
+        assertEquals("10%", updatedDiscountDTO.getDiscountPercent());
+        assertNotNull(updatedDiscountDTO.getCreatedAt());
+        assertNotNull(updatedDiscountDTO.getModifiedAt());
+
+        verify(discountRepository, times(1)).save(updatedDiscount);
+        verify(discountMapper, times(1)).toEntity(discountDTO);
+        verify(discountMapper, times(1)).toDTO(savedDiscount);
+    }
+
+    @Test
+    void updateDiscountById_WhenInvalidId_ThrowsBadRequestException() {
+        Long discountId = 1L;
+        DiscountDTO discountDTO = DiscountDTO.builder()
+                .id(2L)
+                .name("New Discount")
+                .description("Updated Description")
+                .discountPercent("10%")
+                .createdAt(LocalDateTime.now())
+                .modifiedAt(LocalDateTime.now())
+                .build();
+
+        assertThrows(BadRequestException.class, () -> discountService.updateDiscountById(discountId, discountDTO));
+
+        verify(discountRepository, never()).save(any());
+        verify(discountMapper, never()).toEntity(any());
+        verify(discountMapper, never()).toDTO(any());
+    }
+
+    @Test
+    void deleteDiscount_ExistingDiscountId_DeletesDiscount() {
+
+        Long discountId = 1L;
         when(discountRepository.existsById(discountId)).thenReturn(true);
 
         discountService.deleteDiscount(discountId);
 
-        verify(discountRepository).existsById(discountId);
-        verify(discountRepository).deleteById(discountId);
+        verify(discountRepository, times(1)).existsById(discountId);
+        verify(discountRepository, times(1)).deleteById(discountId);
+        verifyNoMoreInteractions(discountRepository);
     }
 
 }

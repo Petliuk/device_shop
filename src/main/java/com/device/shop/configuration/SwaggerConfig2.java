@@ -25,4 +25,9 @@ public class SwaggerConfig2 {
                 .paths(PathSelectors.any()).build();
     }
 
+    @Bean
+    public org.modelmapper.ModelMapper modelMapper() {
+        return new org.modelmapper.ModelMapper();
+    }
+
 }

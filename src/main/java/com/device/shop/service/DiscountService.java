@@ -2,55 +2,21 @@ package com.device.shop.service;
 
 import com.device.shop.entity.Discount;
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.repository.DiscountRepository;
-
-import lombok.AllArgsConstructor;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.device.shop.model.DiscountDTO;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-public class DiscountService implements DiscountServiceInterface {
+public interface DiscountService {
 
-    DiscountRepository discountRepository;
+    DiscountDTO addNewDiscount(DiscountDTO discountDTO);
 
-    @Transactional
-    public Discount addNewDiscount(Discount discount) {
-        return discountRepository.save(discount);
-    }
+    List<DiscountDTO> getAllDiscounts();
 
-    @Transactional
-    public List<Discount> getAllDiscount() {
-        return discountRepository.findAll();
-    }
+    DiscountDTO getDiscountById(Long discountId);
 
-    @Transactional
-    public Discount getDiscountById(Long discountId) {
-        return discountRepository.findById(discountId).orElseThrow(() -> new EntityNotFoundException("Discount with id " + discountId + " not found"));
-    }
+    DiscountDTO updateDiscountById(Long discountId, DiscountDTO discountDTO) throws BadRequestException, EntityNotFoundException;
 
-    @Transactional
-    public Discount updateDiscountById(Discount discount, Long discountId) throws BadRequestException, EntityNotFoundException {
-        if (discountId == null || !discountRepository.existsById(discountId)) {
-            throw new EntityNotFoundException("Discount with id " + discountId + " not found");
-        } else if (!discountId.equals(discount.getId())) {
-            throw new BadRequestException("Cannot change the id to " + discount.getId());
-        } else {
-            return discountRepository.save(discount);
-        }
-    }
-
-    @Transactional
-    public void deleteDiscount(Long discountId) {
-        if (discountRepository.existsById(discountId)) {
-            discountRepository.deleteById(discountId);
-        } else {
-            throw new EntityNotFoundException("Discount with id " + discountId + " not found");
-        }
-    }
+    void deleteDiscount(Long discountId);
 
 }

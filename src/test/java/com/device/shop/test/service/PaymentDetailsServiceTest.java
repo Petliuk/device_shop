@@ -2,8 +2,9 @@ package com.device.shop.test.service;
 
 import com.device.shop.entity.PaymentDetails;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.model.PaymentDetailsDTO;
 import com.device.shop.repository.PaymentDetailsRepository;
-import com.device.shop.service.PaymentDetailsService;
+import com.device.shop.service.impl.PaymentDetailsImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,11 +17,11 @@ import static org.mockito.Mockito.*;
 
 public class PaymentDetailsServiceTest {
 
-    @Mock
+   @Mock
     private PaymentDetailsRepository paymentDetailsRepository;
 
     @InjectMocks
-    private PaymentDetailsService paymentDetailsService;
+    private PaymentDetailsImpl paymentDetailsService;
 
     @BeforeEach
     public void setup() {
@@ -30,10 +31,12 @@ public class PaymentDetailsServiceTest {
     @Test
     public void testCreatePaymentById() {
         Long id = 1L;
+        PaymentDetailsDTO paymentDTO = PaymentDetailsDTO.builder().id(id).build();
         PaymentDetails payment = PaymentDetails.builder().id(id).build();
+
         when(paymentDetailsRepository.save(any(PaymentDetails.class))).thenReturn(payment);
 
-        PaymentDetails result = paymentDetailsService.createPaymentById(id);
+        PaymentDetailsDTO result = paymentDetailsService.createPaymentById(id, paymentDTO);
 
         assertNotNull(result);
         assertEquals(id, result.getId());
@@ -46,7 +49,8 @@ public class PaymentDetailsServiceTest {
         PaymentDetails payment = PaymentDetails.builder().id(paymentId).build();
         when(paymentDetailsRepository.findById(paymentId)).thenReturn(java.util.Optional.of(payment));
 
-        PaymentDetails result = paymentDetailsService.getPaymentById(paymentId);
+
+        PaymentDetailsDTO result = paymentDetailsService.getPaymentById(paymentId);
 
         assertNotNull(result);
         assertEquals(paymentId, result.getId());
@@ -56,15 +60,21 @@ public class PaymentDetailsServiceTest {
     @Test
     public void testUpdatePaymentDetails() throws BadRequestException {
         Long paymentDetailsId = 1L;
+        PaymentDetailsDTO paymentDetailsDTO = new PaymentDetailsDTO();
+        paymentDetailsDTO.setId(paymentDetailsId);
+
         PaymentDetails paymentDetails = new PaymentDetails();
         paymentDetails.setId(paymentDetailsId);
+
         when(paymentDetailsRepository.existsById(paymentDetailsId)).thenReturn(true);
-        when(paymentDetailsRepository.save(paymentDetails)).thenReturn(paymentDetails);
+        when(paymentDetailsRepository.save(any(PaymentDetails.class))).thenReturn(paymentDetails);
 
-        PaymentDetails result = paymentDetailsService.updatePaymentDetails(paymentDetails, paymentDetailsId);
+        PaymentDetailsDTO resultDTO = paymentDetailsService.updatePaymentDetails(paymentDetailsDTO, paymentDetailsId);
 
-        assertEquals(paymentDetails, result);
-        verify(paymentDetailsRepository, times(1)).save(paymentDetails);
+        assertNotNull(resultDTO);
+        assertEquals(paymentDetailsDTO.getId(), resultDTO.getId());
+
+        verify(paymentDetailsRepository, times(1)).save(any(PaymentDetails.class));
     }
 
     @Test

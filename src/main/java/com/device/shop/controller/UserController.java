@@ -1,8 +1,8 @@
 package com.device.shop.controller;
 
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.entity.User;
-import com.device.shop.service.UserService;
+import com.device.shop.model.UserDTO;
+import com.device.shop.service.impl.UserImpl;
 
 import lombok.AllArgsConstructor;
 
@@ -17,35 +17,35 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserImpl userImpl;
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws BadRequestException {
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws BadRequestException {
+        UserDTO savedUserDTO = userImpl.createUser(userDTO);
+        return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
-        User user = userService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long userId) {
+        UserDTO userDTO = userImpl.getUserById(userId);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> users = userService.getAllUser();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> userDTOs = userImpl.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId, @RequestBody User user) throws BadRequestException {
-        User updatedUser = userService.updateUser(user, userId);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long userId, @RequestBody UserDTO userDTO) throws BadRequestException {
+        UserDTO updatedUserDTO = userImpl.updateUser(userDTO, userId);
+        return new ResponseEntity<>(updatedUserDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
-        userService.deleteUser(userId);
+        userImpl.deleteUser(userId);
         return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
     }
 

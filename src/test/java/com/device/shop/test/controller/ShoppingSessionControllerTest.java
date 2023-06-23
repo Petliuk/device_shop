@@ -1,8 +1,8 @@
 package com.device.shop.test.controller;
 
 import com.device.shop.controller.ShoppingSessionController;
-import com.device.shop.entity.ShoppingSession;
-import com.device.shop.service.ShoppingSessionService;
+import com.device.shop.model.ShoppingSessionDTO;
+import com.device.shop.service.impl.ShoppingSessionImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,11 +21,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ShoppingSessionControllerTest {
-
     private MockMvc mockMvc;
 
     @Mock
-    private ShoppingSessionService shoppingSessionService;
+    private ShoppingSessionImpl shoppingSessionImpl;
 
     @InjectMocks
     private ShoppingSessionController shoppingSessionController;
@@ -38,67 +37,94 @@ public class ShoppingSessionControllerTest {
 
     @Test
     public void testCreateShoppingSession() throws Exception {
-        ShoppingSession shoppingSession = new ShoppingSession();
-        shoppingSession.setId(1L);
-        shoppingSession.setTotal(100.0);
+        ShoppingSessionDTO shoppingSessionDTO = ShoppingSessionDTO.builder()
+                .id(1L)
+                .total(100.0)
+                .build();
 
-        when(shoppingSessionService.createShoppingSession(any(ShoppingSession.class))).thenReturn(shoppingSession);
+        when(shoppingSessionImpl.createShoppingSession(any(ShoppingSessionDTO.class))).thenReturn(shoppingSessionDTO);
 
-        mockMvc.perform(post("/session").contentType(MediaType.APPLICATION_JSON).content("{\"total\": 100.0}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
+        mockMvc.perform(post("/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"total\": 100.0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.total").value(100.0));
 
-        verify(shoppingSessionService, times(1)).createShoppingSession(any(ShoppingSession.class));
+        verify(shoppingSessionImpl, times(1)).createShoppingSession(any(ShoppingSessionDTO.class));
     }
 
     @Test
     public void testGetShoppingSessionById() throws Exception {
-        ShoppingSession shoppingSession = new ShoppingSession();
-        shoppingSession.setId(1L);
-        shoppingSession.setTotal(100.0);
+        ShoppingSessionDTO shoppingSessionDTO = ShoppingSessionDTO.builder()
+                .id(1L)
+                .total(100.0)
+                .build();
 
-        when(shoppingSessionService.getShoppingSessionById(1L)).thenReturn(shoppingSession);
+        when(shoppingSessionImpl.getShoppingSessionById(1L)).thenReturn(shoppingSessionDTO);
 
-        mockMvc.perform(get("/{sessionId}", 1L)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
+        mockMvc.perform(get("/{sessionId}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.total").value(100.0));
 
-        verify(shoppingSessionService, times(1)).getShoppingSessionById(1L);
+        verify(shoppingSessionImpl, times(1)).getShoppingSessionById(1L);
     }
 
     @Test
     public void testGetAllShoppingSessions() throws Exception {
-        ShoppingSession session1 = new ShoppingSession();
-        session1.setId(1L);
-        session1.setTotal(100.0);
+        ShoppingSessionDTO session1 = ShoppingSessionDTO.builder()
+                .id(1L)
+                .total(100.0)
+                .build();
 
-        ShoppingSession session2 = new ShoppingSession();
-        session2.setId(2L);
-        session2.setTotal(200.0);
+        ShoppingSessionDTO session2 = ShoppingSessionDTO.builder()
+                .id(2L)
+                .total(200.0)
+                .build();
 
-        List<ShoppingSession> shoppingSessions = Arrays.asList(session1, session2);
+        List<ShoppingSessionDTO> shoppingSessions = Arrays.asList(session1, session2);
 
-        when(shoppingSessionService.getAllShoppingSessions()).thenReturn(shoppingSessions);
+        when(shoppingSessionImpl.getAllShoppingSessions()).thenReturn(shoppingSessions);
 
-        mockMvc.perform(get("/session")).andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(1)).andExpect(jsonPath("$[0].total").value(100.0)).andExpect(jsonPath("$[1].id").value(2)).andExpect(jsonPath("$[1].total").value(200.0));
+        mockMvc.perform(get("/allSession"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].total").value(100.0))
+                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].total").value(200.0));
 
-        verify(shoppingSessionService, times(1)).getAllShoppingSessions();
+        verify(shoppingSessionImpl, times(1)).getAllShoppingSessions();
     }
 
     @Test
     public void testUpdateShoppingSession() throws Exception {
-        ShoppingSession shoppingSession = new ShoppingSession();
-        shoppingSession.setId(1L);
-        shoppingSession.setTotal(100.0);
+        ShoppingSessionDTO updatedSessionDTO = new ShoppingSessionDTO();
+        updatedSessionDTO.setTotal(100.0);
 
-        when(shoppingSessionService.updateShoppingSession(any(ShoppingSession.class))).thenReturn(shoppingSession);
+        ShoppingSessionDTO updatedSession = new ShoppingSessionDTO();
+        updatedSession.setId(1L);
+        updatedSession.setTotal(100.0);
 
-        mockMvc.perform(put("/{sessionId}", 1L).contentType(MediaType.APPLICATION_JSON).content("{\"total\": 100.0}")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(1)).andExpect(jsonPath("$.total").value(100.0));
+        when(shoppingSessionImpl.updateShoppingSession(anyLong(), any(ShoppingSessionDTO.class))).thenReturn(updatedSession);
 
-        verify(shoppingSessionService, times(1)).updateShoppingSession(any(ShoppingSession.class));
+        mockMvc.perform(put("/{sessionId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"total\": 100.0}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.total").value(100.0));
+
+        verify(shoppingSessionImpl, times(1)).updateShoppingSession(anyLong(), any(ShoppingSessionDTO.class));
     }
 
     @Test
     public void testDeleteShoppingSessionById() throws Exception {
-        mockMvc.perform(delete("/{sessionId}", 1L)).andExpect(status().isNoContent());
+        mockMvc.perform(delete("/{sessionId}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Product successfully deleted!"));
 
-        verify(shoppingSessionService, times(1)).deleteShoppingSessionById(1L);
+        verify(shoppingSessionImpl, times(1)).deleteShoppingSessionById(1L);
     }
 
 }

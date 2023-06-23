@@ -15,10 +15,14 @@ import java.time.LocalDateTime;
 public class CartItem {
 
     @Id
+    @GeneratedValue
     Long id;
+    @Column(nullable = false)
     Long quantity;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
 
     @ManyToOne
     @JoinColumn(name = "session_id")

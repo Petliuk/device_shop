@@ -2,10 +2,7 @@ package com.device.shop.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,9 +19,12 @@ public class ProductCategory {
     Long id;
     String name;
     String description;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
-    LocalDateTime deleted_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "productCategory")
     List<Product> products;

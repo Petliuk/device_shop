@@ -1,42 +1,20 @@
 package com.device.shop.service;
 
-import com.device.shop.entity.ShoppingSession;
-import com.device.shop.repository.ShoppingSessionRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.device.shop.model.ShoppingSessionDTO;
+import org.springframework.http.ResponseEntity;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-public class ShoppingSessionService implements ShoppingSessionServiceInterface {
+public interface ShoppingSessionService {
 
-    ShoppingSessionRepository shoppingSessionRepository;
+    ShoppingSessionDTO createShoppingSession(ShoppingSessionDTO shoppingSessionDTO);
 
-    @Transactional
-    public ShoppingSession createShoppingSession(ShoppingSession shoppingSession) {
-        return shoppingSessionRepository.save(shoppingSession);
-    }
+    ShoppingSessionDTO getShoppingSessionById(Long sessionId);
 
-    @Transactional
-    public ShoppingSession getShoppingSessionById(Long sessionId) {
-        return shoppingSessionRepository.findById(sessionId).orElseThrow(() -> new EntityNotFoundException("Shopping session not found"));
-    }
+    List<ShoppingSessionDTO> getAllShoppingSessions();
 
-    @Transactional
-    public List<ShoppingSession> getAllShoppingSessions() {
-        return shoppingSessionRepository.findAll();
-    }
+    ShoppingSessionDTO updateShoppingSession(Long sessionId, ShoppingSessionDTO updatedSessionDTO);
 
-    public ShoppingSession updateShoppingSession(ShoppingSession updatedSession) {
-        return shoppingSessionRepository.save(updatedSession);
-    }
-
-    @Transactional
-    public void deleteShoppingSessionById(Long sessionId) {
-        shoppingSessionRepository.deleteById(sessionId);
-    }
+    ResponseEntity<String> deleteShoppingSessionById(Long sessionId);
 
 }
