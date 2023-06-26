@@ -1,16 +1,21 @@
 package com.device.shop.service.impl;
 
+import com.device.shop.entity.ERole;
+import com.device.shop.entity.Role;
 import com.device.shop.entity.User;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.mapper.UserMapper;
 import com.device.shop.model.UserDTO;
+import com.device.shop.repository.RoleRepository;
 import com.device.shop.repository.UserRepository;
 import com.device.shop.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,18 +27,26 @@ public class UserImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserDTO createUser(UserDTO userDTO) throws BadRequestException {
         validateUserFields(userDTO);
         User user = userMapper.toEntity(userDTO);
+        setUserRoles(user, userDTO);
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
         User savedUser = userRepository.save(user);
         return userMapper.toDTO(savedUser);
     }
 
     @Transactional
     public UserDTO getUserById(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " not found"));
         return userMapper.toDTO(user);
     }
 
@@ -58,6 +71,7 @@ public class UserImpl implements UserService {
         }
 
         User updatedUser = userMapper.toEntity(userDTO);
+        setUserRoles(updatedUser, userDTO);
         updatedUser.setId(existingUser.getId());
         User savedUser = userRepository.save(updatedUser);
         return userMapper.toDTO(savedUser);
@@ -86,5 +100,17 @@ public class UserImpl implements UserService {
             throw new BadRequestException("Invalid phone number format");
         }
     }
+     private void setUserRoles(User user, UserDTO userDTO){
+         if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
+             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                     .orElseThrow(() -> new EntityNotFoundException("Default user role not found"));
+             user.setRoles(Collections.singleton(userRole));
+         } else {
+             user.setRoles(userDTO.getRoles().stream()
+                     .map(role -> roleRepository.findByName(role)
+                             .orElseThrow(() -> new EntityNotFoundException("Default user role not found")))
+                     .collect(Collectors.toSet()));
+         }
+     }
 
 }

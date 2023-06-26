@@ -32,14 +32,12 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 public class ProductServiceTest {
     private ProductRepository productRepository;
-    private ModelMapper modelMapper;
     private ProductImpl productService;
 
     @BeforeEach
     public void setUp() {
         productRepository = mock(ProductRepository.class);
-        modelMapper = new ModelMapper();
-        productService = new ProductImpl(productRepository, modelMapper);
+        productService = new ProductImpl(productRepository);
     }
 
     @Test

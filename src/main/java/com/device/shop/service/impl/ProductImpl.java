@@ -3,6 +3,7 @@ package com.device.shop.service.impl;
 import com.device.shop.csv.CSVHelper;
 import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
+import com.device.shop.mapper.ProductMapper;
 import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.ProductRepository;
 import com.device.shop.service.ProductService;
@@ -23,13 +24,13 @@ import java.util.stream.Collectors;
 public class ProductImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final ModelMapper modelMap;
+    private final ProductMapper productMapper;
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream()
-                .map(this::convertToDto)
+                .map(productMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -37,7 +38,7 @@ public class ProductImpl implements ProductService {
     public ProductDTO getProductById(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
-        return convertToDto(product);
+        return productMapper.toDTO(product);
     }
 
     @Transactional
@@ -51,22 +52,22 @@ public class ProductImpl implements ProductService {
 
     @Transactional
     public ResponseEntity<ProductDTO> addProducts(ProductDTO productDTO) {
-        Product product = convertToEntity(productDTO);
+        Product product = productMapper.toEntity(productDTO);
         productRepository.save(product);
-        return ResponseEntity.ok(convertToDto(product));
+        return ResponseEntity.ok(productMapper.toDTO(product));
     }
 
     @Transactional(readOnly = true)
     public ProductDTO getProductByName(String name) {
         Product product = productRepository.findByName(name);
-        return convertToDto(product);
+        return productMapper.toDTO(product);
     }
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getProductsByCategory(Long categoryId) {
         List<Product> products = productRepository.findByProductCategory_Id(categoryId);
         return products.stream()
-                .map(this::convertToDto)
+                .map(productMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -79,10 +80,10 @@ public class ProductImpl implements ProductService {
             throw new BadRequestException("Cannot change the id to " + productDTO.getId());
         }
 
-        Product updatedProduct = convertToEntity(productDTO);
+        Product updatedProduct = productMapper.toEntity(productDTO);
         updatedProduct.setId(existingProduct.getId());
 
-        return convertToDto(productRepository.save(updatedProduct));
+        return productMapper.toDTO(productRepository.save(updatedProduct));
     }
 
     @Transactional
@@ -97,14 +98,6 @@ public class ProductImpl implements ProductService {
         } catch (IOException e) {
             throw new IOException("Failed to store CSV data: " + e.getMessage());
         }
-    }
-
-    private ProductDTO convertToDto(Product product) {
-        return modelMap.map(product, ProductDTO.class);
-    }
-
-    private Product convertToEntity(ProductDTO productDTO) {
-        return modelMap.map(productDTO, Product.class);
     }
 
 }

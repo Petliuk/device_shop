@@ -6,12 +6,11 @@ import com.device.shop.service.impl.ShoppingSessionImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 public class ShoppingSessionController {
 
@@ -23,11 +22,13 @@ public class ShoppingSessionController {
         return ResponseEntity.ok(createdSession);
     }
 
+
     @GetMapping("/{sessionId}")
     public ResponseEntity<ShoppingSessionDTO> getShoppingSessionById(@PathVariable Long sessionId) {
         ShoppingSessionDTO shoppingSession = shoppingSessionImpl.getShoppingSessionById(sessionId);
         return ResponseEntity.ok(shoppingSession);
     }
+
 
     @GetMapping("/allSession")
     public ResponseEntity<List<ShoppingSessionDTO>> getAllShoppingSessions() {

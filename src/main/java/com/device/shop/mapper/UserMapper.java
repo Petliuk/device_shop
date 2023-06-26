@@ -1,9 +1,12 @@
 package com.device.shop.mapper;
 
+import com.device.shop.entity.Role;
 import com.device.shop.entity.User;
 
 import com.device.shop.model.UserDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
@@ -15,6 +18,7 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .password(user.getPassword())
+                .roles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()))
                 .build();
     }
 
