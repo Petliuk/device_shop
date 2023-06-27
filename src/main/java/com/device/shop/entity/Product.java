@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Product {
+
     @Id
     @GeneratedValue
     Long id;
@@ -20,16 +21,27 @@ public class Product {
     String description;
     String sku;
     Double price;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
-    LocalDateTime deleted_at;
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
 
     @OneToOne
-    @JoinColumn(name = "product_inventory_id")
+    @JoinColumn(name = "inventory_id")
+    //toDo add support later
     ProductInventory productInventory;
+
     @ManyToOne
+    //toDo add support later
     ProductCategory productCategory;
 
+    @OneToOne(mappedBy = "product")
+    CartItem cartItem;
+
+    @ManyToOne
+    Discount discount;
 
 }

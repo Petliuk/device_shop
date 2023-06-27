@@ -1,50 +1,61 @@
 package com.device.shop.controller;
 
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.entity.User;
+import com.device.shop.model.UserDTO;
 import com.device.shop.service.UserService;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @AllArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws BadRequestException {
-        User savedUser = userService.createUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws BadRequestException {
+        UserDTO savedUserDTO = userService.createUser(userDTO);
+        return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long userId) {
-        User user = userService.getUserById(userId);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @SecurityRequirement(name = "bearerAuth")
+    //toDo Admin can see all users, user can see only its details
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long userId) {
+        UserDTO userDTO = userService.getUserById(userId);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/allUsers")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> users = userService.getAllUser();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> userDTOs = userService.getAllUsers();
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long userId,
-                                           @RequestBody User user) throws BadRequestException {
-        User updatedUser = userService.updateUser(user, userId);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @SecurityRequirement(name = "bearerAuth")
+    //toDo Admin can see all users, user can see only its details
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long userId, @RequestBody UserDTO userDTO) throws BadRequestException {
+        UserDTO updatedUserDTO = userService.updateUser(userDTO, userId);
+        return new ResponseEntity<>(updatedUserDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "bearerAuth")
+    //toDo Admin can see all users, user can see only its details
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") Long userId) {
         userService.deleteUser(userId);
         return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
     }
+
 }

@@ -13,12 +13,16 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ProductInventory {
+
     @Id
     Long id;
-    Long quantify;
-    LocalDateTime created_at;
-    LocalDateTime modified_at;
-    LocalDateTime deleted_at;
+    Long quantify;                  //помилка
+    @Column(name = "created_at")
+    LocalDateTime createdAt;
+    @Column(name = "modified_at")
+    LocalDateTime modifiedAt;
+    @Column(name = "deleted_at")
+    LocalDateTime deletedAt;
 
     @OneToOne(mappedBy = "productInventory", cascade = CascadeType.ALL)
     Product product;

@@ -1,40 +1,30 @@
 package com.device.shop.service;
 
-import com.device.shop.csv.CSVHelper;
-import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
-import com.device.shop.repository.ProductRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.device.shop.model.ProductDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-@Service
-@AllArgsConstructor
-public class ProductService implements ProductServiceInterface {
+public interface ProductService {
 
+    List<ProductDTO> getAllProducts();
 
-    ProductRepository productRepository;
+    ProductDTO getProductById(Long productId);
 
-    @Transactional
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
-    }
+    void deleteProduct(Long productId);
 
-    @Transactional
-    public void save(MultipartFile file) throws IOException , BadRequestException {
-        if (!CSVHelper.hasCSVFormat(file)) {
-            throw new BadRequestException("Please upload a csv file");
-        }
-        try {
-            List<Product> products = CSVHelper.csvToProducts(file.getInputStream());
-            productRepository.saveAll(products);
-        } catch (IOException e) {
-            throw new IOException("Failed to store CSV data: " + e.getMessage());
-        }
-    }
+    ResponseEntity<ProductDTO> addProducts(ProductDTO productDTO);
+
+    ProductDTO getProductByName(String name);
+
+    List<ProductDTO> getProductsByCategory(Long categoryId);
+
+    ProductDTO updateProduct(ProductDTO productDTO, Long productId) throws BadRequestException, EntityNotFoundException;
+
+    void save(MultipartFile file) throws IOException, BadRequestException;
 
 }

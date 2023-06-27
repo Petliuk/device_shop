@@ -1,0 +1,5 @@
+ALTER TABLE cart_item
+    MODIFY COLUMN quantity INT NOT NULL;
+
+/*ALTER TABLE order_items MODIFY id BIGINT
+    AUTO_INCREMENT PRIMARY KEY;*/
