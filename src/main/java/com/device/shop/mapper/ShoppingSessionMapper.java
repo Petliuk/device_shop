@@ -12,7 +12,7 @@ public class ShoppingSessionMapper {
                 .total(shoppingSession.getTotal())
                 .createdAt(shoppingSession.getCreatedAt())
                 .modifiedAt(shoppingSession.getModifiedAt())
-                .user(shoppingSession.getUser())
+                .userId(shoppingSession.getUser().getId())
                 .build();
     }
 
@@ -22,7 +22,6 @@ public class ShoppingSessionMapper {
                 .total(shoppingSessionDTO.getTotal())
                 .createdAt(shoppingSessionDTO.getCreatedAt())
                 .modifiedAt(shoppingSessionDTO.getModifiedAt())
-                .user(shoppingSessionDTO.getUser())
                 .build();
     }
 

@@ -1,9 +1,11 @@
 package com.device.shop.service.impl;
 
 import com.device.shop.entity.ShoppingSession;
+import com.device.shop.entity.User;
 import com.device.shop.mapper.ShoppingSessionMapper;
 import com.device.shop.model.ShoppingSessionDTO;
 import com.device.shop.repository.ShoppingSessionRepository;
+import com.device.shop.repository.UserRepository;
 import com.device.shop.service.ShoppingSessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,20 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ShoppingSessionImpl implements ShoppingSessionService {
-
+public class ShoppingSessionServiceImpl implements ShoppingSessionService {
+    //toDo decouple
     private final ShoppingSessionRepository shoppingSessionRepository;
     private final ShoppingSessionMapper shoppingSessionMapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public ShoppingSessionDTO createShoppingSession(ShoppingSessionDTO shoppingSessionDTO) {
         ShoppingSession shoppingSession = shoppingSessionMapper.toEntity(shoppingSessionDTO);
+
+        User user = userRepository.findById(shoppingSessionDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + shoppingSessionDTO.getUserId() + " not found"));
+        shoppingSession.setUser(user);
+
         ShoppingSession createdSession = shoppingSessionRepository.save(shoppingSession);
         return shoppingSessionMapper.toDTO(createdSession);
     }

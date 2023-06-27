@@ -2,7 +2,7 @@ package com.device.shop.controller;
 
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.ProductDTO;
-import com.device.shop.service.impl.ProductImpl;
+import com.device.shop.service.ProductService;
 
 import lombok.AllArgsConstructor;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductController {
 
-    ProductImpl productService;
+    private final ProductService productService;
 
     @PostMapping("/product/{id}")
     public ResponseEntity<ProductDTO> updateProductsById(@PathVariable("id") Long productId, @RequestBody ProductDTO productDTO) throws BadRequestException {
@@ -57,6 +57,7 @@ public class ProductController {
     }
 
     @GetMapping("/categories/{categoryId}")
+    //toDo add logic later + make dynamic search
     public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
         List<ProductDTO> productsDTO = productService.getProductsByCategory(categoryId);
         return new ResponseEntity<>(productsDTO, HttpStatus.OK);

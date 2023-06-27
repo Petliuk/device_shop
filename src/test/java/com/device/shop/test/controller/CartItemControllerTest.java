@@ -3,7 +3,7 @@ package com.device.shop.test.controller;
 import com.device.shop.controller.CartItemController;
 import com.device.shop.model.CartItemDTO;
 import com.device.shop.model.ProductDTO;
-import com.device.shop.service.impl.CartItemImpl;
+import com.device.shop.service.impl.CartItemServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ public class CartItemControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private CartItemImpl cartItemService;
+    private CartItemServiceImpl cartItemService;
 
     private CartItemController cartItemController;
 

@@ -1,9 +1,12 @@
 package com.device.shop.mapper;
 
+import com.device.shop.entity.Discount;
 import com.device.shop.entity.Product;
 
 import com.device.shop.model.ProductDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class ProductMapper {
@@ -17,6 +20,9 @@ public class ProductMapper {
                 .createdAt(product.getCreatedAt())
                 .modifiedAt(product.getModifiedAt())
                 .deletedAt(product.getDeletedAt())
+                .discountId(Optional.ofNullable(product.getDiscount())
+                        .map(Discount::getId)
+                        .orElse(null))
                 .build();
     }
 

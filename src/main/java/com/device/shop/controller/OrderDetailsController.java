@@ -2,7 +2,7 @@ package com.device.shop.controller;
 
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.OrderDetailsDTO;
-import com.device.shop.service.impl.OrderDetailsImpl;
+import com.device.shop.service.OrderDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class OrderDetailsController {
 
-    private final OrderDetailsImpl orderDetailsService;
+    private final OrderDetailsService orderDetailsService;
 
     @GetMapping("/order/{id}/details")
     public ResponseEntity<OrderDetailsDTO> getDetailsAboutTheOrderDetailsById(@PathVariable("id") Long orderId) {

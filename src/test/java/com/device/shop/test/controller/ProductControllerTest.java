@@ -5,7 +5,7 @@ import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.exception.ExceptionController;
 import com.device.shop.model.ProductDTO;
-import com.device.shop.service.impl.ProductImpl;
+import com.device.shop.service.impl.ProductServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class ProductControllerTest {
 
 
     @Mock
-    private ProductImpl productService;
+    private ProductServiceImpl productService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
     private ProductController productController;

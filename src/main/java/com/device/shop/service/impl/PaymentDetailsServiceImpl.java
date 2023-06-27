@@ -15,8 +15,8 @@ import javax.persistence.EntityNotFoundException;
 
 @Service
 @AllArgsConstructor
-public class PaymentDetailsImpl  implements PaymentDetailsService {
-
+public class PaymentDetailsServiceImpl implements PaymentDetailsService {
+    //toDo decouple
     PaymentDetailsRepository paymentDetailsRepository;
     PaymentDetailsMapper paymentDetailsMapper;
 

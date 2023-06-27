@@ -16,6 +16,7 @@ import java.util.List;
 public class ShoppingSession {
 
     @Id
+    @GeneratedValue
     Long id;
     Double total;
     @Column(name = "created_at")

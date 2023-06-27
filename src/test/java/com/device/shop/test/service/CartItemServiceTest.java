@@ -1,34 +1,7 @@
 package com.device.shop.test.service;
 
-import com.device.shop.controller.CartItemController;
-import com.device.shop.entity.CartItem;
-import com.device.shop.entity.Product;
-import com.device.shop.entity.ShoppingSession;
-import com.device.shop.mapper.CartItemMapper;
-import com.device.shop.mapper.ProductMapper;
-import com.device.shop.model.CartItemDTO;
-import com.device.shop.model.ProductDTO;
-import com.device.shop.repository.CartItemRepository;
-import com.device.shop.repository.ShoppingSessionRepository;
-import com.device.shop.service.ProductService;
-import com.device.shop.service.impl.CartItemImpl;
-import com.device.shop.service.impl.ProductImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import javax.persistence.EntityNotFoundException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+
 public class CartItemServiceTest {
 
 /*    private CartItemImpl cartItemService;

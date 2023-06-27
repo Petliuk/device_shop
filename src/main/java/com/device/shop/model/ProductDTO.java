@@ -20,5 +20,6 @@ public class ProductDTO {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
+    private Long discountId;
 
 }

@@ -4,11 +4,10 @@ import com.device.shop.entity.*;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.mapper.OrderDetailsMapper;
 import com.device.shop.mapper.OrderItemsMapper;
-import com.device.shop.mapper.ProductMapper;
-import com.device.shop.model.CartItemDTO;
 import com.device.shop.model.OrderItemsDTO;
 import com.device.shop.repository.OrderItemsRepository;
 import com.device.shop.repository.ProductRepository;
+import com.device.shop.service.OrderDetailsService;
 import com.device.shop.service.OrderItemsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +17,13 @@ import javax.persistence.EntityNotFoundException;
 
 @Service
 @AllArgsConstructor
-public class OrderItemsImpl implements OrderItemsService {
-
+public class OrderItemsServiceImpl implements OrderItemsService {
+    //toDo decouple
     private final OrderItemsRepository orderItemsRepository;
     private final OrderItemsMapper orderItemsMapper;
-    private final ProductMapper productMapper;
     private final OrderDetailsMapper orderDetailsMapper;
-    private final ProductImpl productImps;
-    private final OrderDetailsImpl orderDetailsImpl;
+    private final OrderDetailsService orderDetailsService;
+    private final ProductRepository productRepository;
 
     @Transactional
     public OrderItemsDTO getOrderItemsById(Long orderItemsId) {
@@ -38,10 +36,11 @@ public class OrderItemsImpl implements OrderItemsService {
     public OrderItemsDTO addOrderItems(Long productId, OrderItemsDTO orderItemsDTO) {
        OrderItems orderItems = orderItemsMapper.toEntity(orderItemsDTO);
 
-        Product product = productMapper.toEntity(productImps.getProductById(productId));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + productId + " not found"));
         orderItems.setProduct(product);
 
-        OrderDetails orderDetails = orderDetailsMapper.toEntity(orderDetailsImpl.getOrderDetailsById(orderItemsDTO.getOrderDetailsId()));
+        OrderDetails orderDetails = orderDetailsMapper.toEntity(orderDetailsService.getOrderDetailsById(orderItemsDTO.getOrderDetailsId()));
         orderItems.setOrderDetails(orderDetails);
 
         OrderItems newOrderItems = orderItemsRepository.save(orderItems);

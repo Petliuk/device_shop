@@ -4,7 +4,7 @@ import com.device.shop.entity.ShoppingSession;
 import com.device.shop.mapper.ShoppingSessionMapper;
 import com.device.shop.model.ShoppingSessionDTO;
 import com.device.shop.repository.ShoppingSessionRepository;
-import com.device.shop.service.impl.ShoppingSessionImpl;
+import com.device.shop.service.impl.ShoppingSessionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ public class ShoppingSessionServiceTest {
     private ShoppingSessionMapper shoppingSessionMapper;
 
     @InjectMocks
-    private ShoppingSessionImpl shoppingSessionService;
+    private ShoppingSessionServiceImpl shoppingSessionService;
 
     @BeforeEach
     void setup() {

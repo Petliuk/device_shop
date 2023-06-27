@@ -19,8 +19,8 @@ import javax.persistence.EntityNotFoundException;
 
 @Service
 @AllArgsConstructor
-public class OrderDetailsImpl implements OrderDetailsService {
-
+public class OrderDetailsServiceImpl implements OrderDetailsService {
+    //toDo decouple
     private final OrderDetailsRepository orderDetailsRepository;
     private final OrderDetailsMapper orderDetailsMapper;
     private final UserRepository userRepository;

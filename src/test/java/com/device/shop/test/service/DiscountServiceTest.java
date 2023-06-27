@@ -5,7 +5,7 @@ import com.device.shop.exception.BadRequestException;
 import com.device.shop.mapper.DiscountMapper;
 import com.device.shop.model.DiscountDTO;
 import com.device.shop.repository.DiscountRepository;
-import com.device.shop.service.impl.DiscountImpl;
+import com.device.shop.service.impl.DiscountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ public class DiscountServiceTest {
     private DiscountMapper discountMapper;
 
     @InjectMocks
-    private DiscountImpl discountService;
+    private DiscountServiceImpl discountService;
 
     @BeforeEach
     public void setup() {

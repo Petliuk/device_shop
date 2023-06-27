@@ -4,7 +4,7 @@ import com.device.shop.entity.PaymentDetails;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.PaymentDetailsDTO;
 import com.device.shop.repository.PaymentDetailsRepository;
-import com.device.shop.service.impl.PaymentDetailsImpl;
+import com.device.shop.service.impl.PaymentDetailsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ public class PaymentDetailsServiceTest {
     private PaymentDetailsRepository paymentDetailsRepository;
 
     @InjectMocks
-    private PaymentDetailsImpl paymentDetailsService;
+    private PaymentDetailsServiceImpl paymentDetailsService;
 
     @BeforeEach
     public void setup() {

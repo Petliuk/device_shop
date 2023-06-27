@@ -1,6 +1,5 @@
 package com.device.shop.model;
 
-import com.device.shop.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +16,6 @@ public class ShoppingSessionDTO {
     private Double total;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private User user;
+    private Long userId;
 
 }

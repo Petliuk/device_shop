@@ -4,7 +4,7 @@ import com.device.shop.controller.UserController;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.exception.ExceptionController;
 import com.device.shop.model.UserDTO;
-import com.device.shop.service.impl.UserImpl;
+import com.device.shop.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
 
     @Mock
-    private UserImpl userService;
+    private UserServiceImpl userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
     private UserController userController;

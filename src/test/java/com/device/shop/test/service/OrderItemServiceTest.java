@@ -1,24 +1,5 @@
 package com.device.shop.test.service;
 
-import com.device.shop.entity.OrderItems;
-import com.device.shop.entity.Product;
-import com.device.shop.exception.BadRequestException;
-import com.device.shop.model.OrderItemsDTO;
-import com.device.shop.repository.OrderItemsRepository;
-import com.device.shop.repository.ProductRepository;
-import com.device.shop.service.impl.OrderItemsImpl;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 public class OrderItemServiceTest {
 
 /* @Mock

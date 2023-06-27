@@ -4,13 +4,12 @@ import com.device.shop.entity.Product;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.ProductRepository;
-import com.device.shop.service.impl.ProductImpl;
+import com.device.shop.service.impl.ProductServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.AdditionalAnswers;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -32,12 +31,12 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles("test")
 public class ProductServiceTest {
     private ProductRepository productRepository;
-    private ProductImpl productService;
+    private ProductServiceImpl productService;
 
     @BeforeEach
     public void setUp() {
         productRepository = mock(ProductRepository.class);
-        productService = new ProductImpl(productRepository);
+        //productService = new ProductServiceImpl(productRepository);
     }
 
     @Test

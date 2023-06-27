@@ -2,7 +2,7 @@ package com.device.shop.controller;
 
 import com.device.shop.model.CartItemDTO;
 import com.device.shop.model.ProductDTO;
-import com.device.shop.service.impl.CartItemImpl;
+import com.device.shop.service.CartItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CartItemController {
 
-    CartItemImpl cartItemService;
+    private final CartItemService cartItemService;
 
     @PostMapping("/cart/{id}/items")
     public ResponseEntity<CartItemDTO> addProduct(@PathVariable("id") Long id, @RequestBody CartItemDTO cartItemDTO) {

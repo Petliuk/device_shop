@@ -1,25 +1,6 @@
 package com.device.shop.test.service;
 
-import com.device.shop.entity.User;
-import com.device.shop.exception.BadRequestException;
-import com.device.shop.mapper.UserMapper;
-import com.device.shop.model.UserDTO;
-import com.device.shop.repository.UserRepository;
-import com.device.shop.service.impl.UserImpl;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
 

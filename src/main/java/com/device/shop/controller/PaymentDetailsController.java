@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class PaymentDetailsController {
 
-    PaymentDetailsService paymentDetailsService;
+    private final PaymentDetailsService paymentDetailsService;
 
     @PostMapping("/{paymentId}")
     public ResponseEntity<PaymentDetailsDTO> createPaymentById(@PathVariable("paymentId") Long id, @RequestBody PaymentDetailsDTO paymentDTO) {

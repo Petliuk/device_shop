@@ -1,7 +1,5 @@
 package com.device.shop.model;
 
-import com.device.shop.entity.OrderDetails;
-import com.device.shop.entity.Product;
 import lombok.*;
 
 import java.time.LocalDateTime;

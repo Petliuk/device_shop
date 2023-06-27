@@ -2,7 +2,7 @@ package com.device.shop.test.controller;
 
 import com.device.shop.controller.ShoppingSessionController;
 import com.device.shop.model.ShoppingSessionDTO;
-import com.device.shop.service.impl.ShoppingSessionImpl;
+import com.device.shop.service.impl.ShoppingSessionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ public class ShoppingSessionControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private ShoppingSessionImpl shoppingSessionImpl;
+    private ShoppingSessionServiceImpl shoppingSessionImpl;
 
     @InjectMocks
     private ShoppingSessionController shoppingSessionController;

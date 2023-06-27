@@ -1,7 +1,7 @@
 package com.device.shop.controller;
 
 import com.device.shop.model.ShoppingSessionDTO;
-import com.device.shop.service.impl.ShoppingSessionImpl;
+import com.device.shop.service.ShoppingSessionService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,37 +14,37 @@ import java.util.List;
 @AllArgsConstructor
 public class ShoppingSessionController {
 
-    private final ShoppingSessionImpl shoppingSessionImpl;
+    private final ShoppingSessionService shoppingSessionService;
 
     @PostMapping("/create")
     public ResponseEntity<ShoppingSessionDTO> createShoppingSession(@RequestBody ShoppingSessionDTO shoppingSessionDTO) {
-        ShoppingSessionDTO createdSession = shoppingSessionImpl.createShoppingSession(shoppingSessionDTO);
+        ShoppingSessionDTO createdSession = shoppingSessionService.createShoppingSession(shoppingSessionDTO);
         return ResponseEntity.ok(createdSession);
     }
 
 
     @GetMapping("/{sessionId}")
     public ResponseEntity<ShoppingSessionDTO> getShoppingSessionById(@PathVariable Long sessionId) {
-        ShoppingSessionDTO shoppingSession = shoppingSessionImpl.getShoppingSessionById(sessionId);
+        ShoppingSessionDTO shoppingSession = shoppingSessionService.getShoppingSessionById(sessionId);
         return ResponseEntity.ok(shoppingSession);
     }
 
 
     @GetMapping("/allSession")
     public ResponseEntity<List<ShoppingSessionDTO>> getAllShoppingSessions() {
-        List<ShoppingSessionDTO> shoppingSessions = shoppingSessionImpl.getAllShoppingSessions();
+        List<ShoppingSessionDTO> shoppingSessions = shoppingSessionService.getAllShoppingSessions();
         return ResponseEntity.ok(shoppingSessions);
     }
 
     @PutMapping("/{sessionId}")
     public ResponseEntity<ShoppingSessionDTO> updateShoppingSession(@PathVariable Long sessionId, @RequestBody ShoppingSessionDTO updatedSessionDTO) {
-        ShoppingSessionDTO updated = shoppingSessionImpl.updateShoppingSession(sessionId, updatedSessionDTO);
+        ShoppingSessionDTO updated = shoppingSessionService.updateShoppingSession(sessionId, updatedSessionDTO);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{sessionId}")
     public ResponseEntity<String> deleteShoppingSessionById(@PathVariable Long sessionId) {
-        shoppingSessionImpl.deleteShoppingSessionById(sessionId);
+        shoppingSessionService.deleteShoppingSessionById(sessionId);
         return new ResponseEntity<>("Product successfully deleted!", HttpStatus.OK);
     }
 

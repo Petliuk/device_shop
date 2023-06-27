@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class DiscountImpl implements DiscountService {
+public class DiscountServiceImpl implements DiscountService {
 
+    //toDo decouple
     private final DiscountRepository discountRepository;
     private final DiscountMapper discountMapper;
 
@@ -37,7 +38,8 @@ public class DiscountImpl implements DiscountService {
 
     @Transactional
     public DiscountDTO getDiscountById(Long discountId) {
-        Discount discount = discountRepository.findById(discountId).orElseThrow(() -> new EntityNotFoundException("Discount with id " + discountId + " not found"));
+        Discount discount = discountRepository.findById(discountId)
+                .orElseThrow(() -> new EntityNotFoundException("Discount with id " + discountId + " not found"));
         return discountMapper.toDTO(discount);
     }
 

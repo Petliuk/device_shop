@@ -31,9 +31,11 @@ public class Product {
 
     @OneToOne
     @JoinColumn(name = "inventory_id")
+    //toDo add support later
     ProductInventory productInventory;
 
     @ManyToOne
+    //toDo add support later
     ProductCategory productCategory;
 
     @OneToOne(mappedBy = "product")
