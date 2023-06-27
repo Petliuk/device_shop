@@ -58,11 +58,6 @@ public class CartItemControllerTest {
         Long cartItemId = 3L;
         Long quantity = 1L;
 
-        CartItemDTO cartItemDTO = CartItemDTO.builder()
-                .id(cartItemId)
-                .quantity(quantity)
-                .build();
-
         CartItemDTO expectedResponse = CartItemDTO.builder()
                 .id(cartItemId)
                 .quantity(quantity)
@@ -80,6 +75,8 @@ public class CartItemControllerTest {
 
         verify(cartItemService, times(1)).addToCart(eq(sessionId), any(CartItemDTO.class));
     }
+
+    //toDo testAddProduct_BadRequestException
 
     @Test
     void testGetProductsInCart() throws Exception {
@@ -102,6 +99,8 @@ public class CartItemControllerTest {
         verify(cartItemService, times(1)).getProductsInCart(eq(cartId));
     }
 
+    //toDo testGetProductsInCart_EntityNotFoundException
+
     @Test
     void testDeleteProductById() throws Exception {
         Long productId = 1L;
@@ -112,6 +111,8 @@ public class CartItemControllerTest {
         verify(cartItemService, times(1)).deleteTheProduct(productId);
     }
 
+    //toDo testDeleteProductById_EntityNotFoundException
+
     @Test
     void testDeleteAllProducts() throws Exception {
         Long cartId = 1L;
@@ -121,5 +122,7 @@ public class CartItemControllerTest {
 
         verify(cartItemService, times(1)).removeAllProductsFromCart(cartId);
     }
+
+    //toDo testDeleteAllProducts_EntityNotFoundException
 
 }

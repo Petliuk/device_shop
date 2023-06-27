@@ -1,6 +1,6 @@
 package com.device.shop.repository;
 
-import com.device.shop.entity.ERole;
+import com.device.shop.model.ERole;
 import com.device.shop.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

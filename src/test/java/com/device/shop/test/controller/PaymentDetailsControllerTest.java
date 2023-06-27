@@ -37,9 +37,9 @@ public class PaymentDetailsControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(paymentDetailsController).build();
     }
 
-/*
-    @Test
-    void testCreatePaymentById() throws Exception {
+    //toDo correct the test - testCreatePayment()
+  /*  @Test
+    void testCreatePayment() throws Exception {
         Long paymentId = 1L;
         PaymentDetailsDTO paymentDTO = new PaymentDetailsDTO();
         PaymentDetailsDTO createdPayment = new PaymentDetailsDTO();
@@ -55,8 +55,9 @@ public class PaymentDetailsControllerTest {
                 .andExpect(jsonPath("$.id").value(paymentId));
 
         verify(paymentDetailsService, times(1)).createPaymentById(paymentId, paymentDTO);
-    }
-*/
+    }*/
+
+    //toDo add test - testCreatePayment_BadRequestException
 
     @Test
     void testGetPaymentDataById() throws Exception {
@@ -75,6 +76,8 @@ public class PaymentDetailsControllerTest {
         verify(paymentDetailsService, times(1)).getPaymentById(paymentId);
     }
 
+    //toDo add test testGetPaymentDataById_EntityNotFoundException
+    //toDo correct the test - testUpdatePaymentDetails()
  /*   @Test
     void testUpdatePaymentDetails() throws Exception {
 
@@ -93,6 +96,9 @@ public class PaymentDetailsControllerTest {
         verify(paymentDetailsService, times(1)).updatePaymentDetails(eq(paymentDTO), eq(1L));
     }*/
 
+    //toDo add test testUpdatePaymentDetails_EntityNotFoundException
+    //toDo add test testUpdatePaymentDetails_BadRequestException
+
     @Test
     void testDeletePaymentDetailsById() throws Exception {
         Long paymentId = 1L;
@@ -103,4 +109,5 @@ public class PaymentDetailsControllerTest {
 
         verify(paymentDetailsService, times(1)).deletePaymentDetailsById(paymentId);
     }
+    //toDo add test testDeletePaymentDetailsById_EntityNotFoundException
 }

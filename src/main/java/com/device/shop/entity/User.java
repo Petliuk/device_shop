@@ -33,7 +33,7 @@ public class User {
     @Column(unique = true)
   //  @ApiModelProperty(value = "User email", required = true, example = "user@gmail.com")
     private String email;
-    @JsonProperty(access = Access.WRITE_ONLY)
+
     private String password;
 
     @OneToOne(mappedBy = "user")

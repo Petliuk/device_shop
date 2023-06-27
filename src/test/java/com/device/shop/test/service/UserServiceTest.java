@@ -1,8 +1,10 @@
 package com.device.shop.test.service;
 
-import static org.mockito.ArgumentMatchers.any;
+/*import static org.mockito.ArgumentMatchers.any;*/
 
 public class UserServiceTest {
+
+    //toDo Change all tests to work correctly
 
 /*
     @Mock

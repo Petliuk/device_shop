@@ -199,6 +199,8 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.price").value(10.0));
     }
 
+    //toDo add test testGetProductByName_EntityNotFound
+
     @Test
     public void testGetProductsByCategory() throws Exception {
         Product product = Product.builder()
@@ -238,6 +240,8 @@ public class ProductControllerTest {
         verify(productService).getProductsByCategory(categoryId);
     }
 
+    //toDo add test testGetProductsByCategory_EntityNotFound
+
     @Test
     public void testAddProduct() throws Exception {
         Product product = Product.builder()
@@ -262,6 +266,8 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.name").value("Test Product"))
                 .andExpect(jsonPath("$.price").value(10.0));
     }
+
+    //toDo add test testAddProduct_BadRequest
 
     @Test
     public void testUploadFile() throws Exception {

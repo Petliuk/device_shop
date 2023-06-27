@@ -54,6 +54,8 @@ public class ShoppingSessionControllerTest {
         verify(shoppingSessionImpl, times(1)).createShoppingSession(any(ShoppingSessionDTO.class));
     }
 
+    //toDo add test testCreateShoppingSession_BadRequest
+
     @Test
     public void testGetShoppingSessionById() throws Exception {
         ShoppingSessionDTO shoppingSessionDTO = ShoppingSessionDTO.builder()
@@ -70,6 +72,8 @@ public class ShoppingSessionControllerTest {
 
         verify(shoppingSessionImpl, times(1)).getShoppingSessionById(1L);
     }
+
+    //toDo add test testGetShoppingSessionById_NotFound
 
     @Test
     public void testGetAllShoppingSessions() throws Exception {
@@ -97,6 +101,8 @@ public class ShoppingSessionControllerTest {
         verify(shoppingSessionImpl, times(1)).getAllShoppingSessions();
     }
 
+    //toDo add test testGetAllShoppingSession_NotFound
+
     @Test
     public void testUpdateShoppingSession() throws Exception {
         ShoppingSessionDTO updatedSessionDTO = new ShoppingSessionDTO();
@@ -118,6 +124,9 @@ public class ShoppingSessionControllerTest {
         verify(shoppingSessionImpl, times(1)).updateShoppingSession(anyLong(), any(ShoppingSessionDTO.class));
     }
 
+    //toDo add test testUpdateShoppingSession_NotFound
+    //toDo add test testUpdateShoppingSession_BadRequest
+
     @Test
     public void testDeleteShoppingSessionById() throws Exception {
         mockMvc.perform(delete("/{sessionId}", 1L))
@@ -126,5 +135,7 @@ public class ShoppingSessionControllerTest {
 
         verify(shoppingSessionImpl, times(1)).deleteShoppingSessionById(1L);
     }
+
+    //toDo add test testDeleteShoppingSessionById_NotFound
 
 }

@@ -1,6 +1,6 @@
 package com.device.shop.service.impl;
 
-import com.device.shop.entity.ERole;
+import com.device.shop.model.ERole;
 import com.device.shop.entity.Role;
 import com.device.shop.entity.User;
 import com.device.shop.exception.BadRequestException;

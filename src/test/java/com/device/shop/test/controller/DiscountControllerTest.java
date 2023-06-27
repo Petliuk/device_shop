@@ -64,6 +64,8 @@ public class DiscountControllerTest {
         verify(discountService).addNewDiscount(any());
     }
 
+    //toDo testAddDiscount_BadRequestException
+
     @Test
     public void testGetAllDiscounts() throws Exception {
         DiscountDTO discount1 = DiscountDTO.builder()
@@ -98,6 +100,8 @@ public class DiscountControllerTest {
         verify(discountService).getAllDiscounts();
     }
 
+    // toDo testGetAllDiscounts_EntityNotFoundException
+
     @Test
     public void testGetDetailsAboutTheDiscountById() throws Exception {
         DiscountDTO discountDTO = DiscountDTO.builder()
@@ -118,6 +122,8 @@ public class DiscountControllerTest {
 
         verify(discountService).getDiscountById(1L);
     }
+
+    //toDo testGetDetailsAboutTheDiscountById_EntityNotFoundException
 
     @Test
     public void testUpdateDiscountInformation() throws Exception {
@@ -142,12 +148,17 @@ public class DiscountControllerTest {
         verify(discountService).updateDiscountById(eq(1L), any(DiscountDTO.class));
     }
 
+    //toDo testUpdateDiscountInformation_EntityNotFoundException
+    //toDo testGetDetailsAboutTheDiscountById_BadRequestException
+
     @Test
     public void testDeleteDiscount() throws Exception {
         mockMvc.perform(delete("/discount/1")).andExpect(status().isOk()).andExpect(content().string("Discount successfully deleted!"));
 
         verify(discountService).deleteDiscount(1L);
     }
+
+    //toDo testDeleteDiscount_EntityNotFoundException
 
     private String asJsonString(Object obj) {
         try {

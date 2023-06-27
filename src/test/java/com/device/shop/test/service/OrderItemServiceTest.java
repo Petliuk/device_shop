@@ -1,6 +1,8 @@
 package com.device.shop.test.service;
 
 public class OrderItemServiceTest {
+    
+    //toDo Change all tests to work correctly
 
 /* @Mock
     private OrderItemsRepository orderItemsRepository;

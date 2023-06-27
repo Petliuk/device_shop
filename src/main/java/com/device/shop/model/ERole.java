@@ -1,4 +1,4 @@
-package com.device.shop.entity;
+package com.device.shop.model;
 
 public enum ERole {
     ROLE_USER,

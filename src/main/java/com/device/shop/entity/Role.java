@@ -1,5 +1,6 @@
 package com.device.shop.entity;
 
+import com.device.shop.model.ERole;
 import lombok.*;
 
 import javax.persistence.*;

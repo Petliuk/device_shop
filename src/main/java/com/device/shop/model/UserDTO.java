@@ -1,7 +1,6 @@
 package com.device.shop.model;
 
-import com.device.shop.entity.ERole;
-import com.device.shop.entity.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +18,7 @@ public class UserDTO {
     private String surname;
     private String phone;
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private Set<ERole> roles;
 

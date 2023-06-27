@@ -65,7 +65,7 @@ public class DiscountServiceTest {
     }
 
     @Test
-    void getAllDiscounts_ShouldReturnAllDiscounts() {
+    void testGetAllDiscounts() {
 
         List<Discount> discounts = Arrays.asList(
                 Discount.builder()
@@ -116,8 +116,10 @@ public class DiscountServiceTest {
         verify(discountMapper, times(1)).toDTO(discounts.get(1));
     }
 
+    //toDo add test getAllDiscounts_NotFound
+
     @Test
-    void getDiscountById_ExistingId_ShouldReturnDiscountDTO() {
+    void testGetDiscountById_ExistingId_ShouldReturnDiscountDTO() {
 
         Long discountId = 1L;
         Discount discount = Discount.builder()
@@ -148,7 +150,7 @@ public class DiscountServiceTest {
     }
 
     @Test
-    void getDiscountById_NonExistingDiscountId_ThrowsEntityNotFoundException() {
+    void testGetDiscountById_NonExistingDiscountId_ThrowsEntityNotFoundException() {
 
         Long discountId = 1L;
         when(discountRepository.findById(discountId)).thenReturn(Optional.empty());
@@ -160,7 +162,7 @@ public class DiscountServiceTest {
 
 
     @Test
-    void updateDiscountById_WhenValidInput_ReturnUpdatedDiscountDTO() throws BadRequestException {
+    void testUpdateDiscountById() {
 
         Long discountId = 1L;
         DiscountDTO discountDTO = DiscountDTO.builder()
@@ -215,7 +217,7 @@ public class DiscountServiceTest {
     }
 
     @Test
-    void updateDiscountById_WhenInvalidId_ThrowsBadRequestException() {
+    void updateDiscountById_ThrowsBadRequestException() {
         Long discountId = 1L;
         DiscountDTO discountDTO = DiscountDTO.builder()
                 .id(2L)
@@ -233,8 +235,10 @@ public class DiscountServiceTest {
         verify(discountMapper, never()).toDTO(any());
     }
 
+    //toDo add test updateDiscountById_NotFound
+
     @Test
-    void deleteDiscount_ExistingDiscountId_DeletesDiscount() {
+    void deleteDiscount() {
 
         Long discountId = 1L;
         when(discountRepository.existsById(discountId)).thenReturn(true);
@@ -245,5 +249,5 @@ public class DiscountServiceTest {
         verify(discountRepository, times(1)).deleteById(discountId);
         verifyNoMoreInteractions(discountRepository);
     }
-
+    //toDo add test deleteDiscount_NotFound
 }
