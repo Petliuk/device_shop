@@ -3,11 +3,14 @@ package com.device.shop.service.impl;
 import com.device.shop.csv.CSVHelper;
 import com.device.shop.entity.Discount;
 import com.device.shop.entity.Product;
+import com.device.shop.entity.ProductPhoto;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.mapper.ProductMapper;
 import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.DiscountRepository;
+import com.device.shop.repository.ProductPhotoRepository;
 import com.device.shop.repository.ProductRepository;
+import com.device.shop.service.ProductPhotoService;
 import com.device.shop.service.ProductService;
 import lombok.AllArgsConstructor;
 
@@ -28,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final DiscountRepository discountRepository;
+    private final ProductPhotoRepository productPhotoRepository;
 
     @Transactional(readOnly = true)
     public List<ProductDTO> getAllProducts() {
@@ -53,22 +57,10 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    @Transactional
-    public ResponseEntity<ProductDTO> addProducts(ProductDTO productDTO) {
-        Product product = productMapper.toEntity(productDTO);
-
-        Discount discount = discountRepository.findById(productDTO.getDiscountId())
-                      .orElseThrow(() -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
-        product.setDiscount(discount);
-
-        productRepository.save(product);
-        return ResponseEntity.ok(productMapper.toDTO(product));
-    }
-
     @Transactional(readOnly = true)
-    public ProductDTO getProductByName(String name) {
-        Product product = productRepository.findByName(name);
-        return productMapper.toDTO(product);
+    public List<ProductDTO> searchProductsByName(String name) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
+        return products.stream().map(productMapper::toDTO).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -110,6 +102,24 @@ public class ProductServiceImpl implements ProductService {
         } catch (IOException e) {
             throw new IOException("Failed to store CSV data: " + e.getMessage());
         }
+    }
+
+    @Transactional
+    public ResponseEntity<ProductDTO> addProduct(ProductDTO productDTO) {
+        Product product = productMapper.toEntity(productDTO);
+
+        if (productDTO.getPhotoId() != null) {
+            ProductPhoto productPhoto = productPhotoRepository.findById(productDTO.getPhotoId())
+                    .orElseThrow(() -> new EntityNotFoundException("Фото з id " + productDTO.getPhotoId() + " не знайдено"));
+            product.setProductPhoto(productPhoto);
+        }
+
+        Discount discount = discountRepository.findById(productDTO.getDiscountId())
+                .orElseThrow(() -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
+        product.setDiscount(discount);
+
+        productRepository.save(product);
+        return ResponseEntity.ok(productMapper.toDTO(product));
     }
 
 }

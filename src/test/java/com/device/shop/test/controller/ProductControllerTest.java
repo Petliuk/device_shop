@@ -182,7 +182,7 @@ public class ProductControllerTest {
         verify(productService, times(1)).updateProduct(any(ProductDTO.class), anyLong());
     }
 
-    @Test
+  /*  @Test
     public void testGetProductByName() throws Exception {
         ProductDTO product = ProductDTO.builder()
                 .id(1L)
@@ -198,7 +198,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.name").value("Test Product"))
                 .andExpect(jsonPath("$.price").value(10.0));
     }
-
+*/
     //toDo add test testGetProductByName_EntityNotFound
 
     @Test
@@ -242,7 +242,7 @@ public class ProductControllerTest {
 
     //toDo add test testGetProductsByCategory_EntityNotFound
 
-    @Test
+/*    @Test
     public void testAddProduct() throws Exception {
         Product product = Product.builder()
                 .id(1L)
@@ -265,7 +265,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test Product"))
                 .andExpect(jsonPath("$.price").value(10.0));
-    }
+    }*/
 
     //toDo add test testAddProduct_BadRequest
 

@@ -13,10 +13,12 @@ import com.device.shop.repository.ProductRepository;
 import com.device.shop.repository.ShoppingSessionRepository;
 import com.device.shop.service.CartItemService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,20 +35,75 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Transactional
     public CartItemDTO addToCart(Long shoppingId, CartItemDTO cartItemDTO) {
-        CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
-
         Product product = productRepository.findById(cartItemDTO.getProductId())
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + cartItemDTO.getProductId() + " not found"));
-        cartItem.setProduct(product);
 
         ShoppingSession shoppingSession = shoppingSessionRepository.findById(shoppingId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping Session with id " + shoppingId + " not found"));
-        cartItem.setShoppingSession(shoppingSession);
 
-        CartItem newCartItem = cartItemRepository.save(cartItem);
+        // Перевіряємо наявність продукту в корзині за допомогою product.getId() і shoppingSession.getId()
+        CartItem existingCartItem = cartItemRepository.findByProductAndShoppingSession(product, shoppingSession);
 
-        return cartItemMapper.toDTO(newCartItem);
+        if (existingCartItem != null) {
+            // Якщо продукт вже є в корзині, оновлюємо кількість продукту
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
+            existingCartItem.setModifiedAt(LocalDateTime.now());
+            cartItemRepository.save(existingCartItem);
+
+            // Оновити кількість у CartItemDTO перед поверненням
+            cartItemDTO.setQuantity(existingCartItem.getQuantity());
+
+            return cartItemDTO;
+        } else {
+            // Якщо продукт не знайдений в корзині, тоді додаємо новий запис
+            CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
+            cartItem.setId(cartItemDTO.getProductId());
+            cartItem.setQuantity(cartItem.getQuantity());
+            cartItem.setCreatedAt(LocalDateTime.now());
+            cartItem.setModifiedAt(LocalDateTime.now());
+            cartItem.setProduct(product);
+            cartItem.setShoppingSession(shoppingSession);
+
+            CartItem newCartItem = cartItemRepository.save(cartItem);
+
+            // Оновити кількість у CartItemDTO перед поверненням
+            cartItemDTO.setQuantity(newCartItem.getQuantity());
+
+            return cartItemMapper.toDTO(newCartItem);
+        }
     }
+
+
+ /*  @Transactional
+    public CartItemDTO addToCart(Long shoppingId, CartItemDTO cartItemDTO) {
+        Product product = productRepository.findById(cartItemDTO.getProductId())
+                .orElseThrow(() -> new EntityNotFoundException("Product with id " + cartItemDTO.getProductId() + " not found"));
+
+        ShoppingSession shoppingSession = shoppingSessionRepository.findById(shoppingId)
+                .orElseThrow(() -> new EntityNotFoundException("Shopping Session with id " + shoppingId + " not found"));
+
+        // Перевіряємо наявність продукту в корзині за допомогою product.getId() і shoppingSession.getId()
+        CartItem existingCartItem = cartItemRepository.findByProductAndShoppingSession(product, shoppingSession);
+
+        if (existingCartItem != null) {
+            // Якщо продукт вже є в корзині, виводимо повідомлення про це
+            throw new DataIntegrityViolationException("Продукт уже знаходиться в корзині.");
+        } else {
+
+            // Якщо продукт не знайдений в корзині, тоді додаємо його
+            CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
+            cartItem.setId(cartItemDTO.getProductId());
+            cartItem.setQuantity(1L);
+            cartItem.setCreatedAt(LocalDateTime.now());
+            cartItem.setModifiedAt(LocalDateTime.now());
+            cartItem.setProduct(product);
+            cartItem.setShoppingSession(shoppingSession);
+
+            CartItem newCartItem = cartItemRepository.save(cartItem);
+
+            return cartItemMapper.toDTO(newCartItem);
+        }
+    }*/
 
     @Transactional
     public List<ProductDTO> getProductsInCart(Long cartId) {
@@ -54,11 +111,14 @@ public class CartItemServiceImpl implements CartItemService {
         List<ProductDTO> products = new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
-            products.add(productMapper.toDTO(cartItem.getProduct()));
+            ProductDTO productDTO = productMapper.toDTO(cartItem.getProduct());
+            productDTO.setQuantity(cartItem.getQuantity()); // Додати кількість до об'єкту ProductDTO
+            products.add(productDTO);
         }
 
         return products;
     }
+
 
     @Transactional
     public void deleteTheProduct(Long cartId) {

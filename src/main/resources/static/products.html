@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список товарів і пошук</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            background-image: url("1586369.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+
+        .product-details-container {
+            max-width: 600px;
+            width: 200%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .product-details-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-details-container div {
+            text-align: left;
+        }
+
+        .product-item img {
+            max-width: 100%;
+            max-height: 300px; /* Adjust the height as needed */
+            margin: 0 auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Кнопка "Назад" */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-button button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /* Форма пошуку */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            /*position: absolute;*/
+            top: 20px;
+            left: 20px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            padding: 5px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        /* Кнопка пошуку */
+        .form-group button {
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Зображення лупи для кнопки пошуку */
+        .form-group button img {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* Кнопка для входу/реєстрації */
+        .user-controls {
+            margin: auto;
+        }
+
+        .user-controls button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Стилі для списку товарів */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Фонове зображення */
+        body {
+            background-image: url("1586369.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        @media (max-width: 767px) {
+            .product-details-container {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .product-details-container h1 {
+                font-size: 24px;
+            }
+        }
+
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <div class="form-group">
+            <label for="searchInput">Product search:</label>
+            <input type="text" id="searchInput" placeholder="Enter the product ID or name">
+            <button onclick="searchProduct()">
+                <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
+                Search
+            </button>
+        </div>
+        <div>
+            <h1 id="listHeader">LIST OF PRODUCTS</h1>
+            <div> <h3 id="notificationMessage" style="display: none; color: green;;  position: absolute;  ">
+                The product has been added to the cart!</h3>
+            </div>
+
+        </div>
+        <div class="user-controls">
+            <button onclick="redirectToCartPage()">Basket</button>
+            <button onclick="goBackToProducts()">Products</button>
+            <button onclick="goToRegistrationPage()">Registration / Login</button>
+            <button onclick="logout()">Go out</button>
+        </div>
+
+    </div>
+
+    <div class="products-grid" id="productsList"></div>
+    <div id="searchResult"></div>
+</div>
+
+<div class="product-details-container" id="productDetailsContainer" style="display: none;">
+    <h1>PRODUCT DETAILS</h1>
+    <div id="productDetails"></div>
+    <div class="back-button">
+        <button onclick="goBack()">Back</button>
+    </div>
+
+    <div class="form-g">
+        <button class="quantity-arrow" id="decrement" onclick="decrementQuantity()">-</button>
+        <span class="quantity-value" id="quantityValue">1</span>
+        <button class="quantity-arrow" id="increment" onclick="incrementQuantity()">+</button>
+        <button id="addToCartButton" style="background-color: #4CAF50; color: white;">Add to cart</button>
+    </div>
+</div>
+
+<!-- Підключаємо файл product.js -->
+<script src="product.js"></script>
+<!-- Підключаємо файл cart.js -->
+<script src="cart.js"></script>
+</body>
+
+</html>
+
+

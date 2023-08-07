@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "cart_item")
+/*@Table(name = "cart_item", uniqueConstraints = @UniqueConstraint(columnNames = "product_id"))*/
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class CartItem {
 
     @Id
-    @GeneratedValue
+  /*  @GeneratedValue*/
     Long id;
-    @Column(nullable = false)
+    /*@Column(nullable = false)*/
     Long quantity;
     @Column(name = "created_at")
     LocalDateTime createdAt;

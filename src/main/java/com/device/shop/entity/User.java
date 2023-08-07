@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -39,9 +40,9 @@ public class User {
     @OneToOne(mappedBy = "user")
     OrderDetails orderDetails;
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
-    ShoppingSession shoppingSession;
+    List<ShoppingSession> shoppingSession;
 
 
     @ManyToMany(fetch = FetchType.LAZY)

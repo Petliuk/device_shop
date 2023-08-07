@@ -21,13 +21,15 @@ public class Product {
     String description;
     String sku;
     Double price;
+
     @Column(name = "created_at")
     LocalDateTime createdAt;
+
     @Column(name = "modified_at")
     LocalDateTime modifiedAt;
+
     @Column(name = "deleted_at")
     LocalDateTime deletedAt;
-
 
     @OneToOne
     @JoinColumn(name = "inventory_id")
@@ -43,5 +45,9 @@ public class Product {
 
     @ManyToOne
     Discount discount;
+
+    @OneToOne
+    @JoinColumn(name = "photo_id")
+    ProductPhoto productPhoto;
 
 }

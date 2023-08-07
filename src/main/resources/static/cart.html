@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кошик</title>
+    <style>
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Це забезпечить відстань між текстом і кнопкою */
+            padding: 10px; /* Опціонально: додамо відступ для зовнішнього вигляду */
+            background-color: #f0f0f0; /* Опціонально: додамо фоновий колір для контейнера */
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .back-to-product button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative; /* Додамо relative position, щоб .back-to-product могла бути абсолютною відносно body */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            background-image: url("1586369.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .empty-cart-msg {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+<div class="fullscreen-photo"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+    <div class="header">
+        <h1>LIST OF PRODUCTS IN CART</h1>
+        <div class="back-to-product">
+            <button onclick="goBackToProducts()">Back to product list</button>
+        </div>
+        <div id="notificationMessage" style="display: none; color: green; font-weight: bold;"></div>
+    </div>
+</div>
+    <div id="cartItemsList"></div>
+</div>
+
+</div>
+<script src="product.js"></script>
+
+<script src="cart.js"></script>
+</body>
+
+</html>
