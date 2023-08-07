@@ -11,7 +11,7 @@ import java.util.Optional;
 @Component
 public class ProductMapper {
     public ProductDTO toDTO(Product product) {
-        return ProductDTO.builder()
+        ProductDTO.ProductDTOBuilder builder = ProductDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
@@ -23,7 +23,14 @@ public class ProductMapper {
                 .discountId(Optional.ofNullable(product.getDiscount())
                         .map(Discount::getId)
                         .orElse(null))
-                .build();
+                .photoId(product.getProductPhoto().getId());
+
+        // Збереження фото даних
+        if (product.getProductPhoto() != null) {
+            builder.imageData(product.getProductPhoto().getPhotoData());
+        }
+
+        return builder.build();
     }
 
     public Product toEntity(ProductDTO productDTO) {

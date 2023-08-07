@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -52,18 +53,10 @@ public class ProductController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/product")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) {
-        ProductDTO addedProductDTO = productService.addProducts(productDTO).getBody();
-        return ResponseEntity.ok(addedProductDTO);
-    }
-
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/name/{name}")
-    public ResponseEntity<ProductDTO> getProductByName(@PathVariable String name) {
-        ProductDTO productDTO = productService.getProductByName(name);
-        return new ResponseEntity<>(productDTO, HttpStatus.OK);
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@PathVariable String name) {
+        List<ProductDTO> productDTOs = productService.searchProductsByName(name);
+        return new ResponseEntity<>(productDTOs, HttpStatus.OK);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -80,6 +73,14 @@ public class ProductController {
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         productService.save(file);
         return ResponseEntity.status(HttpStatus.OK).body("Uploaded the file successfully: " + file.getOriginalFilename());
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/product")
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) throws IOException {
+        ProductDTO addedProductDTO = productService.addProduct(productDTO).getBody();
+        return ResponseEntity.ok(addedProductDTO);
     }
 
 }
