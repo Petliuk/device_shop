@@ -23,7 +23,6 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-//@CrossOrigin(origins = "http://localhost:63342")
 public class UserController {
 
     private final UserService userService;
@@ -34,8 +33,8 @@ public class UserController {
         return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
-     /*   @SecurityRequirement(name = "bearerAuth")
-    //toDo Admin can see all users, user can see only its details*/
+    /*   @SecurityRequirement(name = "bearerAuth")
+   //toDo Admin can see all users, user can see only its details*/
     @CanAccessOwnData
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("id") Long userId) {
@@ -48,7 +47,7 @@ public class UserController {
         Long userId = Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .map(Authentication::getPrincipal)
-                .map(principal -> (UserDetailsImpl)principal)
+                .map(principal -> (UserDetailsImpl) principal)
                 .map(UserDetailsImpl::getId)
                 .orElseThrow(() -> new EntityNotFoundException("Couldn't find principal"));
         UserDTO userDTO = userService.getUserById(userId);

@@ -32,8 +32,8 @@ public class CartItemController {
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/cart/items/{id}")
-    public ResponseEntity<String> deleteProductById(@PathVariable("id") Long productId) {
-        cartItemService.deleteTheProduct(productId);
+    public ResponseEntity<String> deleteCartItemById(@PathVariable("id") Long cartItemId) {
+        cartItemService.deleteTheCartItem(cartItemId);
         return new ResponseEntity<>("Product successfully deleted from the cart", HttpStatus.OK);
     }
 

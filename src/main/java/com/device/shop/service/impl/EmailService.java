@@ -1,4 +1,5 @@
 package com.device.shop.service.impl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -31,4 +32,5 @@ public class EmailService {
         helper.setText(html, true);
         emailSender.send(message);
     }
+
 }

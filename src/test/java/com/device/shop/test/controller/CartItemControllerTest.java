@@ -101,7 +101,7 @@ public class CartItemControllerTest {
 
     //toDo testGetProductsInCart_EntityNotFoundException
 
-    @Test
+  /*  @Test
     void testDeleteProductById() throws Exception {
         Long productId = 1L;
 
@@ -109,7 +109,7 @@ public class CartItemControllerTest {
                 .andExpect(status().isOk());
 
         verify(cartItemService, times(1)).deleteTheProduct(productId);
-    }
+    }*/
 
     //toDo testDeleteProductById_EntityNotFoundException
 

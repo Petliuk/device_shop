@@ -1,5 +1,4 @@
 function goToProductsPage() {
-    // Замініть цей URL на URL до вашої сторінки з усіма продуктами
     window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/products.html?_ijt=nmg0npme92fg5762odeqe9rg7r&_ij_reload=RELOAD_ON_SAVE';
 }
 
@@ -15,24 +14,20 @@ async function login() {
         const response = await fetch('http://localhost:8080/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded' // Змінено на application/x-www-form-urlencoded
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: formData.toString() // Перетворюємо FormData в рядковий формат
+            body: formData.toString()
         });
 
         if (!response.ok) {
             throw new Error('Не вдалось увійти');
         }
 
-        // Отримання токену з відповіді
         const accessToken = await response.text();
 
-        // Збереження токена у локальному сховищі
         console.log(accessToken);
         localStorage.setItem('token', accessToken);
 
-
-        // Отримання інформації про користувача після успішного входу
         const userResponse = await fetch('http://localhost:8080/users/principal', {
             headers: {
                 Authorization: `Bearer ${accessToken}`
@@ -41,7 +36,7 @@ async function login() {
 
         if (userResponse.ok) {
             const user = await userResponse.json();
-            localStorage.setItem('userId', user.id); // Збереження userId у локальному сховищі
+            localStorage.setItem('userId', user.id);
         }
 
         goToProductsPage();
@@ -52,7 +47,6 @@ async function login() {
     }
 }
 
-//Функція дял реєстрації
 const registrationForm = document.getElementById('registrationForm');
 
 function register() {
@@ -87,10 +81,8 @@ function register() {
         })
         .then(data => {
             console.log('Registration successful:', data);
-            // Отримання елементу для виведення повідомлення
             const registrationSuccess = document.getElementById('registrationSuccess');
-            registrationSuccess.style.display = 'block'; // Показати повідомлення
-            // Очистка форми реєстрації після успішної реєстрації
+            registrationSuccess.style.display = 'block';
             document.getElementById('registrationForm').reset();
         })
         .catch(error => {
@@ -98,15 +90,14 @@ function register() {
         });
 }
 
-// Додати обробник події для надсилання форми на вхід
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
-    login(); // Викликати функцію login при надсиланні форми
+    login();
 });
 
-// Додати обробник події для надсилання форми на реєстрацію
+
 document.getElementById('registrationForm').addEventListener('submit', async (event) => {
     event.preventDefault();
-    register(); // Викликати функцію register при надсиланні форми
+    register();
 });
 

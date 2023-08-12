@@ -28,8 +28,4 @@ public class PaymentDetails {
     @OneToOne(mappedBy = "paymentDetails")
     OrderDetails orderDetails;
 
-    public PaymentDetails(Long id) {
-        this.id = id;
-    }
-
 }

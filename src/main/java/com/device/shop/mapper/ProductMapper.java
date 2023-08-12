@@ -25,7 +25,6 @@ public class ProductMapper {
                         .orElse(null))
                 .photoId(product.getProductPhoto().getId());
 
-        // Збереження фото даних
         if (product.getProductPhoto() != null) {
             builder.imageData(product.getProductPhoto().getPhotoData());
         }

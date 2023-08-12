@@ -17,7 +17,6 @@
             background-attachment: fixed;
         }
 
-
         .product-details-container {
             max-width: 600px;
             width: 200%;
@@ -41,13 +40,12 @@
 
         .product-item img {
             max-width: 100%;
-            max-height: 300px; /* Adjust the height as needed */
+            max-height: 300px;
             margin: 0 auto;
             display: block;
             object-fit: contain;
         }
 
-        /* Кнопка "Назад" */
         .back-button {
             position: absolute;
             top: 20px;
@@ -82,12 +80,10 @@
             text-align: center;
         }
 
-        /* Форма пошуку */
         .form-group {
             display: flex;
             flex-direction: column;
             margin-bottom: 10px;
-            /*position: absolute;*/
             top: 20px;
             left: 20px;
         }
@@ -104,7 +100,6 @@
             outline: none;
         }
 
-        /* Кнопка пошуку */
         .form-group button {
             padding: 8px 12px;
             background-color: #4CAF50;
@@ -114,7 +109,6 @@
             border-radius: 5px;
         }
 
-        /* Зображення лупи для кнопки пошуку */
         .form-group button img {
             width: 16px;
             height: 16px;
@@ -122,7 +116,6 @@
             vertical-align: middle;
         }
 
-        /* Кнопка для входу/реєстрації */
         .user-controls {
             margin: auto;
         }
@@ -137,7 +130,6 @@
             font-size: 14px;
         }
 
-        /* Стилі для списку товарів */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -146,7 +138,6 @@
             margin-top: 20px;
         }
 
-        /* Фонове зображення */
         body {
             background-image: url("1586369.jpg");
             background-size: cover;
@@ -164,7 +155,6 @@
                 font-size: 24px;
             }
         }
-
 </style>
 </head>
 
@@ -187,7 +177,7 @@
 
         </div>
         <div class="user-controls">
-            <button onclick="redirectToCartPage()">Basket</button>
+            <button onclick="redirectToCartPage()">Cart</button>
             <button onclick="goBackToProducts()">Products</button>
             <button onclick="goToRegistrationPage()">Registration / Login</button>
             <button onclick="logout()">Go out</button>
@@ -214,9 +204,9 @@
     </div>
 </div>
 
-<!-- Підключаємо файл product.js -->
+
 <script src="product.js"></script>
-<!-- Підключаємо файл cart.js -->
+
 <script src="cart.js"></script>
 </body>
 

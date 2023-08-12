@@ -16,6 +16,7 @@ import java.util.List;
 public class ShoppingSessionController {
 
     private final ShoppingSessionService shoppingSessionService;
+
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/create")
     public ResponseEntity<ShoppingSessionDTO> createShoppingSession(@RequestBody ShoppingSessionDTO shoppingSessionDTO) {

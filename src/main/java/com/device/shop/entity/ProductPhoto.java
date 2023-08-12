@@ -1,4 +1,5 @@
 package com.device.shop.entity;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,4 +23,5 @@ public class ProductPhoto {
 
     @OneToOne(mappedBy = "productPhoto")
     private Product product;
+
 }

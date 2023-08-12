@@ -111,6 +111,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Invalid phone number format");
         }
     }
+
      private void setUserRoles(User user, UserDTO userDTO){
          if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
              Role userRole = roleRepository.findByName(ERole.ROLE_USER)

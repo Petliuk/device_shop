@@ -24,15 +24,15 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-   // @ApiModelProperty(value = "User firstname", example = "firstname")
+    // @ApiModelProperty(value = "User firstname", example = "firstname")
     private String name;
-   // @ApiModelProperty(value = "User lastname", example = "lastname")
+    // @ApiModelProperty(value = "User lastname", example = "lastname")
     private String surname;
-   // @ApiModelProperty(value = "The user's phone number in the format +380 XX XXX XX XX , +380-XX-XXX-XX-XX", required = true, example = "+380 XX XXX XX XX , +380-XX-XXX-XX-XX")
+    // @ApiModelProperty(value = "The user's phone number in the format +380 XX XXX XX XX , +380-XX-XXX-XX-XX", required = true, example = "+380 XX XXX XX XX , +380-XX-XXX-XX-XX")
     private String phone;
 
     @Column(unique = true)
-  //  @ApiModelProperty(value = "User email", required = true, example = "user@gmail.com")
+    //  @ApiModelProperty(value = "User email", required = true, example = "user@gmail.com")
     private String email;
 
     private String password;
@@ -48,6 +48,5 @@ public class User {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-
 
 }

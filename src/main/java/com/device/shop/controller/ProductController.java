@@ -21,6 +21,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/product/{id}")

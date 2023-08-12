@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -40,8 +41,8 @@ public class Product {
     //toDo add support later
     ProductCategory productCategory;
 
-    @OneToOne(mappedBy = "product")
-    CartItem cartItem;
+    @OneToMany(mappedBy = "product")
+    List<CartItem> cartItem;
 
     @ManyToOne
     Discount discount;

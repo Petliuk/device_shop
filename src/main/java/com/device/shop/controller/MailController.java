@@ -13,7 +13,6 @@ public class MailController {
 
     private MailService mailService;
 
-    //Sending email
     @PostMapping("/send-mail")
     public String sendMail(@RequestBody MailDetail mailDetail) {
         return mailService.sendMail(mailDetail);

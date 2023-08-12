@@ -6,4 +6,5 @@ import java.io.IOException;
 
 public interface ProductPhotoService {
     Long uploadPhoto(MultipartFile image) throws IOException;
+
 }

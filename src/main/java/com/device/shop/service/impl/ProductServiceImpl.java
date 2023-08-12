@@ -10,7 +10,6 @@ import com.device.shop.model.ProductDTO;
 import com.device.shop.repository.DiscountRepository;
 import com.device.shop.repository.ProductPhotoRepository;
 import com.device.shop.repository.ProductRepository;
-import com.device.shop.service.ProductPhotoService;
 import com.device.shop.service.ProductService;
 import lombok.AllArgsConstructor;
 

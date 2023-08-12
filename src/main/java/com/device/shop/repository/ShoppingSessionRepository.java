@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface ShoppingSessionRepository extends JpaRepository<ShoppingSession, Long> {
 
     Optional<Object> findById(ProductDTO shoppingId);
+
 }
