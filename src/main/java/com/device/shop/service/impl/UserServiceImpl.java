@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+
 
     @Transactional
     public UserDTO createUser(UserDTO userDTO) throws BadRequestException {
@@ -40,6 +43,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
         User savedUser = userRepository.save(user);
+        //todo move send email via spring AOP and remove flush operation
+        userRepository.flush();
+        try {
+            emailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getName());
+        } catch (MessagingException e) {
+
+        }
+
         return userMapper.toDTO(savedUser);
     }
 
@@ -100,6 +111,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Invalid phone number format");
         }
     }
+
      private void setUserRoles(User user, UserDTO userDTO){
          if (userDTO.getRoles() == null || userDTO.getRoles().isEmpty()) {
              Role userRole = roleRepository.findByName(ERole.ROLE_USER)

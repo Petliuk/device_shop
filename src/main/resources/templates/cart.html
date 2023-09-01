@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кошик</title>
+    <style>
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .back-to-product button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            background-image: url("background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .empty-cart-msg {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+<div class="fullscreen-photo"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+    <div class="header">
+        <h1>LIST OF PRODUCTS IN CART</h1>
+        <div class="back-to-product">
+            <button onclick="goBackToProducts()">Back to product list</button>
+        </div>
+        <div id="notificationMessage" style="display: none; color: green; font-weight: bold;"></div>
+    </div>
+</div>
+    <div id="cartItemsList"></div>
+</div>
+
+</div>
+<script type="text/javascript" src="../static/js/product.js"></script>
+<script type="text/javascript" src="../static/js/cart.js"></script>
+</body>
+
+</html>

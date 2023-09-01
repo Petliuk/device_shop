@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,19 +34,37 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Transactional
     public CartItemDTO addToCart(Long shoppingId, CartItemDTO cartItemDTO) {
-        CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
-
         Product product = productRepository.findById(cartItemDTO.getProductId())
                 .orElseThrow(() -> new EntityNotFoundException("Product with id " + cartItemDTO.getProductId() + " not found"));
-        cartItem.setProduct(product);
 
         ShoppingSession shoppingSession = shoppingSessionRepository.findById(shoppingId)
                 .orElseThrow(() -> new EntityNotFoundException("Shopping Session with id " + shoppingId + " not found"));
-        cartItem.setShoppingSession(shoppingSession);
 
-        CartItem newCartItem = cartItemRepository.save(cartItem);
+        CartItem existingCartItem = cartItemRepository.findByProductAndShoppingSession(product, shoppingSession);
 
-        return cartItemMapper.toDTO(newCartItem);
+        if (existingCartItem != null) {
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + 1);
+            existingCartItem.setModifiedAt(LocalDateTime.now());
+            cartItemRepository.save(existingCartItem);
+
+            cartItemDTO.setQuantity(existingCartItem.getQuantity());
+
+            return cartItemDTO;
+        } else {
+            CartItem cartItem = cartItemMapper.toEntity(cartItemDTO);
+            cartItem.setId(cartItemDTO.getId());
+            cartItem.setQuantity(cartItem.getQuantity());
+            cartItem.setCreatedAt(LocalDateTime.now());
+            cartItem.setModifiedAt(LocalDateTime.now());
+            cartItem.setProduct(product);
+            cartItem.setShoppingSession(shoppingSession);
+
+            CartItem newCartItem = cartItemRepository.save(cartItem);
+
+            cartItemDTO.setQuantity(newCartItem.getQuantity());
+
+            return cartItemMapper.toDTO(newCartItem);
+        }
     }
 
     @Transactional
@@ -54,18 +73,21 @@ public class CartItemServiceImpl implements CartItemService {
         List<ProductDTO> products = new ArrayList<>();
 
         for (CartItem cartItem : cartItems) {
-            products.add(productMapper.toDTO(cartItem.getProduct()));
+            ProductDTO productDTO = productMapper.toDTO(cartItem.getProduct());
+            productDTO.setQuantity(cartItem.getQuantity());
+            productDTO.setId(cartItem.getId());
+            products.add(productDTO);
         }
 
         return products;
     }
 
     @Transactional
-    public void deleteTheProduct(Long cartId) {
-        if (cartItemRepository.existsById(cartId)) {
-            cartItemRepository.deleteById(cartId);
+    public void deleteTheCartItem(Long cartItemId) {
+        if (cartItemRepository.existsById(cartItemId)) {
+            cartItemRepository.deleteById(cartItemId);
         } else {
-            throw new EntityNotFoundException("Cart item with id " + cartId + " not found");
+            throw new EntityNotFoundException("Cart item with id " + cartItemId + " not found");
         }
     }
 

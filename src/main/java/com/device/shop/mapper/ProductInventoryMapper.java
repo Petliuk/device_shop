@@ -4,7 +4,7 @@ import com.device.shop.entity.ProductInventory;
 
 import com.device.shop.model.ProductInventoryDTO;
 import org.springframework.stereotype.Component;
-
+//ToDo
 @Component
 public class ProductInventoryMapper {
 

@@ -40,7 +40,7 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedException (AccessDeniedException ex){
+    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
         log.error("handleAccessDeniedException", ex);
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }

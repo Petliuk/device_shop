@@ -27,7 +27,6 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     private  final PaymentDetailsMapper paymentDetailsMapper;
     private final PaymentDetailsService paymentDetailsService;
 
-
     @Transactional
     public OrderDetailsDTO getOrderDetailsById(Long orderId) {
         OrderDetails orderDetails = orderDetailsRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("Order Details with id " + orderId + " not found"));

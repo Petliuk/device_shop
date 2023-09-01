@@ -3,10 +3,9 @@ package com.device.shop.mapper;
 import com.device.shop.entity.ProductCategory;
 import com.device.shop.model.ProductCategoryDTO;
 import org.springframework.stereotype.Component;
-
+//ToDo
 @Component
 public class ProductCategoryMapper {
-
 
     public ProductCategory toEntity(ProductCategoryDTO dto) {
         return ProductCategory.builder()

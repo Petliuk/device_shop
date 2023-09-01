@@ -23,7 +23,6 @@ public class CartItemMapper {
                 .quantity(entity.getQuantity())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
-                .productId(entity.getProduct().getId())
                 .shoppingSessionId(entity.getShoppingSession().getId())
                 .build();
     }

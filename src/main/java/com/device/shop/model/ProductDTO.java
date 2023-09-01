@@ -21,5 +21,8 @@ public class ProductDTO {
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
     private Long discountId;
+    private Long quantity;
+    private Long photoId;
+    private byte[] imageData;
 
 }

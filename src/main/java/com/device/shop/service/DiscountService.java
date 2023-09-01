@@ -1,6 +1,5 @@
 package com.device.shop.service;
 
-import com.device.shop.entity.Discount;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.DiscountDTO;
 

@@ -16,7 +16,7 @@ public class ProductInventory {
 
     @Id
     Long id;
-    Long quantify;                  //помилка
+    Long quantify;
     @Column(name = "created_at")
     LocalDateTime createdAt;
     @Column(name = "modified_at")

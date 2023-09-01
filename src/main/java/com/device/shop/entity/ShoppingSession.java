@@ -24,7 +24,7 @@ public class ShoppingSession {
     @Column(name = "modified_at")
     LocalDateTime modifiedAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     User user;
 
