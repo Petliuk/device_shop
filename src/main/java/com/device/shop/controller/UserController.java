@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
+//@CrossOrigin(origins = "http://localhost:63342")
 public class UserController {
 
     private final UserService userService;
@@ -33,7 +34,7 @@ public class UserController {
         return new ResponseEntity<>(savedUserDTO, HttpStatus.CREATED);
     }
 
-    /*   @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = "bearerAuth")
    //toDo Admin can see all users, user can see only its details*/
     @CanAccessOwnData
     @GetMapping("/users/{id}")

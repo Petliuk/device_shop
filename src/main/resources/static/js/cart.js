@@ -7,7 +7,7 @@ async function createOrGetShoppingSession() {
         throw new Error("Користувач не авторизований або токен недійсний");
     }
 
-    const newSessionResponse = await fetch("http://localhost:8080/create", {
+    const newSessionResponse = await fetch("http://localhost:8081/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -51,7 +51,7 @@ async function addToCart(productId) {
     let sessionId = getSessionIdFromLocalStorage();
 
     if (!token) {
-        window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/client.html?_ijt=nvvcca5f9fhi6ia89c8l0fr334&_ij_reload=RELOAD_ON_SAVE';
+        window.location.href = 'client.html';
         alert('In order to buy a product, you must log in to your account!');
         return;
     }
@@ -60,7 +60,7 @@ async function addToCart(productId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/cart/${sessionId}/items`, {
+        const response = await fetch(`http://localhost:8081/cart/${sessionId}/items`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ async function getCartItems() {
 
     const token = localStorage.getItem('token');
     try {
-        const response = await fetch(`http://localhost:8080/cart/${sessionId}/items`, {
+        const response = await fetch(`http://localhost:8081/cart/${sessionId}/items`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -154,7 +154,7 @@ function displayCartItems(cartItems) {
 }
 
 async function goBackToProducts() {
-    window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/products.html';
+    window.location.href = 'products.html';
 }
 
 
@@ -167,7 +167,7 @@ async function deleteProductFromCart(cartItemId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/cart/items/${cartItemId}`, {
+        const response = await fetch(`http://localhost:8081/cart/items/${cartItemId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`

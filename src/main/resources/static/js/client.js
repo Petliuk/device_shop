@@ -1,5 +1,5 @@
 function goToProductsPage() {
-    window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/products.html?_ijt=nmg0npme92fg5762odeqe9rg7r&_ij_reload=RELOAD_ON_SAVE';
+    window.location.href = 'products.html';
 }
 
 async function login() {
@@ -11,7 +11,7 @@ async function login() {
     formData.append('password', password);
 
     try {
-        const response = await fetch('http://localhost:8080/login', {
+        const response = await fetch('http://localhost:8081/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -28,7 +28,7 @@ async function login() {
         console.log(accessToken);
         localStorage.setItem('token', accessToken);
 
-        const userResponse = await fetch('http://localhost:8080/users/principal', {
+        const userResponse = await fetch('http://localhost:8081/users/principal', {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
@@ -50,7 +50,6 @@ async function login() {
 const registrationForm = document.getElementById('registrationForm');
 
 function register() {
-    // Отримайте дані з форми реєстрації
     const name = document.getElementById('name').value;
     const surname = document.getElementById('surname').value;
     const phone = document.getElementById('phone').value;
@@ -65,7 +64,7 @@ function register() {
         password
     };
 
-    fetch('http://localhost:8080/users', {
+    fetch('http://localhost:8081/users', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

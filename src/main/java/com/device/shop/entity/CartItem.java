@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "cart_item")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +17,7 @@ public class CartItem {
     @Id
     @GeneratedValue
     Long id;
+    @Column(nullable = false)
     Long quantity;
     @Column(name = "created_at")
     LocalDateTime createdAt;
@@ -26,7 +28,7 @@ public class CartItem {
     @JoinColumn(name = "session_id")
     ShoppingSession shoppingSession;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     Product product;
 

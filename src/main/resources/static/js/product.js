@@ -1,10 +1,14 @@
 async function fetchProducts(token) {
     try {
-        const response = await fetch('http://localhost:8080/products', {
+        const response = await fetch('http://localhost:8081/products', {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
+
         });
+
         const products = await response.json();
         return products;
     } catch (error) {
@@ -50,7 +54,7 @@ function isLoggedIn() {
 async function redirectToProductDetailsPage(productId) {
 
         try {
-            const response = await fetch(`http://localhost:8080/product/${productId}`);
+            const response = await fetch(`http://localhost:8081/product/${productId}`);
             if (!response.ok) {
                 throw new Error('Товар не знайдено');
             }
@@ -101,7 +105,7 @@ function searchProduct() {
         const searchById = /^\d+$/.test(searchInput); // Перевірка, чи введено ID (число)
         const endpoint = searchById ? `product/${searchInput}` : `search/${encodeURIComponent(searchInput)}`;
 
-        fetch(`http://localhost:8080/${endpoint}`)
+        fetch(`http://localhost:8081/${endpoint}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('/*Товар не знайдено*/');
@@ -157,12 +161,12 @@ function logout() {
 }
 
 function goToRegistrationPage() {
-    window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/client.html?_ijt=nvvcca5f9fhi6ia89c8l0fr334&_ij_reload=RELOAD_ON_SAVE';
+    window.location.href = 'client.html';
 }
 
 function redirectToCartPage() {
     if (isLoggedIn()) {
-        window.location.href = 'http://localhost:63342/MyProjectWithSpring2/src/main/resources/static/cart.html';
+        window.location.href = 'cart.html';
     } else {
         alert("In order to view the cart, you must log in to your account!");
         goToRegistrationPage();
