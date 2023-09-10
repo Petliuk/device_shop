@@ -43,13 +43,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
         User savedUser = userRepository.save(user);
-        //todo move send email via spring AOP and remove flush operation
+/*        //todo move send email via spring AOP and remove flush operation
         userRepository.flush();
         try {
             emailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getName());
         } catch (MessagingException e) {
 
-        }
+        }*/
 
         return userMapper.toDTO(savedUser);
     }
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         if (!emailMatcher.matches()) {
             throw new BadRequestException("Invalid email format");
         }
-        String phoneRegex = "^\\+380\\s\\d{2}\\s\\d{3}\\s\\d{2}\\s\\d{2}$|^\\+380-\\d{2}-\\d{3}-\\d{2}-\\d{2}$";
+        String phoneRegex = "^(\\+380\\s\\d{2}\\s\\d{3}\\s\\d{2}\\s\\d{2}|\\+380-\\d{2}-\\d{3}-\\d{2}-\\d{2}|\\+380\\d{9})$";
         Pattern phonePattern = Pattern.compile(phoneRegex);
         Matcher phoneMatcher = phonePattern.matcher(userDTO.getPhone());
         if (!phoneMatcher.matches()) {
