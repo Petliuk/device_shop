@@ -107,18 +107,22 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<ProductDTO> addProduct(ProductDTO productDTO) {
         Product product = productMapper.toEntity(productDTO);
 
-        if (productDTO.getPhotoId() != null) {
-            ProductPhoto productPhoto = productPhotoRepository.findById(productDTO.getPhotoId())
-                    .orElseThrow(() -> new EntityNotFoundException("Фото з id " + productDTO.getPhotoId() + " не знайдено"));
+        if (productDTO.getImageData() != null) {
+            ProductPhoto productPhoto = ProductPhoto.builder()
+                    .photoData(productDTO.getImageData())
+                    .build();
             product.setProductPhoto(productPhoto);
         }
 
-        Discount discount = discountRepository.findById(productDTO.getDiscountId())
-                .orElseThrow(() -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
-        product.setDiscount(discount);
+        if (productDTO.getDiscountId() != null) {
+            Discount discount = discountRepository.findById(productDTO.getDiscountId())
+                    .orElseThrow(() -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
+            product.setDiscount(discount);
+        } else {
+            product.setDiscount(null);
+        }
 
         productRepository.save(product);
         return ResponseEntity.ok(productMapper.toDTO(product));
     }
-
 }

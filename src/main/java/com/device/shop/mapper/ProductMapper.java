@@ -22,11 +22,12 @@ public class ProductMapper {
                 .deletedAt(product.getDeletedAt())
                 .discountId(Optional.ofNullable(product.getDiscount())
                         .map(Discount::getId)
-                        .orElse(null))
-                .photoId(product.getProductPhoto().getId());
+                        .orElse(null));
 
         if (product.getProductPhoto() != null) {
-            builder.imageData(product.getProductPhoto().getPhotoData());
+            builder
+                    .photoId(product.getProductPhoto().getId())
+                    .imageData(product.getProductPhoto().getPhotoData());
         }
 
         return builder.build();
@@ -44,5 +45,4 @@ public class ProductMapper {
                 .deletedAt(productDTO.getDeletedAt())
                 .build();
     }
-
 }

@@ -27,7 +27,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/users")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) throws BadRequestException {
         UserDTO savedUserDTO = userService.createUser(userDTO);
