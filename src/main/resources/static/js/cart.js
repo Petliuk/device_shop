@@ -130,20 +130,20 @@ function displayCartItems(cartItems) {
 
     const cartItemsHTML = cartItems.map(item => `
         <div style="display: flex; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-            <!-- Place the product image on the left side -->
             <div style="width: 200px; height: 200px; margin-right: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
                 <img src="data:image/jpeg;base64,${item.imageData}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
             <div style="flex: 1;">
                 <h2>${item.name}</h2>
-                 <p>Cart Items ID: ${item.id}</p>
+                 <p>Ідентифікатор товарів кошика: ${item.id}</p>
           
-                <p>Quantity: ${item.quantity}</p>
-                <p>Description: ${item.description} </p>
+                <p>Кількість: ${item.quantity}</p>
+                <p>Опис: ${item.description} </p>
                 <p>Sku: ${item.sku}</p>
-                <p>Price: ${item.price}</p>
-                <p>DiscountId ${item.discountId}</p>
-                <button onclick="deleteProductFromCart(${item.id})" style="background-color: #FF0000; color: white;">Remove</button>
+                <p>Ціна: ${item.price}</p>
+                <p>Ідентифікатор знижки ${item.discountId}</p>
+                <button onclick="deleteProductFromCart(${item.id})" style="background-color: #FF0000; color: white;">Видалити</button>
+                <button onclick="buyProduct(${item.id})" style="background-color: #333; color: white;">Купити</button>
             </div>
         </div>
     `).join('');
@@ -181,7 +181,7 @@ async function deleteProductFromCart(cartItemId) {
 
         const notificationMessage = document.getElementById('notificationMessage');
         notificationMessage.style.display = 'block';
-        notificationMessage.innerText = 'Product successfully deleted from the cart';
+        notificationMessage.innerText = 'Товар успішно видалено з кошика';
         setTimeout(() => {
             notificationMessage.style.display = 'none';
         }, 3000);

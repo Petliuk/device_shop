@@ -3,6 +3,7 @@ package com.device.shop.mapper;
 import com.device.shop.entity.Role;
 import com.device.shop.entity.User;
 
+import com.device.shop.model.ERole;
 import com.device.shop.model.UserDTO;
 import org.springframework.stereotype.Component;
 

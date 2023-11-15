@@ -10,6 +10,9 @@ import com.device.shop.repository.RoleRepository;
 import com.device.shop.repository.UserRepository;
 import com.device.shop.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,9 +67,16 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::toDTO).collect(Collectors.toList());
-    }
 
+        // Отримати ім'я користувача з контексту безпеки
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+
+        return users.stream()
+                .filter(user -> !user.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN && user.getEmail().equals(username)))
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
+    }
     @Transactional
     public UserDTO updateUser(UserDTO userDTO, Long userId) throws BadRequestException {
         validateUserFields(userDTO);

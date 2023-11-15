@@ -1,51 +1,3 @@
-
-
-/*async function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    const formData = new URLSearchParams();
-    formData.append('username', email);
-    formData.append('password', password);
-
-    try {
-        const response = await fetch('http://localhost:8081/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: formData.toString()
-        });
-
-        if (!response.ok) {
-            throw new Error('Не вдалось увійти');
-        }
-
-        const accessToken = await response.text();
-
-        console.log(accessToken);
-        localStorage.setItem('token', accessToken);
-
-        const userResponse = await fetch('http://localhost:8081/users/principal', {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-
-        if (userResponse.ok) {
-            const user = await userResponse.json();
-            localStorage.setItem('userId', user.id);
-        }
-
-        goToProductsPage();
-
-    } catch (error) {
-        console.error('Помилка входу:', error);
-        alert('Не вдалось увійти. Перевірте ваші облікові дані та спробуйте знову.');
-    }
-}*/
-
-
 async function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -81,12 +33,9 @@ async function login() {
             const user = await userResponse.json();
             localStorage.setItem('userId', user.id);
 
-            // Перевірка ролі користувача
             if (user.roles.includes('ROLE_USER')) {
-                // Перекидуємо на сторінку з усіма продуктами
                 goToProductsPage();
             } else if (user.roles.includes('ROLE_ADMIN')) {
-                // Перекидуємо на сторінку адміністратора
                 goAdmin();
             }
         } else {
@@ -103,7 +52,7 @@ function goToProductsPage() {
     window.location.href = 'products.html';
 }
 function goAdmin() {
-    window.location.href = 'createProduct.html';
+    window.location.href = 'admin_page.html';
 }
 
 
@@ -153,7 +102,6 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
     event.preventDefault();
     login();
 });
-
 
 document.getElementById('registrationForm').addEventListener('submit', async (event) => {
     event.preventDefault();

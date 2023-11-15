@@ -16,6 +16,7 @@ import java.util.List;
 public class Discount {
 
     @Id
+    @GeneratedValue
     Long id;
     String name;
     String description;

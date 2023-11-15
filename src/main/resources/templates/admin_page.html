@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Адміністратор</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .menu {
+      background-color: #fff;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+    }
+
+
+    .search-bar {
+      display: flex;
+    }
+    .search-input {
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    .search-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .logout-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .menu-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .user-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+    .user-card {
+      width: calc(33.33% - 20px);
+      margin-right: 20px;
+      margin-bottom: 20px;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    .discount-card {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .discount-id,
+    .discount-name,
+    .discount-description,
+    .discount-percent,
+    .discount-created,
+    .discount-modified {
+        margin-bottom: 5px;
+    }
+    .delete-product-button,
+    .delete-discount-button,
+    .delete-user-button{
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .edit-product-button,
+    .additional-info-button,
+    .collapse-info-button,
+    .edit-discount-button,
+    .send-message,
+    .edit-user-button{
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .edit-product-button,
+    .delete-product-button,
+    .additional-info-button {
+      margin-right: 10px;
+    }
+    .form-container {
+      width: 60%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    .form-container h2 {
+      text-align: center;
+    }
+
+    .form-container form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-container label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-container input {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-container button {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-container button:hover {
+      background-color: #0056b3;
+    }
+    .edit-product-button:hover,
+    .delete-product-button:hover,
+    .additional-info-button:hover,
+    .edit-user-button:hover,
+    .delete-user-button:hover,
+    .search-button:hover,
+    .logout-button:hover,
+    .menu-button:hover,
+    .edit-discount-button:hover,
+    .delete-discount-button:hover {
+      background-color: #0056b3;
+    }
+    #createDiscountFormContainer {
+      display: none;
+    }
+    #editDiscountFormContainer{
+      display: none;
+    }
+    #editDiscountFormContainer {
+      width: 60%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    #editDiscountFormContainer h2 {
+      text-align: center;
+    }
+    #editDiscountFormContainer form {
+      display: flex;
+      flex-direction: column;
+    }
+    #editDiscountFormContainer label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    #editDiscountFormContainer input {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #editDiscountFormContainer #saveEditedDiscountButton {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+      align-self: flex-end;
+    }
+    #editDiscountFormContainer #cancelEditDiscountButton {
+      background-color: red;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+      align-self: flex-start;
+    }
+    #editDiscountFormContainer #saveEditedDiscountButton,
+    #editDiscountFormContainer #cancelEditDiscountButton {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px;
+      width: calc(50% - 10px);
+      display: inline-block;
+    }
+    #editDiscountFormContainer #saveEditedDiscountButton:hover,
+    #editDiscountFormContainer #cancelEditDiscountButton:hover {
+      background-color: #0056b3;
+    }
+    #addProductFormContainer {
+      width: 60%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: none;
+    }
+    #addProductFormContainer h2 {
+      text-align: center;
+    }
+    #addProductFormContainer form {
+      display: block;
+    }
+    #addProductFormContainer label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    #addProductFormContainer input,
+    #addProductFormContainer select,
+    #addProductFormContainer textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+    #addProductFormContainer button[type="submit"] {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 0;
+      width: auto;
+      display: block;
+    }
+    #addProductFormContainer button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    #productDescription {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      resize: vertical;
+      transition: height 0.2s;
+      min-height: 100px;
+    }
+    #editUserDialog {
+      width: 50%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    #editUserDialog h2 {
+      text-align: center;
+    }
+    #editUserDialog label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    #editUserDialog input {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+    #editUserSaveButton,
+    #editUserCancelButton {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    #editUserSaveButton:hover,
+    #editUserCancelButton:hover {
+      background-color: #0056b3;
+    }
+    /* Стилі для окремої категорії */
+    .category-item {
+      background-color: #f7f7f7;
+      border: 1px solid #ccc; /* Додана рамка */
+      border-radius: 10px;
+      margin: 10px 0;
+      padding: 10px;
+    }
+
+    /* Стилі для назви категорії */
+    .category-name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    /* Стилі для опису категорії */
+    .category-description {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    /* Стилі для кнопки "Видалити категорію" */
+    .delete-category-button {
+      background-color: #ff0000; /* Червоний колір */
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-category-button:hover {
+      background-color: #ff3333; /* Змінений колір при наведенні */
+    }
+
+    .menu_1 {
+
+      background-color: #fff;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+
+
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>Адміністратор</h1>
+</div>
+<div class="container">
+  <div class="menu">
+
+    <div class="menu-button" id="addProductButton">Додати продукт</div>
+    <div class="menu-button" id="productsButton">Продукти</div>
+    <div class="menu-button" id="usersButton">Користувачі</div>
+    <div class="menu-button" id="discountsButton">Знижки</div>
+    <div class="menu-button" id="createDiscountButton">Створити знижку</div>
+    <div class="menu-button" id="addCategoryButton">Додати категорію</div>
+    <div class="menu-button" id="categoriesButton">Категорії</div>
+<!--    <div class="menu-button">Замовлення</div>
+    <div class="menu-button">Повідомлення</div>
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Пошук">
+      <button class="search-button">Пошук</button>
+    </div>-->
+    <button class="logout-button" onclick="logout()">Вийти</button>
+
+  </div>
+  <div class="menu_1">
+  <select id="categorySearch" onchange="searchByCategory()"><option value="">Обрати категорію</option></select>
+  <input type="text" id="searchInput" placeholder="Пошук пристрою"><button onclick="searchProduct()">Пошук</button>
+    <div class="menu-button" id="a">Пошта</div>
+    <div class="menu-button" id="b">Замовлення</div>
+    <div class="menu-button" id="v">..............</div>
+    <div class="menu-button" id="z">..............</div>
+    <div class="menu-button" id="f">..............</div>
+    <div class="menu-button" id="h">..............</div>
+    <div class="menu-button" id="l">..............</div>
+    <div class="menu-button" id="p">..............</div>
+
+
+  </div>
+
+
+  <div id="userListContainer" class="user-list"></div>
+  <div id="productListContainer"></div>
+  <div id="discountListContainer"></div>
+  <div id="categoriesContainer" style="display: none;"></div>
+
+  <div id="addCategoryFormContainer" class="form-container" style="display: none;">
+    <h2>Додати категорію</h2>
+    <form id="addCategoryForm">
+      <label for="categoryName">Назва категорії:</label>
+      <input type="text" id="categoryName" required>
+      <br>
+      <label for="categoryDescription">Опис категорії:</label>
+      <textarea id="categoryDescription" required></textarea>
+      <br>
+      <button type="submit">Зберегти</button>
+    </form>
+  </div>
+
+  <div id="createDiscountFormContainer" class="form-container">
+    <h2>Створити нову знижку</h2>
+    <form>
+      <label for="discountName">Назва знижки:</label>
+      <input type="text" id="discountName" name="discountName" required><br>
+      <label for = "discountDescription">Опис:</label>
+      <input type="text" id="discountDescription" name="discountDescription" required><br>
+      <label for="discountPercent">Величина знижки (%):</label>
+      <input type="number" id="discountPercent" name="discountPercent" required><br>
+      <button type="button" id="saveDiscountButton">Зберегти знижку</button>
+    </form>
+  </div>
+
+  <div id="editDiscountFormContainer">
+    <h2>Редагувати Знижку</h2>
+    <form id="editDiscountForm">
+      <input type="hidden" id="editDiscountId" />
+      <label for="editDiscountName">Назва:</label>
+      <input type="text" id="editDiscountName" required /><br />
+      <label for="editDiscountDescription">Опис:</label>
+      <textarea id="editDiscountDescription"></textarea><br />
+      <label for="editDiscountPercent">Величина знижки:</label>
+      <input type="text" id="editDiscountPercent" required /><br />
+      <button type="button" id="saveEditedDiscountButton">Зберегти</button>
+      <button type="button" id="cancelEditDiscountButton">Скасувати</button>
+    </form>
+  </div>
+
+
+  <div id="addProductFormContainer" style="display: none;">
+    <h2>Додати продукт</h2>
+    <form id="addProductForm">
+      <div>
+        <label for="image">Вибрати фото:</label>
+        <input type="file" id="image" accept=".jpg, .jpeg, .png">
+        <img id="productPreview" src="" alt="Вибране фото" style="display: none; max-width: 200px;">
+      </div>
+      <div>
+        <label for="discount">Знижка:</label>
+        <select id="discount" name="discount">
+        </select>
+      </div>
+      <div>
+        <label for="category">Категорія:</label>
+        <select id="category" name="category">
+        </select>
+      </div>
+      <div>
+        <label for="productName">Назва продукту:</label>
+        <input type="text" id="productName" required>
+      </div>
+      <div>
+        <label for="productDescription">Опис продукту:</label>
+        <textarea id="productDescription" required></textarea>
+      </div>
+      <div>
+        <label for="productSKU">SKU:</label>
+        <input type="text" id="productSKU" required>
+      </div>
+      <div>
+        <label for="productPrice">Ціна:</label>
+        <input type="number" id="productPrice" required>
+      </div>
+      <div>
+        <label for="productQuantity">Кількість:</label>
+        <input type="number" id="productQuantity" required>
+      </div>
+      <button type="submit">Додати продукт</button>
+    </form>
+  </div>
+
+
+  <div id="editUserDialog" style="display: none;">
+    <h2>Редагувати користувача</h2>
+    <div>
+      <label for="editUserId">ID:</label>
+      <input type="text" id="editUserId" disabled>
+    </div>
+    <div>
+      <label for="editUserName">Ім'я:</label>
+      <input type="text" id="editUserName">
+    </div>
+    <div>
+      <label for="editUserSurname">Прізвище:</label>
+      <input type="text" id="editUserSurname">
+    </div>
+    <div>
+      <label for="editUserPhone">Телефон:</label>
+      <input type="text" id="editUserPhone">
+    </div>
+    <div>
+      <label for="editUserEmail">Email:</label>
+      <input type="text" id="editUserEmail">
+    </div>
+    <div>
+      <button id="editUserSaveButton">Зберегти</button>
+      <button id="editUserCancelButton">Скасувати</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" src="../static/js/admin_page.js"></script>
+<script type="text/javascript" src="../static/js/product.js"></script>
+
+<script type="text/javascript" src="../static/js/admin_product.js"></script>
+<script type="text/javascript" src="../static/js/admin_user.js"></script>
+<script type="text/javascript" src="../static/js/admin_discount.js"></script>
+<script type="text/javascript" src="../static/js/admin_category.js"></script>
+<!--<script type="text/javascript" src="../static/js/product.js"></script>-->
+
+
+</body>
+</html>

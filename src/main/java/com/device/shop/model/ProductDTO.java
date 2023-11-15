@@ -1,5 +1,6 @@
 package com.device.shop.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,5 +25,5 @@ public class ProductDTO {
     private Long quantity;
     private Long photoId;
     private byte[] imageData;
-
+    private Long categoryId;
 }

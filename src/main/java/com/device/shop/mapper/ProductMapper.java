@@ -18,6 +18,7 @@ public class ProductMapper {
                 .sku(product.getSku())
                 .price(product.getPrice())
                 .createdAt(product.getCreatedAt())
+                .categoryId(product.getProductCategory() != null ? product.getProductCategory().getId() : null)
                 .modifiedAt(product.getModifiedAt())
                 .deletedAt(product.getDeletedAt())
                 .discountId(Optional.ofNullable(product.getDiscount())

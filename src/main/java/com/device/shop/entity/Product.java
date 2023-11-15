@@ -47,7 +47,7 @@ public class Product {
     @ManyToOne
     Discount discount;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id")
     ProductPhoto productPhoto;
 

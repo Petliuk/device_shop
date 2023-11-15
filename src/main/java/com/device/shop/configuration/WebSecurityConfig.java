@@ -78,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart/{id}/items",
                         "/{sessionId}",
                         "/cart/items/{id}",
-                        "/users"/*,
+                        "/users",
+                        "/products/category/{categoryId}"/*,
                         "/product"*/).permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated();
