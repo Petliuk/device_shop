@@ -107,19 +107,21 @@ public class ProductServiceImpl implements ProductService {
         Product updatedProduct = productMapper.toEntity(productDTO);
 
         //========================================================================
-        Discount discount = discountRepository.findById(productDTO.getDiscountId()).orElseThrow(() -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
+        Discount discount = discountRepository.findById(productDTO.getDiscountId()).orElseThrow(()
+                -> new EntityNotFoundException("Discount with id " + productDTO.getDiscountId() + " not found"));
         updatedProduct.setDiscount(discount);
 
         //========================================================================
 
-        ProductCategory productCategory = productCategoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new EntityNotFoundException("ProductCategory with id " + productDTO.getCategoryId() + " not found"));
+        ProductCategory productCategory = productCategoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()
+                -> new EntityNotFoundException("ProductCategory with id " + productDTO.getCategoryId() + " not found"));
         updatedProduct.setProductCategory(productCategory);
 
         //========================================================================
 
-        ProductPhoto productPhoto = productPhotoRepository.findById(productDTO.getPhotoId()).orElseThrow(() -> new EntityNotFoundException("ProductPhoto with id " + productDTO.getPhotoId() + " not found"));
+        ProductPhoto productPhoto = productPhotoRepository.findById(productDTO.getPhotoId()).orElseThrow(()
+                -> new EntityNotFoundException("ProductPhoto with id " + productDTO.getPhotoId() + " not found"));
         updatedProduct.setProductPhoto(productPhoto);
-
 
         //========================================================================
         updatedProduct.setId(existingProduct.getId());

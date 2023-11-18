@@ -32,4 +32,10 @@ public class CartItem {
     @JoinColumn(name = "product_id")
     Product product;
 
+
+    @ManyToOne
+    @JoinColumn(name = "order_in_admin_id")
+    private OrderInAdmin orderInAdmin;
+
+
 }

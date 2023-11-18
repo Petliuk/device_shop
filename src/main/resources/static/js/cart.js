@@ -153,6 +153,9 @@ function displayCartItems(cartItems) {
     updateQuantity();
 }
 
+
+
+
 async function goBackToProducts() {
     window.location.href = 'products.html';
 }

@@ -26,4 +26,7 @@ public class ProductDTO {
     private Long photoId;
     private byte[] imageData;
     private Long categoryId;
+
+/*    public void setProductId(Long id) {
+    }*/
 }

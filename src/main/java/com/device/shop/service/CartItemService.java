@@ -15,4 +15,5 @@ public interface CartItemService {
 
     void removeAllProductsFromCart(Long cartId);
 
+   /* List<CartItem> getCartItems(Long cartId);*/
 }

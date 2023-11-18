@@ -376,6 +376,29 @@
 
 
     }
+
+    .orders {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .order-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      width: calc(200% - -50px); /* 25% ширини для відображення по 4 у рядку з відступами */
+      box-sizing: border-box;
+    }
+
+    .order-item h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .order-item p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -414,6 +437,10 @@
     <div class="menu-button" id="p">..............</div>
 
 
+  </div>
+
+  <div id="ordersContainer">
+    <!-- Сюди будуть вставлятися замовлення -->
   </div>
 
 

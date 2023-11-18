@@ -76,6 +76,7 @@ public class CartItemServiceImpl implements CartItemService {
             ProductDTO productDTO = productMapper.toDTO(cartItem.getProduct());
             productDTO.setQuantity(cartItem.getQuantity());
             productDTO.setId(cartItem.getId());
+           /* productDTO.setProductId(cartItem.getProduct().getId()); // Отримання productId з об'єкту Product, пов'язаного з CartItem*/
             products.add(productDTO);
         }
 
