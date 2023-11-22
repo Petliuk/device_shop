@@ -19,6 +19,7 @@ function switchPage(page) {
     addProductFormContainer.style.display = 'none';
     addCategoryFormContainer.style.display = 'none';
     categoriesContainer.style.display = 'none';
+    ordersContainer.style.display = 'none';
 
     hideCreateDiscountForm();
     hideEditDiscountForm();
@@ -45,8 +46,13 @@ function switchPage(page) {
         showAddCategoryForm();
     }else if(page === 'categories'){
         loadCategories();
+    }else if(page === 'orders'){
+        ordersContainer.style.display = 'block';
+        loadOrders();
     }
 }
+
+
 
 document.getElementById('addProductButton').addEventListener('click', function () {
     switchPage('addProduct');
@@ -176,46 +182,6 @@ async function loadCategoriesForProduct() {
     }
 }
 
-
-/*
-document.getElementById('selectCategoryButton').addEventListener('click', function () {
-    loadCategoriesForProduct();
-});
-
-async function loadCategoriesForProduct() {
-    const categorySelect = document.getElementById('category');
-    categorySelect.innerHTML = '';
-
-    const token = localStorage.getItem('token');
-
-    try {
-        const response = await fetch('http://localhost:8081/product-categories', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error('Помилка отримання категорій.');
-        }
-
-        const data = await response.json();
-
-        data.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.id;
-            option.text = category.name;
-            categorySelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Помилка завантаження категорій:', error);
-    }
-}
-*/
-
-
-
 document.getElementById('addProductForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
@@ -331,3 +297,91 @@ imageInput.addEventListener('change', function () {
     }
 });
 
+//------------------------------------------------------------------------------------
+document.getElementById('b').addEventListener('click', function () {
+    switchPage('orders');
+});
+
+
+async function loadOrders() {
+    try {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch('http://localhost:8081/orders', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch orders.');
+        }
+
+        const orders = await response.json();
+        displayOrders(orders);
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+    }
+}
+
+function displayOrders(orders) {
+    const ordersContainer = document.getElementById('ordersContainer');
+    ordersContainer.innerHTML = '';
+
+    orders.forEach(order => {
+        const orderDiv = document.createElement('div');
+        orderDiv.classList.add('order-item');
+
+        const user = order.user;
+        const product = order.product;
+
+        const orderInfo = `
+            <h3>Замовлення:</h3>
+            <p><strong>ID користувача:</strong> ${user.id}</p>
+            <p><strong>Ім'я користувача:</strong> ${user.name} ${user.surname}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Телефон:</strong> ${user.phone}</p>
+            <p><strong>Адреса доставки:</strong> ${order.address}</p>
+            <h3>Товар:</h3>
+            <p><strong>ID товару:</strong> ${product.id}</p>
+            <p><strong>Назва:</strong> ${product.name}</p>
+            <p><strong>Опис:</strong> ${product.description}</p>
+            <p><strong>Ціна:</strong> ${product.price}</p>
+            <p><strong>Кількість:</strong> ${product.quantity}</p>
+            <button class="delete-order-btn" data-order-id="${order.id}">Видалити</button>
+        `;
+
+        orderDiv.innerHTML = orderInfo;
+        ordersContainer.appendChild(orderDiv);
+
+        // Додамо обробник подій для кожної кнопки видалення
+        const deleteButton = orderDiv.querySelector('.delete-order-btn');
+        deleteButton.addEventListener('click', async () => {
+            const orderId = deleteButton.getAttribute('data-order-id');
+            await deleteOrder(orderId);
+        });
+    });
+}
+
+async function deleteOrder(orderId) {
+    const token = localStorage.getItem('token');
+
+    try {
+        const response = await fetch(`http://localhost:8081/order/${orderId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete the order.');
+        }
+
+        await loadOrders();
+    } catch (error) {
+        console.error('Error deleting order:', error);
+    }
+}

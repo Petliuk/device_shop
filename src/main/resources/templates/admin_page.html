@@ -81,11 +81,11 @@
       box-sizing: border-box;
     }
     .discount-card {
-        background-color: #ffffff;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 10px;
-        margin-bottom: 10px;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
     }
     .discount-id,
     .discount-name,
@@ -93,7 +93,7 @@
     .discount-percent,
     .discount-created,
     .discount-modified {
-        margin-bottom: 5px;
+      margin-bottom: 5px;
     }
     .delete-product-button,
     .delete-discount-button,
@@ -376,6 +376,43 @@
 
 
     }
+
+    .orders {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .order-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+      width: calc(110% - 100px); /* 25% ширини для відображення по 4 у рядку з відступами */
+      box-sizing: border-box;
+    }
+
+    .order-item h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .order-item p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
+
+    .delete-order-btn {
+      background-color: red; /* Змінюємо колір фону на червоний */
+      color: white; /* Змінюємо колір тексту на білий, щоб він був видимим на червоному фоні */
+      border: none; /* Видаляємо рамку кнопки */
+      padding: 8px 16px; /* Додаємо відступи внутрішньої області кнопки */
+      border-radius: 4px; /* Закруглюємо кути кнопки */
+      cursor: pointer; /* Змінюємо вигляд курсору при наведенні на кнопку */
+    }
+
+    /* Стилі для кнопки при наведенні */
+    .delete-order-btn:hover {
+      background-color: darkred; /* Змінюємо колір фону кнопки при наведенні */
+    }
   </style>
 </head>
 <body>
@@ -392,22 +429,22 @@
     <div class="menu-button" id="createDiscountButton">Створити знижку</div>
     <div class="menu-button" id="addCategoryButton">Додати категорію</div>
     <div class="menu-button" id="categoriesButton">Категорії</div>
-<!--    <div class="menu-button">Замовлення</div>
-    <div class="menu-button">Повідомлення</div>
-    <div class="search-bar">
-      <input type="text" class="search-input" placeholder="Пошук">
-      <button class="search-button">Пошук</button>
-    </div>-->
+    <!--    <div class="menu-button">Замовлення</div>
+        <div class="menu-button">Повідомлення</div>
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Пошук">
+          <button class="search-button">Пошук</button>
+        </div>-->
     <button class="logout-button" onclick="logout()">Вийти</button>
 
   </div>
   <div class="menu_1">
-  <select id="categorySearch" onchange="searchByCategory()"><option value="">Обрати категорію</option></select>
-  <input type="text" id="searchInput" placeholder="Пошук пристрою"><button onclick="searchProduct()">Пошук</button>
+    <select id="categorySearch" onchange="searchByCategory()"><option value="">Обрати категорію</option></select>
+    <input type="text" id="searchInput" placeholder="Пошук пристрою"><button onclick="searchProduct()">Пошук</button>
     <div class="menu-button" id="a">Пошта</div>
     <div class="menu-button" id="b">Замовлення</div>
-    <div class="menu-button" id="v">..............</div>
-    <div class="menu-button" id="z">..............</div>
+    <div class="menu-button" id="v">Підтверджено</div>
+    <div class="menu-button" id="z">Продано</div>
     <div class="menu-button" id="f">..............</div>
     <div class="menu-button" id="h">..............</div>
     <div class="menu-button" id="l">..............</div>
@@ -415,6 +452,8 @@
 
 
   </div>
+
+  <div id="ordersContainer" ></div>
 
 
   <div id="userListContainer" class="user-list"></div>
