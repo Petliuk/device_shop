@@ -68,7 +68,6 @@ async function addToCart(productId) {
             },
             body: JSON.stringify({
                 productId: productId,
-
                 shoppingSessionId: sessionId,
                 quantity: quantity
             })
@@ -178,13 +177,6 @@ async function deleteProductFromCart(cartItemId) {
             throw new Error('Failed to delete the product from the cart.');
         }
 
-    /*    const notificationMessage = document.getElementById('notificationMessage');
-        notificationMessage.style.display = 'block';
-        notificationMessage.innerText = 'Товар успішно видалено з кошика';
-        setTimeout(() => {
-            notificationMessage.style.display = 'none';
-        }, 3000);
-*/
         getCartItems();
     } catch (error) {
         console.error('Error deleting product from cart:', error);

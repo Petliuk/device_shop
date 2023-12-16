@@ -10,14 +10,12 @@ import com.device.shop.repository.RoleRepository;
 import com.device.shop.repository.UserRepository;
 import com.device.shop.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +75,7 @@ public class UserServiceImpl implements UserService {
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());
     }
+
     @Transactional
     public UserDTO updateUser(UserDTO userDTO, Long userId) throws BadRequestException {
         validateUserFields(userDTO);
@@ -90,6 +89,12 @@ public class UserServiceImpl implements UserService {
         if (!userId.equals(userDTO.getId())) {
             throw new BadRequestException("Cannot change the ID to " + userDTO.getId());
         }
+        // Перевіряємо, чи прийшов новий пароль в UserDTO
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            // Якщо пароль не надійшов, використовуємо існуючий пароль з бази даних
+            userDTO.setPassword(existingUser.getPassword());
+        }
+
 
         User updatedUser = userMapper.toEntity(userDTO);
         setUserRoles(updatedUser, userDTO);
