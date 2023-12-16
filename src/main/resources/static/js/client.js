@@ -1,7 +1,3 @@
-function goToProductsPage() {
-    window.location.href = 'products.html';
-}
-
 async function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -24,7 +20,6 @@ async function login() {
         }
 
         const accessToken = await response.text();
-
         console.log(accessToken);
         localStorage.setItem('token', accessToken);
 
@@ -37,15 +32,29 @@ async function login() {
         if (userResponse.ok) {
             const user = await userResponse.json();
             localStorage.setItem('userId', user.id);
-        }
 
-        goToProductsPage();
+            if (user.roles.includes('ROLE_USER')) {
+                goToProductsPage();
+            } else if (user.roles.includes('ROLE_ADMIN')) {
+                goAdmin();
+            }
+        } else {
+            throw new Error('Не вдалось отримати дані користувача');
+        }
 
     } catch (error) {
         console.error('Помилка входу:', error);
         alert('Не вдалось увійти. Перевірте ваші облікові дані та спробуйте знову.');
     }
 }
+
+function goToProductsPage() {
+    window.location.href = 'products.html';
+}
+function goAdmin() {
+    window.location.href = 'admin_page.html';
+}
+
 
 const registrationForm = document.getElementById('registrationForm');
 
@@ -93,7 +102,6 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
     event.preventDefault();
     login();
 });
-
 
 document.getElementById('registrationForm').addEventListener('submit', async (event) => {
     event.preventDefault();

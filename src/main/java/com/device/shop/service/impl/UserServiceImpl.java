@@ -10,11 +10,12 @@ import com.device.shop.repository.RoleRepository;
 import com.device.shop.repository.UserRepository;
 import com.device.shop.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
@@ -43,13 +44,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
         User savedUser = userRepository.save(user);
-        //todo move send email via spring AOP and remove flush operation
+/*        //todo move send email via spring AOP and remove flush operation
         userRepository.flush();
         try {
             emailService.sendRegistrationEmail(savedUser.getEmail(), savedUser.getName());
         } catch (MessagingException e) {
 
-        }
+        }*/
 
         return userMapper.toDTO(savedUser);
     }
@@ -64,7 +65,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(userMapper::toDTO).collect(Collectors.toList());
+
+        // Отримати ім'я користувача з контексту безпеки
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+
+        return users.stream()
+                .filter(user -> !user.getRoles().stream().anyMatch(role -> role.getName() == ERole.ROLE_ADMIN && user.getEmail().equals(username)))
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -80,6 +89,12 @@ public class UserServiceImpl implements UserService {
         if (!userId.equals(userDTO.getId())) {
             throw new BadRequestException("Cannot change the ID to " + userDTO.getId());
         }
+        // Перевіряємо, чи прийшов новий пароль в UserDTO
+        if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty()) {
+            // Якщо пароль не надійшов, використовуємо існуючий пароль з бази даних
+            userDTO.setPassword(existingUser.getPassword());
+        }
+
 
         User updatedUser = userMapper.toEntity(userDTO);
         setUserRoles(updatedUser, userDTO);
@@ -104,7 +119,7 @@ public class UserServiceImpl implements UserService {
         if (!emailMatcher.matches()) {
             throw new BadRequestException("Invalid email format");
         }
-        String phoneRegex = "^\\+380\\s\\d{2}\\s\\d{3}\\s\\d{2}\\s\\d{2}$|^\\+380-\\d{2}-\\d{3}-\\d{2}-\\d{2}$";
+        String phoneRegex = "^(\\+380\\s\\d{2}\\s\\d{3}\\s\\d{2}\\s\\d{2}|\\+380-\\d{2}-\\d{3}-\\d{2}-\\d{2}|\\+380\\d{9})$";
         Pattern phonePattern = Pattern.compile(phoneRegex);
         Matcher phoneMatcher = phonePattern.matcher(userDTO.getPhone());
         if (!phoneMatcher.matches()) {

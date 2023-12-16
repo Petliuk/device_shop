@@ -1,18 +1,23 @@
 package com.device.shop.controller;
 
+import com.device.shop.entity.ProductCategory;
 import com.device.shop.exception.BadRequestException;
 import com.device.shop.model.ProductDTO;
+import com.device.shop.repository.ProductCategoryRepository;
+import com.device.shop.repository.ShoppingSessionRepository;
 import com.device.shop.service.ProductService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,6 +26,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -30,12 +36,26 @@ public class ProductController {
         return new ResponseEntity<>(updateProductDAO, HttpStatus.OK);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
+/*
+  @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/products")
     public ResponseEntity<List<ProductDTO>> getAllProduct() {
         List<ProductDTO> productDTO = productService.getAllProducts();
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
+*/
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/products")
+    public ResponseEntity<Page<ProductDTO>> getAllProduct(
+            /*@RequestParam int page, int pageSize*/
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int pageSize
+    ) {
+        Page<ProductDTO> productPage = (Page<ProductDTO>) productService.getAllProducts(page, pageSize);
+        return new ResponseEntity<>(productPage, HttpStatus.OK);
+    }
+
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -60,13 +80,13 @@ public class ProductController {
         return new ResponseEntity<>(productDTOs, HttpStatus.OK);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
+/*    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/categories/{categoryId}")
     //toDo add logic later + make dynamic search
     public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
         List<ProductDTO> productsDTO = productService.getProductsByCategory(categoryId);
         return new ResponseEntity<>(productsDTO, HttpStatus.OK);
-    }
+    }*/
 
     @SecurityRequirement(name = "bearerAuth")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -82,6 +102,13 @@ public class ProductController {
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO) throws IOException {
         ProductDTO addedProductDTO = productService.addProduct(productDTO).getBody();
         return ResponseEntity.ok(addedProductDTO);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/products/category/{categoryId}")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable("categoryId") Long categoryId) {
+        List<ProductDTO> productsDTO = productService.getProductsByCategory(categoryId);
+        return ResponseEntity.ok(productsDTO);
     }
 
 }

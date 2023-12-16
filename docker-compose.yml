@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  mysqldb:
+    image: mysql:8.0.21
+    ports:
+      - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "device_shop"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_PASSWORD: "root"
   app:
     build:
       context: .
@@ -7,19 +16,13 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - localhost
-
-  localhost:
-    image: mysql:8.0.21
-    ports:
-      - "3306:3306"
+      mysqldb:
+        condition: service_completed_successfully
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/device_shop?serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-  flyway:
-        build:
-          context: .
-          dockerfile: Dockerfile.flyway
-        depends_on:
-          - localhost
+      SPRING_APPLICATION_JSON: '{
+           "spring.datasource.url"  : "jdbc:mysql://mysqldb:3307/device_shop?serverTimezone=UTC",
+           "spring.datasource.username" : "root",
+           "spring.datasource.password" : "root",
+           "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5Dialect",
+           "spring.jpa.hibernate.ddl-auto" : "update"
+        }'

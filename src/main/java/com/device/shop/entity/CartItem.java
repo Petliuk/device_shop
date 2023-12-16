@@ -28,7 +28,7 @@ public class CartItem {
     @JoinColumn(name = "session_id")
     ShoppingSession shoppingSession;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id")
     Product product;
 

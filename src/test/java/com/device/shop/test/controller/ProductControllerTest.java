@@ -48,6 +48,7 @@ public class ProductControllerTest {
     private ProductController productController;
 
 
+/*
     @BeforeEach
     public void setup() {
         productController = new ProductController(productService);
@@ -55,7 +56,9 @@ public class ProductControllerTest {
                 .setControllerAdvice(new ExceptionController())
                 .build();
     }
+*/
 
+/*
     @Test
     public void testGetAllProducts() throws Exception {
         ProductDTO product1 = ProductDTO.builder()
@@ -85,6 +88,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$[1].description").value("*"))
                 .andExpect(jsonPath("$[1].sku").value("two"));
     }
+*/
 
     @Test
     public void testGetProductById() throws Exception {

@@ -35,6 +35,8 @@ public class User {
     //  @ApiModelProperty(value = "User email", required = true, example = "user@gmail.com")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonIgnore // Виключити пароль з серіалізації
     private String password;
 
     @OneToOne(mappedBy = "user")

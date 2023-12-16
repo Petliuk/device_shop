@@ -60,14 +60,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/resources/**", "/static/**", "/js/**", "/img/**", "/css/**", "/ui", "/products", "/product/{id}", "/search/{name}", "/create", "/cart/{id}/items", "/{sessionId}", "/cart/items/{id}").permitAll()
+                .antMatchers("/login",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/resources/**",
+                        "/static/**",
+                        "/js/**",
+                        "/img/**",
+                        "/css/**",
+                        "/ui",
+                        "/products",
+                        "/upload",
+                        "/product/{id}",
+                        "/search/{name}",
+                        "/create",
+                        "/cart/{id}/items",
+                        "/{sessionId}",
+                        "/cart/items/{id}",
+                        "/users",
+                        "/products/category/{categoryId}",
+                        "/discount/{id}",
+                        "/product-categories/{id}"/*,
+                        "/product"*/).permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean
+   @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 

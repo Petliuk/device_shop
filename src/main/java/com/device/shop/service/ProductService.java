@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDTO> getAllProducts();
+/*List<ProductDTO> getAllProducts();*/
 
     ProductDTO getProductById(Long productId);
 
@@ -21,10 +21,13 @@ public interface ProductService {
 
     List<ProductDTO> searchProductsByName(String name);
 
-    List<ProductDTO> getProductsByCategory(Long categoryId);
+   /* List<ProductDTO> getProductsByCategory(Long categoryId);*/
 
     ProductDTO updateProduct(ProductDTO productDTO, Long productId) throws BadRequestException, EntityNotFoundException;
 
     void save(MultipartFile file) throws IOException, BadRequestException;
 
+    List<ProductDTO> getProductsByCategory(Long categoryId);
+
+  Object getAllProducts(int page, int pageSize);
 }

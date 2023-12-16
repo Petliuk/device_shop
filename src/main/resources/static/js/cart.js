@@ -68,7 +68,6 @@ async function addToCart(productId) {
             },
             body: JSON.stringify({
                 productId: productId,
-
                 shoppingSessionId: sessionId,
                 quantity: quantity
             })
@@ -130,20 +129,19 @@ function displayCartItems(cartItems) {
 
     const cartItemsHTML = cartItems.map(item => `
         <div style="display: flex; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-            <!-- Place the product image on the left side -->
             <div style="width: 200px; height: 200px; margin-right: 10px; display: flex; justify-content: center; align-items: center; overflow: hidden;">
                 <img src="data:image/jpeg;base64,${item.imageData}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
             <div style="flex: 1;">
-                <h2>${item.name}</h2>
-                 <p>Cart Items ID: ${item.id}</p>
-          
-                <p>Quantity: ${item.quantity}</p>
-                <p>Description: ${item.description} </p>
+                <h2>${item.name}</h2>    
+                <p>Ідентифікатор продукту: ${item.id}</p>
+                <p>Кількість: ${item.quantity}</p>
+                <p>Опис: ${item.description} </p>
                 <p>Sku: ${item.sku}</p>
-                <p>Price: ${item.price}</p>
-                <p>DiscountId ${item.discountId}</p>
-                <button onclick="deleteProductFromCart(${item.id})" style="background-color: #FF0000; color: white;">Remove</button>
+                <p>Ціна: ${item.price}</p>
+                <p>Ідентифікатор знижки ${item.discountId}</p>
+                <button onclick="deleteProductFromCart(${item.sku})" style="background-color: #FF0000; color: white;">Видалити</button>
+                <button onclick="buyProduct(${item.id}, ${item.sku})" style="background-color: #333; color: white;">Купити</button>
             </div>
         </div>
     `).join('');
@@ -179,13 +177,6 @@ async function deleteProductFromCart(cartItemId) {
             throw new Error('Failed to delete the product from the cart.');
         }
 
-        const notificationMessage = document.getElementById('notificationMessage');
-        notificationMessage.style.display = 'block';
-        notificationMessage.innerText = 'Product successfully deleted from the cart';
-        setTimeout(() => {
-            notificationMessage.style.display = 'none';
-        }, 3000);
-
         getCartItems();
     } catch (error) {
         console.error('Error deleting product from cart:', error);
@@ -193,3 +184,49 @@ async function deleteProductFromCart(cartItemId) {
 }
 
 getCartItems();
+async function buyProduct(productId, cartItemId) {
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const sessionId = getSessionIdFromLocalStorage();
+
+
+    if (!token || !userId || !sessionId) {
+        throw new Error('Користувач не авторизований або токен недійсний');
+    }
+
+    try {
+        const response = await fetch('http://localhost:8081/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                userId: parseInt(userId),
+                productId: parseInt(productId),
+                address: 'Введіть свою адресу доставки' // Опційно: можна змінити на динамічне поле введення адреси
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Не вдалося оформити замовлення');
+        }
+
+        const notificationMessage = document.getElementById('notificationMessage');
+        notificationMessage.style.display = 'block';
+        notificationMessage.innerText = 'Замовлення успішно оформлено, ми з вами зв\'яжемося найближчим часом.';
+        setTimeout(() => {
+            notificationMessage.style.display = 'none';
+        }, 3000);
+
+
+        //я успіш Післного оформлення замовлення, видаляємо продукт з кошика
+        await deleteProductFromCart(cartItemId);
+
+        // Оновлюємо список продуктів у кошику
+        getCartItems();
+
+    } catch (error) {
+        console.error('Помилка під час оформлення замовлення:', error);
+    }
+}
